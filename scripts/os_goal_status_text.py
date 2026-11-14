@@ -71,7 +71,7 @@ def _rows(ledger, key, missing):
     return rows
 
 
-def _closure_summary(ledger, runtime, now):
+def _closure_summary(ledger, runtime, now, source_repo=None):
     """Compact decision view first; never infer a runnable queue from dependencies."""
     from os_goal_progress import project_progress
     state = runtime.get("state", {}) if isinstance(runtime, dict) else {}
@@ -95,7 +95,8 @@ def _closure_summary(ledger, runtime, now):
                 if key in snapshot:
                     current[key] = snapshot[key]
         elif state.get("closure_target") is not None:
-            current = project_progress(ledger, state=state, repo=Path(__file__).resolve().parents[1], now=now)
+            current = project_progress(ledger, state=state,
+                repo=Path(source_repo) if source_repo is not None else Path(__file__).resolve().parents[1], now=now)
         if ((current.get("current_target") or {}).get("original_check") in current["closed_original_checks"]):
             current["target_status"] = "CLOSED_IN_CANONICAL_LEDGER"
             current["remaining_conditions"] = []
@@ -231,7 +232,7 @@ def _runtime(lines, runtime, now, checker):
 
 
 def render_status_text(ledger, *, source_commit=None, runtime=None, generated_at=None,
-                       identity_checker=None, ci=None, notes=None):
+                       identity_checker=None, ci=None, notes=None, source_repo=None):
     if not isinstance(ledger, dict) or runtime is not None and not isinstance(runtime, dict):
         raise TypeError("Ledger/runtime must be objects")
     now = _time(generated_at) if generated_at is not None else datetime.now(timezone.utc)
@@ -256,7 +257,7 @@ def render_status_text(ledger, *, source_commit=None, runtime=None, generated_at
              "Canonical ledger: docs/verification/m14-m15-closure-progress.json; human plan: CAMPAIGN.md.",
              "This is a derived view, not new acceptance or execution authority. Checklist percentages are not accepted milestones, engineering hours or converted LOC.",
              "Scope: " + _text(ledger.get("scope")), ""]
-    lines += _closure_summary(ledger, runtime, now)
+    lines += _closure_summary(ledger, runtime, now, source_repo)
     lines += ["MILESTONE SUMMARY", ""]
     summaries = ledger.get("summaries") if isinstance(ledger.get("summaries"), dict) else {}
     for milestone in ("M14", "M15"):

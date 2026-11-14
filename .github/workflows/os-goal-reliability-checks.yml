@@ -7,6 +7,8 @@ on:
       - 'scripts/tests/*os_goal*'
       - 'docs/verification/m14-m15-closure-progress.json'
       - '.github/workflows/os-goal-reliability-checks.yml'
+      - '.github/workflows/final-push-tracker.yml'
+      - 'scripts/tests/test_final_push_tracker_workflow.py'
   push:
     branches: ['codex/harness-reliability-*', 'codex/local-native-staging-repair']
     paths:
@@ -14,6 +16,8 @@ on:
       - 'scripts/tests/*os_goal*'
       - 'docs/verification/m14-m15-closure-progress.json'
       - '.github/workflows/os-goal-reliability-checks.yml'
+      - '.github/workflows/final-push-tracker.yml'
+      - 'scripts/tests/test_final_push_tracker_workflow.py'
 
 permissions:
   contents: read
@@ -56,6 +60,7 @@ jobs:
           # Fake RPC/service fixtures plus temporary ordinary HOST child
           # processes. No model, GitHub writes, native workload or held replay.
           modules = [
+              "scripts.tests.test_final_push_tracker_workflow",
               "scripts.tests.test_os_goal_capture_progress",
               "scripts.tests.test_os_goal_continuous",
               "scripts.tests.test_os_goal_continuous_eligibility",

@@ -24,6 +24,27 @@ docs/development/os-goal-reliability.md for its implementation contracts.
    legacy guardian owns polling, use its supported transition; never duplicate it.
    Reply with the observed identity, times and any precise remaining blocker.
 
+   If changing the active checkout would disturb its current source work, use a
+   detached observer worktree at the EXACT commit in the mailbox instruction.
+   Create it with the existing repository's normal git worktree path; do not
+   clone another repository, switch the active worktree, or edit live state.
+   Verify that the observer and saved controller checkouts resolve to the same
+   Git common directory, that the observer HEAD is the instructed commit, and
+   that the observer checkout contains no local source changes. Run ONLY the
+   start-mailbox/status-mailbox commands from that observer worktree. They do
+   not load the new controller into the active Root or restart the engine.
+   The observer reads the authoritative checkout from saved state["repo"] and
+   publishes that checkout's actual working-tree ledger, HEAD and target
+   evidence. Unknown, missing or foreign saved checkout bindings must remain
+   explicit publication errors; authenticated instruction reception continues.
+   A genuine cold start with no controller state is labelled as such.
+
+   Full publication readiness can wait for the retained status refresh or error
+   backoff deadline. Inspect the reported next_due times; do not erase cadence,
+   pending publication intents or receipts to force a green status. Engine
+   startup requires the current monitor and mailbox poll; full unattended
+   readiness additionally requires current verified publication.
+
 3. At the supported controller transition load closure control while preserving
    the saved Root and existing budget/holds. M14/M15 mode enables it automatically;
    otherwise --progress-control is explicit. Keep the 20-minute checkpoint and

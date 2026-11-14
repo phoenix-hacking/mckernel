@@ -78,12 +78,17 @@ jobs:
           python3 -B scripts/restore_ihk_source.py \
             --repo "$GITHUB_WORKSPACE" \
             --destination "$GITHUB_WORKSPACE/ihk"
+          python3 -B scripts/restore_ihk_source.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --destination "$RUNNER_TEMP/final-push-ihk-history"
+          printf 'MCKERNEL_IHK_HISTORY=%s\n' \
+            "$RUNNER_TEMP/final-push-ihk-history" >> "$GITHUB_ENV"
 
       - name: Validate frozen host-module inventory
         if: steps.host-scope.outputs.required == 'true'
         run: |
           set -euo pipefail
-          python3 -m unittest discover -s scripts/tests -v
+          python3 -m unittest discover -s scripts/tests -v --failfast
           python3 scripts/host_module_inventory.py --check
           python3 scripts/rocky_kernel_source_lock.py --check
           python3 scripts/rocky_kernel_source_review.py --check
@@ -111,6 +116,7 @@ jobs:
               PATH=/usr/bin:/bin \
               LC_ALL=C \
               FP_AUTHORITY_EXPECTED_HEAD="$EXPECTED_HEAD_SHA" \
+              MCKERNEL_IHK_HISTORY="$MCKERNEL_IHK_HISTORY" \
               /usr/bin/python3 -I -S -B -c "if True:
             import os,subprocess,sys,types
             trusted_type=type
@@ -291,3 +297,4 @@ jobs:
           path: evidence/final-push-summary.json
           if-no-files-found: error
           retention-days: 90
+

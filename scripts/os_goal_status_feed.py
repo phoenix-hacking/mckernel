@@ -78,6 +78,11 @@ class StatusFeed:
         result = {"schema_version": 1, "url": PUBLIC_URL, "path": str(self.directory / "status.txt"),
                   "attempted_at": now, "next_refresh_at": now + self.interval if publish else prior.get("next_refresh_at", 0)}
         try:
+            source = context.get("publication_source") if isinstance(context, dict) else None
+            if isinstance(source, dict):
+                result["publication_source"] = dict(source)
+                notes.append("Status source: " + str(source.get("mode", "UNKNOWN")) + ". "
+                             "Checkout binding does not establish a live controller or source execution authority.")
             if isinstance(context, dict):
                 state = context.get("engine_state")
                 state = state if isinstance(state, dict) else {}
@@ -111,6 +116,7 @@ class StatusFeed:
             notes.append("The progress ledger is a working-tree snapshot; checkout HEAD does not assert it is committed or that a milestone is accepted.")
             rendered = write_status_text(self.directory / "status.txt", ledger,
                                          source_commit=self._revision(source_repo), runtime=runtime,
+                                         source_repo=source_repo,
                                          generated_at=now, identity_checker=self._identity, notes=notes)
             result.update(status="GENERATED", generated_at=now, report=rendered)
             atomic_json(self.directory / STATE_FILE, result)

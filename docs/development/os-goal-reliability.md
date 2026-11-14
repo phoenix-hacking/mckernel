@@ -60,6 +60,24 @@ poll when mailbox configuration is present; `--mailbox-monitor required` makes
 that explicit. `--mailbox-monitor off` is an intentional opt-out, not an unattended
 readiness claim.
 
+The observer's code checkout and the campaign data checkout may be different
+worktrees of the same repository. Before publication, the observer resolves the
+saved controller's absolute `repo` and verifies its Git common directory matches
+the shared runtime directory. That checkout supplies the current working-tree
+ledger, checkout HEAD and closure-target evidence; the pinned observer checkout
+continues to supply code and mailbox configuration. A missing or foreign saved
+checkout produces an explicit publication error without stopping authenticated
+instruction reception. Only a genuinely absent controller state uses the
+observer checkout, labelled `OBSERVER_CHECKOUT_NO_CONTROLLER`. This binding
+does not prove a live controller or grant source execution authority.
+
+Status publication retains its existing ten-minute cadence and failure backoff
+across observer replacement. A fresh successful mailbox poll can therefore
+precede full publication readiness. The new-engine startup check requires the
+monitor and mailbox stages; unattended monitoring requires the publication stage
+as well. Inspect the reported next due times instead of clearing durable
+cadence, pending intents or receipts.
+
 New controller instruction receipts bind the exact text SHA-256, verified source
 ID, Root thread/turn, worker/server identities, invocation and durable pre-RPC
 attempt. A legacy receipt is historical acceptance only. Uncertain mutating
@@ -288,6 +306,15 @@ Do not replace a healthy controller, mutate its live state or restart work merel
 to load this change. The mailbox observer can be started independently after its
 source is adopted; closure control is loaded at the supported controller transition.
 
+When the current working tree has ongoing source changes, the existing Root can
+start only the mailbox component from a clean detached worktree at the exact
+reviewed commit. Use the original repository's normal `git worktree` operation,
+verify the shared Git common directory and the exact observer HEAD, then run
+`start-mailbox` and `status-mailbox` there. Do not run engine or guardian start,
+replace the active checkout, or edit its saved state as part of observer
+bootstrap. The saved controller checkout remains the publication source. The
+`status-text` manual-preview command is not part of this isolated bootstrap.
+
 Before treating the installation as unattended-ready, observe current-instance
 polling and publication, submit a harmless exact instruction and verify its
 controller receipt, apply a real finite target, and observe the next automatic
@@ -304,6 +331,17 @@ transport, resource, mailbox and controller suites. Two older recovery modules
 unchanged source baseline (21 failures and one error across 32 tests) and are not
 represented as passing by this gate. Their historical generic-restart expectations
 do not replace current owner-retention tests.
+
+The full-project `Final push completion tracker` remains a separate check of
+the broader project. Its full unittest discovery now stops at the
+first failure so a concrete traceback survives its job budget. CI restores both
+the vendored IHK source and a separate pinned Git-history checkout in
+`RUNNER_TEMP`, exports `MCKERNEL_IHK_HISTORY`, and explicitly retains that input
+through the isolated contract launcher. Workflow regressions exercise the actual
+shell argument boundaries, failed-restoration behavior and isolated environment.
+These repairs do not declare the historical submodule-only authority consumers
+compatible with the current vendored layout; any remaining failures must be
+resolved without changing frozen source identities or skipping the full gate.
 
 Automated tests establish these exercised contracts. Workstation adoption,
 actual provider admission, service availability and an unattended production
