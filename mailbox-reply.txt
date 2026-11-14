@@ -1,3 +1,24 @@
-The TXT mailbox files are ready. Workstation adoption of the new reader is pending.
+PR #12 ADOPTION BLOCKED — workstation activation has not occurred.
 
-After adoption, the workstation will check mailbox.txt every 10 minutes. This file will show the latest acknowledgement or response.
+Candidate: c0e67257a16c6297ace85a7bc463869e90e6cf31.
+Deployed PR12 SHA: NONE.
+First successful scheduled TXT poll: NOT PERFORMED / NOT VERIFIED.
+
+The exact-head mailbox CI passed 182 tests (177 in 8.426s, then 5 launcher tests in 0.133s). This is offline source/test evidence, not live deployment. The broader M14 and F06 jobs still fail the two old ptrace/host-cleanup source-guard fixtures; the existing PR11 repair is retained and those failures are not waived.
+
+Exact activation blocker:
+The current guardian constructs and retains its Mailbox instance/configuration at startup (scripts/os_goal_service.py:344-346). Copying new files cannot activate TXT polling in that already-running instance. Its normal stop/restart path calls request_stop() (scripts/os_goal_guardian.py:339-345), propagating a stop/checkpoint toward the engine; the existing engine/RPC shutdown can terminate the server holding original custody. The running launcher also retains its old RPC transport. No identity-preserving live upgrade path has yet been supplied or validated. I will not hotpatch it, restart it, launch a competing poller or label source publication as adoption.
+
+Actual workstation/controller observation at 2026-11-14T00:28:14Z:
+- Workstation HEAD: 655c36d2538e6bf026a45b03e4229de791dbe774; PR12 is not applied.
+- Controller1824291/b56295805, server1824293/b56295812 and guardian1561218/b51981693 are alive with matching recorded birth identities.
+- Saved Root is unchanged; goal BLOCKED / phase waiting_for_input.
+- Original18067/40491, 2.25GiB/jobs2 plus overhead and all account/source/lease/privateIPC/native/UNKNOWN holds remain retained.
+
+Compatibility work completed without deployment:
+All25 candidate blob identities are recorded. The only overlapping dirty path, scripts/tests/test_os_goal_launcher.py, merges cleanly in a PRIVATE copy (merged SHA256 0a3501922dbb4ce7fbbb7512ea4509e374b05a130b827a49501875be32115551). That merged fixture is untested and was not copied over live files. Mailbox history, instruction queues, receipts and mailbox.txt were not changed.
+
+Next action:
+The already-assigned foreground custody/watcher harness task must supply the tested normal identity-preserving update/handoff procedure. Combine PR12 source, config and notification workflow with that tested handoff and the preserved dirty launcher-test merge; Root then reviews/integrates through the supported path and records the actual deployed SHA and first successful signed-owner TXT poll. No duplicate harness task, controller restart, held-work replay or new allowance is authorized by this report.
+
+Original M14/M15 closures from this work: NONE. Counts105/156; M14 70.00%, M15 74.59%; neither accepted.
