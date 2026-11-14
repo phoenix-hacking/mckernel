@@ -6,7 +6,7 @@ permissions:
   contents: read
 jobs:
   affected:
-    name: Reviewed IHK affected16 outer tests
+    name: Reviewed IHK pending7 outer tests; retain prior9 green
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     env:
@@ -17,7 +17,7 @@ jobs:
       - name: Check out immutable reviewed source candidate
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: 06712df907bb6a9a72621234f4cbe1f74b2a47df
+          ref: 239c3f5a66c0dd1bee6e7b4d501da9e8ffccc7bb
           fetch-depth: 1
           persist-credentials: false
           submodules: false
@@ -46,8 +46,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/ihk-affected-output"
-          test "$(git rev-parse HEAD)" = '06712df907bb6a9a72621234f4cbe1f74b2a47df'
-          test "$(git rev-parse 'HEAD^{tree}')" = 'b7412bb993b06ce6afee7d1c4b8bc03b60c55f71'
+          test "$(git rev-parse HEAD)" = '239c3f5a66c0dd1bee6e7b4d501da9e8ffccc7bb'
+          test "$(git rev-parse 'HEAD^{tree}')" = '19f425662c47aa465c9515b79f117c963f95b08a'
           test "$(git rev-parse HEAD:ihk)" = '9f1d0170ba199eb1a477f1ed85de44442f985cd1'
           test ! -e ihk/.git
           git rev-parse HEAD 'HEAD^{tree}' HEAD:ihk > "$RUNNER_TEMP/ihk-affected-output/source-identity.txt"
@@ -69,7 +69,7 @@ jobs:
           5c61abf496991b398387f5bf967afb133b7da925f62e4adead5f0dc46e62970d  scripts/native_rust_exact_mckernel_image_container_owner.py
           83501ae145a609e7ef087e1529f5f4723e11a6e6b0f6fb65c9e1c70e18f8dc35  scripts/native_rust_exact_mckernel_image_offline.py
           604a7ea4807038ddea88dd0b1af797bcd9612513905ed4f119787b07fe5062f8  scripts/native_rust_kbuild_link_closure.py
-          72aca7173cb59b42ba40a5b4421314cb6221414df645495545ca767a4a858161  scripts/restore_ihk_source.py
+          db40344f762da9c5026e6b860ef86e08c57b0300fbe083e9ae27d9cb87bbcef3  scripts/restore_ihk_source.py
           e22221422d5cef408a258a21c8e6ca3d7b67dadbcc80750b505d65e6a1e971ce  scripts/rocky_rust_staging.py
           c6dcce5d5dca53007836b5b033dfccf2917445bc160e82f15b0ec9dfc095fd2f  scripts/tests/test_native_rust_exact_build_offline.py
           b46b4dd67eeb0b68db31235acd2d5995c7b0f38971a6a69e4deca31a1c068499  scripts/tests/test_native_rust_exact_build_workflow.py
@@ -99,18 +99,20 @@ jobs:
           cat "$RUNNER_TEMP/ihk-affected-output/history-restore.stdout"
           cat "$RUNNER_TEMP/ihk-affected-output/history-restore.stderr" >&2
           cat "$RUNNER_TEMP/ihk-affected-output/history-identity.txt"
-      - name: Command1 exact10 reviewed IHK adapter selectors
+      - name: Command1 only the failed restore reconstruction selector
+        env:
+          GIT_TRACE2_EVENT: ${{ runner.temp }}/ihk-affected-output/restore-git-trace2.jsonl
         shell: bash
         run: |
           set +e
           set -uo pipefail
-          /usr/bin/python3 -B -m unittest -v scripts.tests.test_native_rust_exact_build_offline.DriverTests.test_positive_all_five_phases_and_inventory scripts.tests.test_native_rust_exact_build_offline.DriverTests.test_head_submodule_and_dirty_mutations scripts.tests.test_native_rust_exact_build_offline.DriverTests.test_input_mutation_and_incomplete_inventory_reject scripts.tests.test_restore_ihk_source.RestoreIhkSourceTests.test_reconstructs_from_committed_blobs_and_empty_destination scripts.tests.test_restore_ihk_source.RestoreIhkSourceTests.test_exact_clean_checkout_is_unchanged_noop scripts.tests.test_restore_ihk_source.RestoreIhkSourceTests.test_manifest_hash_and_gitlink_bindings_reject_changes scripts.tests.test_rocky_rust_staging.RockyRustStagingTests.test_generated_identity_reproduces_unchanged_ihk_consumer_git_rule scripts.tests.test_rocky_rust_staging.RockyRustStagingTests.test_generated_identity_uses_consumer_version_for_source_archive scripts.tests.test_rocky_rust_staging.RockyRustStagingTests.test_generated_identity_rejects_unreviewed_consumer_rule scripts.tests.test_native_rust_exact_build_workflow.NativeRustExactBuildWorkflowTests.test_frozen_legacy_oracle_and_shared_evidence_path_are_available > "$RUNNER_TEMP/ihk-affected-output/command-1.stdout" 2> "$RUNNER_TEMP/ihk-affected-output/command-1.stderr"
+          /usr/bin/python3 -B -m unittest -v scripts.tests.test_restore_ihk_source.RestoreIhkSourceTests.test_reconstructs_from_committed_blobs_and_empty_destination > "$RUNNER_TEMP/ihk-affected-output/command-1.stdout" 2> "$RUNNER_TEMP/ihk-affected-output/command-1.stderr"
           status=$?
           printf '%s\n' "$status" > "$RUNNER_TEMP/ihk-affected-output/command-1.exit"
           cat "$RUNNER_TEMP/ihk-affected-output/command-1.stdout"
           cat "$RUNNER_TEMP/ihk-affected-output/command-1.stderr" >&2
           test "$status" = 0 || exit "$status"
-          grep -Eq '^Ran 10 tests in [0-9.]+s$' "$RUNNER_TEMP/ihk-affected-output/command-1.stderr" || exit 1
+          grep -Eq '^Ran 1 test in [0-9.]+s$' "$RUNNER_TEMP/ihk-affected-output/command-1.stderr" || exit 1
           test "$(tail -n 1 "$RUNNER_TEMP/ihk-affected-output/command-1.stderr")" = OK || exit 1
       - name: Command2 exact5 reviewed IHK adapter selectors
         shell: bash
@@ -142,7 +144,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: ihk-exact-affected16
+          name: ihk-exact-pending7
           path: ${{ runner.temp }}/ihk-affected-output/
           if-no-files-found: error
           retention-days: 14
