@@ -361,8 +361,9 @@ class CampaignTests(unittest.TestCase):
             campaign.save()
             with self.assertRaises(ValueError):
                 launcher.queue_instruction(self.directory, "   ")
-            with self.assertRaises(ValueError):
-                launcher.queue_instruction(self.directory, "x" * 8193)
+            for invalid in (None, "\ud800"):
+                with self.subTest(invalid=repr(invalid)), self.assertRaises(ValueError):
+                    launcher.queue_instruction(self.directory, invalid)
             ident = launcher.queue_instruction(self.directory, "Continue after checkpoint")
             campaign.checkpoint_requested = True
             campaign.rpc = FakeRPC(self.args, goal())

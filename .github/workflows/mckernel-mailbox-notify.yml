@@ -4,36 +4,35 @@ on:
   workflow_dispatch:
     inputs:
       event_id:
-        description: Stable lowercase SHA-256 identifier for this notice
+        description: Stable lowercase SHA-256 identifier for this message chunk
         required: true
         type: string
       body:
-        description: Redacted blocker report, at most 6000 UTF-8 bytes
+        description: Message text chunk; at most 48000 bytes after JSON and comment escaping
         required: true
         type: string
-  push:
-    branches: [development]
-    paths: ['.github/workflows/mckernel-mailbox-notify.yml']
 
 permissions:
   contents: read
   pull-requests: write
 
 concurrency:
-  group: mckernel-mailbox-${{ github.event.inputs.event_id || 'setup' }}
+  group: mckernel-mailbox-${{ github.event.inputs.event_id }}
   cancel-in-progress: false
 
 jobs:
   notify:
     if: >-
+      github.event_name == 'workflow_dispatch' &&
       github.repository == 'phoenix-hacking/mckernel' &&
       github.actor == 'phoenix-hacking' &&
       github.triggering_actor == 'phoenix-hacking' &&
-      github.ref == 'refs/heads/development'
+      (github.ref == 'refs/heads/development' ||
+       github.ref == 'refs/heads/codex/local-native-staging-repair')
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
-      - name: Post a deduplicated notice to the fixed mailbox
+      - name: Post a deduplicated message to the fixed mailbox
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         with:
           debug: false
@@ -43,57 +42,50 @@ jobs:
             const REPO = 'mckernel';
             const RECIPIENT_ID = 175406809;
             const MAILBOX_NUMBER = 3; // Dedicated draft PR conversation; keep open.
+            // These are per-request transport bounds; messages and mailboxes
+            // may contain any number of separately identified chunks.
+            const MAX_TRANSPORT_BYTES = 48000;
+            const ALLOWED_REFS = new Set([
+              'refs/heads/development',
+              'refs/heads/codex/local-native-staging-repair'
+            ]);
             const reject = () => { throw new Error('Mailbox notification request refused'); };
             if (context.repo.owner !== OWNER || context.repo.repo !== REPO ||
                 context.actor !== OWNER || context.payload.sender?.id !== RECIPIENT_ID ||
-                context.ref !== 'refs/heads/development' ||
+                !ALLOWED_REFS.has(context.ref) || context.eventName !== 'workflow_dispatch' ||
                 !Number.isSafeInteger(MAILBOX_NUMBER) || MAILBOX_NUMBER <= 0) reject();
-            let eventId, report;
-            if (context.eventName === 'workflow_dispatch') {
-              const inputs = context.payload.inputs;
-              if (!inputs || Object.keys(inputs).sort().join(',') !== 'body,event_id' ||
-                  typeof inputs.event_id !== 'string' || !/^[0-9a-f]{64}$/.test(inputs.event_id) ||
-                  typeof inputs.body !== 'string' || !inputs.body.trim() ||
-                  Buffer.byteLength(inputs.body, 'utf8') > 6000 ||
-                  /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(inputs.body)) reject();
-              eventId = inputs.event_id;
-              report = inputs.body;
-            } else if (context.eventName === 'push') {
-              eventId = require('crypto').createHash('sha256')
-                .update('mckernel-mailbox-setup-v2:' + MAILBOX_NUMBER).digest('hex');
-              report = 'The McKernel notification mailbox supports sent, received and waiting receipts, with workstation checks every 10 minutes. ⏳ **WAITING: workstation activation and a verified first poll.** This setup notice checks the bot posting path; it does not report an engineering blocker or confirm email delivery.';
-            } else reject();
+            const inputs = context.payload.inputs;
+            if (!inputs || Object.keys(inputs).sort().join(',') !== 'body,event_id' ||
+                typeof inputs.event_id !== 'string' || !/^[0-9a-f]{64}$/.test(inputs.event_id) ||
+                typeof inputs.body !== 'string' || inputs.body.length === 0 ||
+                /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(inputs.body)) reject();
+            const eventId = inputs.event_id;
+            const marker = '<!-- mckernel-mailbox:' + eventId + ' -->';
+            // Keep supplied text as data, including shell syntax and attempted
+            // HTML markers. Escape mentions without adding a recipient mention.
+            const message = inputs.body.replace(/@/g, '\uff20').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const body = marker + '\n' + message;
+            if (Buffer.byteLength(JSON.stringify({event_id: eventId, body: inputs.body}), 'utf8') > MAX_TRANSPORT_BYTES ||
+                Buffer.byteLength(body, 'utf8') > MAX_TRANSPORT_BYTES) reject();
             const {data: mailbox} = await github.rest.pulls.get({
               owner: OWNER, repo: REPO, pull_number: MAILBOX_NUMBER
             });
             if (mailbox.number !== MAILBOX_NUMBER || mailbox.user?.id !== RECIPIENT_ID ||
                 mailbox.base?.repo?.full_name !== OWNER + '/' + REPO ||
                 mailbox.state !== 'open' || mailbox.draft !== true || mailbox.merged === true) reject();
-            const marker = '<!-- mckernel-mailbox:' + eventId + ' -->';
             for await (const page of github.paginate.iterator(github.rest.issues.listComments, {
               owner: OWNER, repo: REPO, issue_number: MAILBOX_NUMBER, per_page: 100
             })) {
               if (page.data.some(comment => comment.user?.type === 'Bot' &&
                   comment.user?.login === 'github-actions[bot]' &&
                   typeof comment.body === 'string' && comment.body.includes(marker))) {
-                core.info('Mailbox notice already recorded; no duplicate posted.');
+                core.info('Mailbox message already recorded; no duplicate posted.');
                 return {status: 'already_posted', event_id: eventId};
               }
             }
-            // Only the fixed recipient above may be mentioned. Keep supplied
-            // text as data, including shell syntax and attempted HTML markers.
-            report = report.replace(/@/g, '\uff20').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            const body = [marker, '@phoenix-hacking', '',
-              '📤 **SENT — published in the GitHub mailbox.** The comment timestamp is the sent time.',
-              '📥 **Your email/phone receipt is unconfirmed.** Computer receipt and controller acceptance are reported separately below.',
-              '', report, '',
-              'Reply here or reply to the GitHub notification email. Put `/mckernel-resume` or `/mckernel-instruct` alone on the first line, then put your concrete instruction on the following lines.',
-              'The workstation checks for new replies every 10 minutes. Receipt updates distinguish queued instructions from controller acceptance; neither means the requested work is complete.',
-              'Existing source, ownership, policy and usage limits still apply.',
-              'GitHub email routing depends on your subscription and notification settings; posting this notice does not confirm email delivery.'
-            ].join('\n');
             const {data: comment} = await github.rest.issues.createComment({
               owner: OWNER, repo: REPO, issue_number: MAILBOX_NUMBER, body
             });
-            core.info('Mailbox notice posted; email delivery is not confirmed.');
+            core.info('Mailbox message posted.');
             return {status: 'posted', event_id: eventId, comment_id: comment.id};
+
