@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T14:15Z
+## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T14:43Z
 
 Same savedRoot01a18bc3-e072-7810-9426-75101b0856c0, invocation
 20261114T063545Z-0eca897f, worker2661996/b72441123/server2661998/b72441133.
@@ -24,12 +24,11 @@ F08 no-event family805306368B/job1 is Q558b47f3/Roota3693e03 scoped RETIRED.
 Failed caller family1207959552B/job1 is Q13a13e81/Rootf434df39 scoped RETIRED.
 F05 compile/passive family805306368B/job1 is Q04854f7a/Rootc9565217 scoped RETIRED.
 Corrected ABI776 caller1207959552B/job1 is Q8eec6493/Root3e584a05 scoped RETIRED.
-New official vendor-descriptor family268435456B/job1 is terminal0/PASS but RESERVED
-pending independent actual authentication/own-familyQ and Root receipt:
-total671088640B/jobs3 plus ALL overhead.
+Official vendor-descriptor family268435456B/job1 is Qa9850b57/Rootfc778733 scoped
+RETIRED. Current known HOST payloads are ONLY old402653184B/jobs2 plus ALL overhead;
+one new payload slot requires fresh actual full aggregate admission.
 Actual6171 production family Q89a2730e/Root94a09169 retire ONLY its new1207959552B/
-job1. No new HOST payload fits until this descriptor job is genuinely scoped retired;
-then one slot requires its own fresh operation admission.
+job1. Every next family still requires its own fresh operation admission.
 Original tool14790 and C3tool32916 retain their original owning contexts. Actual
 four-control testQb7d8b92e/Root e858b5ef retire ONLY
 their separate268435456B/job1. Failed-entryQ96e6905c and Root377db7e0 retire
@@ -235,7 +234,8 @@ reviewed/tested61710a98 after original dd860184 unified patch/c33 preimage/posti
 check. Root preserves two harmless PREINPUT adoption refusals (wrong guessed patch
 filename, then an incorrect diff--git-header guard); neither changed source. The
 exact original ---/+++ one-file format then applied successfully, no build/test
-rerun. Public machine proof/source is docs/verification/m15-f02-shebang-real-files-
+rerun. Coherent code/evidence checkpoint403b8c0be is pushed/fetched/blobverified;
+unrelated dirty source is preserved. Public machine proof/source is docs/verification/m15-f02-shebang-real-files-
 20261114/. No wholeF02/backend/main-success/phase1/native claim.
 Literal successor adjudication9101f3e3 is NOT_GO: next unmatched HOST branch is
 load_interp PT_INTERP-on-interpreter rejection/realloc/free ownership. CredSource
@@ -243,6 +243,17 @@ prepared only one newcasec491fb1f/stage88b6be7b/HANDOFF012cc6e2, real retained
 testELF6ffc9688 read-only as input, real allocator/realloc1000/free/borrowedFILE
 oracle. Proc independently reviews only new source/contract. No fourcase/Rust/
 production link/ABI/provider/SDK rerun; runtime binding/admission remain unissued.
+New caller/source has Proc GOd784dd90. Dispatch froze only minimal literal
+operation/lifecycle bindings HANDOFF373e94d0/prefixc343d013/bodyaca141ea from
+qualifiede610/2d3, genuine d511/Q059 and authentic readonly6ffc. NativeBinding
+actively reviews this distinct operation binding; no source/behavior review is
+repeated. Root has prepared only the concrete six-key data issuer953db289, not
+executed it or issued any grant. Next after actual GO: fresh Root source/account/
+permission/current-owner/aggregate admission, then ONLY new C compile/testlink/one
+PT_INTERP rejection case. One actual realloc1000 generation, diagnostic flush,
+exactly-one production free before NULL and borrowed FILE through one caller
+close must be proved together with positive original waits/FD/container/fullRoot.
+Old402653184B/jobs2 and ALL overhead/other holds stay charged.
 
 NativeBinding separately authors ONLY F05 qualified-account-retained-resource-
 binding-1: helper893/SourceGOa6/actualfourc66 and old256+C3128 resources, preserving
@@ -307,7 +318,15 @@ lease boundary, including preboot RELEASE/newest surviving minor/boot refs and
 uncertainSTART retention. Independent grouped NO_GO8ae8c3b1 + exact02ad supplement
 a4992baf require genuine EFAULT propagation, transient ring-contention behavior
 that does not terminate monitor, and correct MCD02ad composition. One bounded
-private successor is active; no known-broken compile/integration/native action.
+private successor now has exact changed-source GO14a965c6 for selected-v6 with
+paired monitor4a4707da. Normal pending/coalesced/remove/stop/finalflush source paths
+pass;5-second failed finalflush reportsETIMEDOUT/RAIIrelease, never stuck-owner or
+F08 success. DebugContract froze BUILD-PREPARATIONba46fd8e for ONLY the changed
+monitor normal one-invocation rustc compile/link; NativeCurrent actively reviews
+its new readonly leaf overlay/effective-source proof, exact provider/config/profile
+and lifecycle scope. No invented intermediate object/link plan, staged/noevent
+mutation, build/native/wholeF08 acceptance. SMP whole-
+crate vendor192 compile and future genuineevent/byte/cleanup proof remain required.
 Create-v2 physical handoff remains a distinct unproved provider boundary.
 TimeSource's separately reviewed OFFICIAL signed-descriptor route107fe90a has
 operationGO5c682d13/argvf2b9f98a/contract1662feb4. Root fresh33-field grantf60eab6d
@@ -315,10 +334,22 @@ ran exactly5 approved commands once, originalTool69522/fullRoot332827ae exit0.
 ActualRESULT52ed8757 is PASS_OFFICIAL_ROCKY_SIGNED_APPSTREAM_DESCRIPTOR_DISCOVERY_ONLY;
 no primary/RPM GET/compiler/Docker/oldfamily action. Signed primary envelope
 aae78c93 identifies2178044B compressed3d01e7cc/open26085865Ba63216ce. M15Leaf
-independently qualifies actual HTTP/key/signature/5+outer waits/FD/capture/fullRoot
-and ONLYnew256MiB/job1 retirement eligibility. TimeSource prepares only the next
-authenticated-primary GET/check/parse operation; no future grant/primary/RPM fact
-is inferred. Cached46d/e015 supplier and both old reservations remain untouched.
+actualQa9850b57 verifies all3HTTP200/TLS0/redirect0, key1688B/fullfingerprint,
+gpgv0/signeddescriptor and5+parent waits/FD/capture/fullRoot. Rootfc778733 retires
+ONLYnew256MiB/job1. Public qualified descriptor record is docs/verification/
+m15-f06-official-vendor-descriptor-20261114/QUALIFIED-DESCRIPTOR.json.
+TimeSource froze authenticated-primary-source-binding-1 READYf0f38039/request
+d8367178 for ONE exact GET and bounded authenticated gzip/XML vendor192 row/
+dependency selection. FunctionalDelta actively reviews only that changed request
+and its operation bindings. Signed sizes/digests, one120s deadline, actual Q/Root
+dependency and same33+nested6 grant schema are explicit; no primary/RPM acquisition
+or runtime/compiler fact or future grant is inferred. Cached46d/e015 supplier
+and both old reservations remain untouched.
+
+Root broad git status metadata traversal hit protected archived-directory
+PermissionError diagnostics (actual chunk ebe269, original truncated protocol
+record retained). That traversal is stopped with no privilege alternate/retry;
+checkpoint work uses explicit current paths only. No payload or hold changed.
 
 Publication prospective observability repair parent823b/keeper08e7/phase0af6f has
 independent SOURCE GOfda62213. Normal/FULL bodies and original signals/waits stay
