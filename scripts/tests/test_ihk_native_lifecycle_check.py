@@ -944,6 +944,8 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             "ihk_os_application_open_v1",
             "ihk_os_application_invoke_v1",
             "ihk_os_application_close_v1",
+            "ihk_os_application_adopt_current_v4",
+            "ihk_os_application_fork_control_current_v1",
             "ihk_os_create_unbooted_v2",
             "ihk_os_create_unbooted_v3",
             "ihk_os_create_unbooted_v4",
@@ -959,11 +961,14 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         lifecycle._validate_provider_export_symbols(
             symbols, set(lifecycle.EXPECTED_NATIVE_LIFECYCLE_EXPORTS)
         )
-        symbols.remove("__ksymtab_ihk_os_service_register_v1")
-        with self.assertRaisesRegex(lifecycle.ValidationError, "lacks provider GPL export metadata"):
-            lifecycle._validate_provider_export_symbols(
-                symbols, set(lifecycle.EXPECTED_NATIVE_LIFECYCLE_EXPORTS)
-            )
+        for name in ("ihk_os_service_register_v1", "ihk_os_application_adopt_current_v4",
+                     "ihk_os_application_fork_control_current_v1"):
+            with self.subTest(missing_metadata=name):
+                missing = symbols - {"__ksymtab_" + name}
+                with self.assertRaisesRegex(lifecycle.ValidationError, "lacks provider GPL export metadata"):
+                    lifecycle._validate_provider_export_symbols(
+                        missing, set(lifecycle.EXPECTED_NATIVE_LIFECYCLE_EXPORTS)
+                    )
 
     def test_unknown_unexported_ihk_os_definition_is_rejected(self) -> None:
         summary = lifecycle.validate_repository(REPO_ROOT)
