@@ -121,9 +121,11 @@ class ProgressTests(unittest.TestCase):
         new = self.observe(2500)
         self.assertTrue(new["snapshot"]["semantic_progress_changed"])
         self.assertFalse(new["snapshot"]["review_required"])
-        self.assertIsNone(self.observe(4899)["advisory_text"])
-        next_stall = self.observe(4900)
-        self.assertNotEqual(next_stall["advisory_key"], old["advisory_key"])
+        velocity_review = self.observe(4899)
+        self.assertTrue(velocity_review["advisory_key"].startswith("closure-velocity-"))
+        self.assertNotEqual(velocity_review["advisory_key"], old["advisory_key"])
+        self.assertEqual(velocity_review["snapshot"]["closure_velocity"]["new_verified_in_window"], 0)
+        self.assertIsNone(self.observe(4900)["advisory_text"])
 
     def test_partial_cases_and_whole_receipt_claims_never_close_original_checks(self):
         for scope in ("partial", "whole"):
@@ -225,8 +227,8 @@ class ProgressTests(unittest.TestCase):
         self.target["original_check"] = later["id"]
         seen = self.observe(0)
         self.assertEqual(seen["snapshot"]["priority_milestone"], "M14")
-        self.assertTrue(seen["advisory_key"].startswith("out-of-order-target-"))
-        self.assertIn("do not interrupt healthy owned work", seen["advisory_text"])
+        self.assertEqual(seen["snapshot"]["current_target"]["original_check"], later["id"])
+        self.assertIsNone(seen["advisory_key"])  # Preserve existing work; prioritize M14 in the next safe assignment.
 
     def test_real_original_closure_is_progress_but_changes_no_denominator(self):
         self.observe(0)

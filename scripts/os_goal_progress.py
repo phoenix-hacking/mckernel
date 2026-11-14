@@ -770,14 +770,6 @@ def observe_progress(repo, state, now=None):
     elif snapshot.get("target_status") == "NEEDS_TARGET":
         advisory_key = "needs-target-" + fingerprint
         reason = "The unattended run has no finite original-check closure target."
-    elif (snapshot.get("priority_milestone") in ("M14", "M15")
-          and snapshot.get("current_target")
-          and not snapshot["current_target"]["original_check"].startswith(snapshot["priority_milestone"] + "-")):
-        advisory_key = "out-of-order-target-" + _digest({"target": binding,
-            "priority": snapshot["priority_milestone"], "semantic": fingerprint})
-        reason = ("The selected target belongs to a later milestone. Redirect NEW admitted "
-                  "agent assignments to " + snapshot["priority_milestone"] +
-                  " at the next safe decision; do not interrupt healthy owned work or clear holds.")
     elif snapshot.get("closure_velocity", {}).get("state") == "below_target":
         advisory_key = "closure-velocity-" + _digest({"priority": snapshot.get("priority_milestone"),
             "semantic": fingerprint})
