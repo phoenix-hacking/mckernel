@@ -188,6 +188,44 @@ class CampaignTests(unittest.TestCase):
         self.assertIn('approval_policy="never"', command)
         self.assertNotIn("--dangerously-bypass-approvals-and-sandbox", command)
 
+    def test_explicit_eleven_slots_reach_strict_startup_and_require_exact_readback(self):
+        self.args = launcher.arguments(["--max-agents", "11", "--agent-windows", "off"])
+        with patch("os.sched_getaffinity", return_value=set(range(8))), \
+                patch("os_goal_resources._available_memory_gib", return_value=64), \
+                patch("os.path.ismount", return_value=False), \
+                patch("shutil.disk_usage", return_value=Mock(free=64 * 1024 ** 3)):
+            command = launcher.server_argv(self.args, self.directory)
+            self.assertIn("--strict-config", command)
+            self.assertIn("agents.max_concurrent_threads_per_session=11", command)
+            self.assertIn("agents.max_depth=1", command)
+            self.assertIn('agents.default_subagent_reasoning_effort="xhigh"', command)
+            self.assertIn('shell_environment_policy.set.MCKERNEL_OS_MAX_AGENTS="11"', command)
+            self.assertIn('shell_environment_policy.set.CARGO_BUILD_JOBS="3"', command)
+            self.assertIn('shell_environment_policy.set.MCKERNEL_OS_MEMORY_GIB="4"', command)
+            rpc = FakeRPC(self.args)
+            rpc.worker_effort = "xhigh"
+            rpc.models["gpt-6.1-sol"].append("xhigh")
+            settings = launcher.preflight(rpc, self.args, self.directory)
+            self.assertEqual(settings["agents"]["max_concurrent_threads_per_session"], 11)
+            self.assertEqual(settings["resources"]["max_agents"], 11)
+            self.assertEqual(settings["resources"]["native"], {
+                "cpu_affinity": [2, 3, 4, 5], "memory_gib": 12,
+                "max_owners": 1, "separate_admission_required": True})
+            readback = rpc.call
+            for observed in (6, 12):
+                def wrong_capacity(method, params, **kwargs):
+                    response = readback(method, params, **kwargs)
+                    if method == "config/read":
+                        response["config"]["agents"]["max_concurrent_threads_per_session"] = observed
+                    return response
+                with self.subTest(observed=observed), \
+                        patch.object(rpc, "call", side_effect=wrong_capacity), \
+                        self.assertRaisesRegex(RuntimeError, "Effective Codex settings"):
+                    launcher.preflight(rpc, self.args, self.directory)
+            with self.assertRaisesRegex(ValueError, "ceiling of 11"):
+                launcher.server_argv(launcher.arguments(["--max-agents", "12"]), self.directory)
+            self.assertFalse(any(method.startswith(("thread/", "turn/")) for method, _ in rpc.calls))
+
     def test_model_routing_uses_only_gpt_61_for_every_role(self):
         routing = launcher.model_routing(self.args)
         self.assertEqual(routing, {
