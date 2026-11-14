@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T11:28Z
+## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T12:39Z
 
 Same savedRoot01a18bc3-e072-7810-9426-75101b0856c0, invocation
 20261114T063545Z-0eca897f, worker2661996/b72441123/server2661998/b72441133.
@@ -18,8 +18,13 @@ artifact checkpoint41d7a5166 are pushed/fetched verified. Public evidence:
 docs/verification/m14-i01-original-acceptance-20261114/ and
 docs/verification/m15-f02-production-continuation-20261114/.
 
-CURRENT owned HOST reservations are268435456B/job1 for the FAILED supplier plus
-134217728B/job1 for retained C3 cleanup (402653184B/jobs2 TOTAL before ALL overhead).
+CURRENT old HOST reservations are268435456B/job1 for the FAILED supplier plus
+134217728B/job1 for retained C3 cleanup (402653184B/jobs2 before ALL overhead).
+New F08 no-event family805306368B/job1 is terminal0 but still RESERVED pending
+independent actualQ/Root receipt: current total1207959552B/jobs3 plus ALL overhead.
+Actual6171 production family Q89a2730e/Root94a09169 retire ONLY its new1207959552B/
+job1. No new HOST payload fits until the F08 job is genuinely scoped retired;
+then one slot requires its own fresh operation admission.
 Original tool14790 and C3tool32916 retain their original owning contexts. Actual
 four-control testQb7d8b92e/Root e858b5ef retire ONLY
 their separate268435456B/job1. Failed-entryQ96e6905c and Root377db7e0 retire
@@ -140,11 +145,11 @@ provider declarations/public borrowed helper and defined string behavior, trueba
 packed-copy ownership through lastborrow/errors, explicit errno-or-ENOEXEC read
 failure cleanup. Canonical/source selection remains unchanged pending real changed
 compile/link/case validation. NEW producer6171 packet e81edb86 has foreground SOURCE-
-PREPARATION GO3be9f59c; new caller372cd208/b792e639 has separate GO359b3267. No new
-object/ELF/test result exists yet. Compile ONLY changed whole executorRust object
-once (19570eb/46d/110B8d/other15 inputs unchanged), preserve actualA checkpoint,
-link unchanged providers once using corrected B --extern-only, then qualify new
-artifacts/lifecycle and bind their TRUE identities into minimal real-libc/file cases.
+PREPARATION GO3be9f59c; new caller372cd208/b792e639 has separate GO359b3267.
+The changed whole object/existing-provider link now actually passed as below
+(19570eb/46d/110B8d/other15 inputs unchanged); preserve actualA checkpoint.
+Qualify new artifacts/lifecycle and bind TRUE identities into minimal real-libc/file
+cases under separate actual admission; the caller has not run.
 Never substitute oldb245/80a or test-owned free for repaired production cleanup.
 Successful terminalELF/main/phase1 backend behavior remains separately unproved.
 Foreground review owners are healthy; no duplicate canonical reviews or green
@@ -155,10 +160,42 @@ fdd9dff4 for nonescaping per-original-Popen/report/FD custody and exact12Env/
 are now supplied by bounded prefixee588/changed-only SourceGOfd04 (original4dd
 NO_GOef87 remains preserved). Root composed operation binding request62375f44/
 fresh issueraa5807c8 with explicit old256+C3128 inventory, genuine tested account
-and exact single-literal context substitution. NativeBinding reviews ONLY these
-operation/context/isolation bindings; fresh Root compound permission/resources/
-grant/actual argv remain UNISSUED. Body/prefixGO is no compile. The denied cleanup
+and exact single-literal context substitution. NativeBinding operationGOcaf1dc46
+qualified ONLY these operation/context/isolation bindings; Root subsequently
+issued the actual compound permission/resources/grant. The denied cleanup
 scope is never accessed or cleared by this separate source6171 HOST operation.
+Actual new operationGOcaf1dc46 plus Root fresh compound grant48ee7269 passed.
+Exactly one6171 whole-production Rust compile returned0/1.531s/RSS146848KiB;
+actual769280B checkpointd511b91b is closed/fsynced/0444. One existing-provider B
+returned0/.4019s, producing400688B ELF2282fb60/mapacdf1b8a. Corrected nm and passive
+captures completed; the executor/caller/native were NEVER run. ExactCID3787a1b7
+is terminal/nonOOM/removed/absent, fullRoot1d3fdcf4 exit0. M15Leaf own-familyQ89 and
+Root94 retire ONLY its1.125GiB/job1 after9 waits/18streams/421 protectedIO rows and
+directory/lock/container/fullRoot positive closure. Proc artifactQ05951bc8 PASS
+joins actual599Rust globals (one extra compiler-private Drop, publicABI unchanged),
+10LOCAL/3ASM, unchanged119/124 typed providers, six actual disassembly captures/
+18 instruction-GOT-FILE-free joins; phase2 matches prior594B code. Compiler15
+warnings remain at accepted flags. No backend/native/wholeoriginal credit.
+CredSource actualcaller binding00ca483b/dbe655b7 is reused; DispatchSource fills
+genuine artifactQ059/familyQ89/Root94 refs and only caller-role/data bindings to
+the qualified protected capture path. CallerC/stage359 remain unchanged; actual
+caller operation/context/admission and four real-file runtime results are UNISSUED.
+Dispatch froze concrete caller prefix8e6e41fa/bodyea0dbc89/HANDOFF996fe9f4,
+joining genuine producerQ059/ownQ89/Root94. Proc changed-only review found one
+pre-execution KeyError: the expected input is DOCKER-CREATE-ARGV.UNISSUED.json,
+but prefix245 indexes DOCKER-CREATE-ARGV.json. No grant/Popen/case was issued.
+Same DispatchSource froze only this literal-key correctionbfc1e764 in a fresh private
+successor; Proc retains the failed candidate and gives changed-only source/
+operationGO859fb80e, final Root-interface0cb82b84. CallerC/stage/profile,
+protected wait/FD algorithms and actualA/B remain
+unchanged. Root fresh source-only admission is ACCEPTED/running, retains402MiB/
+jobs2 plus actual1.89GiB infrastructure RSS; it grants no payload execution.
+Never recompile/relink this passingA/B or use oldb245/80a as repaired evidence.
+
+NativeBinding separately authors ONLY F05 qualified-account-retained-resource-
+binding-1: helper893/SourceGOa6/actualfourc66 and old256+C3128 resources, preserving
+cc710 same-original owning wait/FD/Env-map bodies. FunctionalDelta is the distinct
+changed-binding reviewer once frozen; actual permission/admission remains unissued.
 
 F08 current-invocation packet has exact operationGO5c6b153f/fullargv9a1d2133 after
 fixing old prefixed-scope/unprefixed-operation contradiction while retaining both
@@ -172,7 +209,20 @@ Qualified-account successor qualified-account-binding-1 now has new operationGO
 4863cdf7/argv867b975f, binding893/a6/actualfourPASSc66 and durable captured refusal
 fields. All behavior/two-invocation/provider-life guards remain reused; only real
 fresh seed/admission/provider/noevent/owner/source/permission/resource gates remain.
-Old5c packet is preserved; no case/probe/nonce has run and no wholeF08 credit.
+Old5c packet is preserved and unissued; successor execution below earns no wholeF08 credit.
+LATEST F08 actual operation: first materializer used taskset0 but required CPU7
+available, so it refused BEFORE nonce/grant/output/family creation. Exact original
+preinput failure89abec0d is preserved; only outer affinity changed to0,6,7. The
+reviewed final payload remainsCPU7. Root then issued fresh33-field grantb4a61e67/
+seedc14d4367 and ran approved4863 exactly once as originalTool81710. FullRoot
+40a8ae5a is terminal0, outera2b968ab/parent76db6727/insidee633649b preserve actual
+both-worker waiting/no-event case, normal daemon/launcher0, positive owned CLI
+waits and exactCIDc69f4209 terminal/nonOOM/Pid0/nonforce removal/absence. CredSource
+actual behaviorQ0a6e66a8 PASS has38 true predicates: stable task/FD graph for
+2.003127s, final gate2.022144s,3.8296ms from final gate to TERM intent, one approved
+TERM and normal joins; worker joins remain honestly source-bound.
+M15Leaf separately qualifies only805MiB/job1 own-family captures/FDs/fullRoot.
+Root has not retired this new family or accepted wholeF08/native/original credit.
 
 Publication prospective observability repair parent823b/keeper08e7/phase0af6f has
 independent SOURCE GOfda62213. Normal/FULL bodies and original signals/waits stay
