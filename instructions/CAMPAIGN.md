@@ -1,24 +1,26 @@
 # McKernel: M14 → M15 → complete supported system
 
-## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T19:46:25+00:00
+## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T19:57:34+00:00
 
 
-CURRENT MACHINE DELTA: the ONE reviewed LLVM member operation is independently
-Qe650ebc1/Root6af4a351 PASS: exact regular125217496B/db74/mode0755, SONAME, limited
-ELF and15original waits/30captures/container closure. ONLY its new1342177280B/job1
-is scoped RETIRED. LLVM_21.1 version-provider/runtime/compiler/SMP/device remain
-UNPROVED; new minimal version-info SOURCE7734/8037 is under FunctionalDelta review.
-No extraction/refetch/runtime replay. Public compact proof:
-docs/verification/m15-f06-official-vendor-descriptor-20261114/QUALIFIED-ONE-LLVM-MEMBER-PASSIVE-DATA.json.
-The exact F02 normal main-descriptor caller6d9d/f253, SourceGO9758/operationGO_febb,
-has now ACTUALLY compiled/testlinked/run ONCE exit0, originaltool60872/fullRootcf246/
-execution238f/CASE001b. Reports16real rlimit slots, args49/cap56/env28/cap32,
-CPU7/vDSO1 DATA and five-role expected frees. M15Leaf independently qualifies the
-new result/family and joins only this branch into original39d/dc459 obligations.
-Its new1207959552B/job1 REMAINS CHARGED pending positive Q+Root, alongside old
-402653184B/jobs2 and ALL overhead. Stop before PREPARE_IMAGE; no original/backend/
-native/wholeF02 acceptance or Rust/production/green-case rerun. Current111/156 and
-all actual holds remain; latest fetched checkpoint9b40f495 precedes this increment.
+CURRENT MACHINE DELTA: main-descriptor case is now Q13851aa2/Root0f0c24be
+scoped PASS and ONLY its new1207959552B/job1 RETIRED: compile/link/case0,16real
+rlimit slots, args49/cap56/env28/cap32/CPU7-vDSO1 DATA, five-role copy/borrow/free,
+9original waits/18captures/438FDs/exactCID/fullRoot0. Numeric failure-errno and
+payload/directory-fsync remain UNOBSERVED; no backend/PREPARE_IMAGE/native claim.
+Public exact caller/stage/CASE/proof: docs/verification/m15-f02-main-desc-real-libc-20261114/.
+Literal successor4bfb1bab remains NOT_GO; ONE next load_elf early real-nonELF FILE
+guard3139-3154 (before allocation3172/GET_CREDV3273) is original CredSource's
+healthy private preparation. Reuse productiond511/2282/SDK46d/providers/all prior
+passing cases, no Rust/production/ABI/source replay or new inventory/quota.
+LLVM member Qe650/Root6af4 remains retired only its new1.25GiB. Next bounded
+LLVM version-info operation77f79c81 ACTUALLY returned DATA_ONLY0, raw818744B/2c40,
+result6a626/fullRoot6a7c; NativeCurrent now qualifies ONLY actual NON-BASE LLVM_21.1
+definition/data/newfamily. Its new1342177280B/job1 REMAINS CHARGED pending Q+Root,
+plus old402653184B/jobs2 and ALL overhead. Versioned-symbol ABI/runtime/compiler/
+SMP/device/original acceptance remain unproved; no extraction/refetch/runtime.
+Current111/156/45open and all actual holds preserved. Latest pushed/fetched
+07f2fcc935 preserves qualified member and actual main-case source progress.
 
 Same savedRoot01a18bc3-e072-7810-9426-75101b0856c0, invocation
 20261114T063545Z-0eca897f, worker2661996/b72441123/server2661998/b72441133.

@@ -1,0 +1,158 @@
+{
+  "actual_case": {
+    "CRT_wrap_main": true,
+    "case_exit": 0,
+    "case_observations_ref": "CASE.json",
+    "compile_Werror_exit": 0,
+    "five_allocation_roles": {
+      "ARGS": {
+        "caller_frees": 1,
+        "capacity": 56,
+        "production_frees": 0
+      },
+      "DESC": {
+        "caller_frees": 1,
+        "capacity": 776,
+        "production_frees": 0
+      },
+      "ENV": {
+        "caller_frees": 1,
+        "capacity": 32,
+        "production_frees": 0
+      },
+      "PREFIX": {
+        "caller_frees": 0,
+        "capacity": 26,
+        "production_frees": 1
+      },
+      "TEMP": {
+        "caller_frees": 0,
+        "capacity": 40,
+        "production_frees": 1
+      },
+      "live_bases_distinct_while_owned": true,
+      "prepare_allocations": 2,
+      "real_allocations": 5,
+      "reallocs": 0
+    },
+    "last_copy_borrow_free": "At each production free, current published args/env/CPU/vDSO and temp content must already match. PREFIX copy<free<TEMP copy<free<prepare return. Final descriptor borrow precedes exactly caller ARGS, ENV and DESC frees. No stale PREFIX read/free after call; no production-consumed returned owner or caller temporary compensation.",
+    "pre_PREPARE_IMAGE_stop": true,
+    "publication": {
+      "CPU_field": 7,
+      "args_real_capacity": 56,
+      "args_returned_published_length": 49,
+      "args_strings": [
+        "/bin/true",
+        "script"
+      ],
+      "args_words": [
+        2,
+        32,
+        42,
+        49
+      ],
+      "env_real_capacity": 32,
+      "env_returned_published_length": 28,
+      "env_string": "X=1",
+      "env_words": [
+        1,
+        24,
+        28
+      ],
+      "padding": "Only zero padding within the real flat allocation capacities is checked; unrelated unwritten descriptor fields not claimed.",
+      "published_args_pointer": "Equal actual live ARGS owner",
+      "published_env_pointer": "Same live borrowed ENV owner",
+      "temporary_prefix_capacity": 40,
+      "temporary_prefix_words": [
+        1,
+        24,
+        34
+      ],
+      "vDSO_field": 1
+    },
+    "rlimits": {
+      "all_before_observed_after_cur_max_triplets_equal": true,
+      "errno_contract": "Wrapper171-186 captures errno immediately after __real_getrlimit, performs metadata checks, restores that exact saved value and returns the genuine result.",
+      "no_rlimit_mutation": true,
+      "numeric_per_call_errno": "UNLOGGED; no invented success errno or failure-scenario claim.",
+      "observed_production_calls": 16,
+      "real_return_values": "Each real call must return0 for actual case_pass true; no fabricated provider result.",
+      "resource_order": [
+        9,
+        4,
+        0,
+        2,
+        1,
+        10,
+        8,
+        12,
+        13,
+        7,
+        6,
+        5,
+        14,
+        15,
+        11,
+        3
+      ],
+      "slot_pointer_order": "Wrapped real calls require resource==resources[slot] and limit==&descriptor->rlimit[slot].",
+      "source_bound_total_real_calls": 48,
+      "total_precision": "16 direct libc before +16 production wrapped-real +16 direct libc after; only the16 slot triplets are logged."
+    },
+    "test_link_exit": 0
+  },
+  "limitations": {
+    "native_or_milestone_acceptance": false,
+    "original_operations": "UNKNOWN",
+    "real_backend_native_default_deployed_current_image": "NOT_EXERCISED_OR_ACCEPTED",
+    "resource_release_authorized": false,
+    "rlimit_failure_behavior_and_numeric_errno": "NOT_OBSERVED; genuine normal return and transparent errno source contract only",
+    "whole_original_F02_acceptance": "NOT_GRANTED; separate literal successor adjudication only"
+  },
+  "original_acceptance_credit_added": 0,
+  "own_family_closure": {
+    "closed_fsynced_captures": 18,
+    "exact_container_terminal_nonOOM_removed_absent": true,
+    "old402653184_bytes_jobs2_and_all_other_holds": "UNCHANGED",
+    "only_new_retired_bytes": 1207959552,
+    "only_new_retired_jobs": 1,
+    "ordinary_FD_generations_closed": 438,
+    "original_waits": 9
+  },
+  "payload_directory_and_payload_fsync": "UNOBSERVED_SEPARATE_SCOPE; Root capture/report directory fsync positive",
+  "proof_pins": {
+    "Root_scoped_retirement_sha256": "0f0c24be7886dc789490f5a3c5a4d4f12b9b9825d4cfed39c8f25e0fd1932965",
+    "independent_actual_Q_sha256": "13851aa2f5910f5f4d2181561e468399cf899c3a5683638a84a9e311d046d127",
+    "operation_GO_sha256": "febbde8f700c042fe394d00cbc59193f338629a5411e4953f6e1c2637ec4dc61",
+    "original_fullRoot_sha256": "cf2469754c1d2b0605d078ff246f04cbda86bc16f4a2202a4cecaed72f739911",
+    "source_GO_sha256": "9758a70719650cae68664ad229f9643271519a2570c78c6ce6bc18001e268653"
+  },
+  "qualified_source_and_case": [
+    {
+      "bytes": 12679,
+      "path": "docs/verification/m15-f02-main-desc-real-libc-20261114/main-desc-host-caller.c",
+      "sha256": "6d9d8306923ce129f5578b5ae3fac68e6d84e82046a9c4723bea4adbe99dccb1"
+    },
+    {
+      "bytes": 4310,
+      "path": "docs/verification/m15-f02-main-desc-real-libc-20261114/main-desc-host-stage.sh",
+      "sha256": "f253c5983ec4e426e5ec978fa93519f451e8ff6a95a4acbee5e530425c361947"
+    },
+    {
+      "bytes": 1404,
+      "path": "docs/verification/m15-f02-main-desc-real-libc-20261114/CASE.json",
+      "sha256": "001b3216180e78643f37aefd1ce0e3a0bb70efc7e632859e78a73c7ba0b9fe19"
+    }
+  ],
+  "schema": "mckernel.qualified-real-libc-normal-main-descriptor-case.v1",
+  "scope": "Functional McKernel OS/apps/Rust/allowed assembly ONLY; NO SECURITY TESTING",
+  "selected_production": {
+    "Rust_or_production_rebuild": false,
+    "immutable_SDK_image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "production_ELF_sha256": "2282fb6086bafcfa1b0aded4fe69d634921c674d2d2af4dc0a44e759b7711cfd",
+    "source_sha256": "61710a98f81d6be8ad5083924db4b855f7786d962285500cff3ffd09595b42b4",
+    "whole_Rust_object_sha256": "d511b91b230c1ccb4f84ff00de6ed8b5a770829373d2f81ca752d22f09dce445"
+  },
+  "status": "PASS_ONLY_REAL_NORMAL_MAIN_DESCRIPTOR_PREPARATION_PUBLICATION_AND_FIVE_ROLE_OWNERSHIP",
+  "whole_original_F02": "NOT_GO; successor4bfb1bab joins only this branch"
+}
