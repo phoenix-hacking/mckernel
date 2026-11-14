@@ -771,7 +771,7 @@ def observe_progress(repo, state, now=None):
     elif snapshot.get("target_status") == "NEEDS_TARGET":
         advisory_key = "needs-target-" + fingerprint
         reason = "The unattended run has no finite original-check closure target."
-    elif snapshot.get("closure_velocity", {}).get("state") == "below_target":
+    elif snapshot.get("closure_velocity", {}).get("state") == "below_target" and not changed:
         advisory_key = "closure-velocity-" + _digest({"priority": snapshot.get("priority_milestone"),
             "semantic": fingerprint})
         reason = ("The rolling 30-minute window has fewer than one newly verified original-check "
