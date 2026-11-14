@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T14:43Z
+## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T15:18Z
 
 Same savedRoot01a18bc3-e072-7810-9426-75101b0856c0, invocation
 20261114T063545Z-0eca897f, worker2661996/b72441123/server2661998/b72441133.
@@ -25,8 +25,11 @@ Failed caller family1207959552B/job1 is Q13a13e81/Rootf434df39 scoped RETIRED.
 F05 compile/passive family805306368B/job1 is Q04854f7a/Rootc9565217 scoped RETIRED.
 Corrected ABI776 caller1207959552B/job1 is Q8eec6493/Root3e584a05 scoped RETIRED.
 Official vendor-descriptor family268435456B/job1 is Qa9850b57/Rootfc778733 scoped
-RETIRED. Current known HOST payloads are ONLY old402653184B/jobs2 plus ALL overhead;
-one new payload slot requires fresh actual full aggregate admission.
+RETIRED. New one-case load_interp caller1207959552B/job1 is Q7c4bc2d2/Rootcaca1927
+scoped RETIRED. The authenticated-primary metadata family268435456B/job1 is
+Q5aeb9c4f/Rootd7bd0eda scoped RETIRED. Current known HOST reservations are ONLY
+old402653184B/jobs2 plus ALL overhead; one new payload slot still requires fresh
+actual source/account/permission/current-owner/aggregate admission.
 Actual6171 production family Q89a2730e/Root94a09169 retire ONLY its new1207959552B/
 job1. Every next family still requires its own fresh operation admission.
 Original tool14790 and C3tool32916 retain their original owning contexts. Actual
@@ -253,6 +256,29 @@ permission/current-owner/aggregate admission, then ONLY new C compile/testlink/o
 PT_INTERP rejection case. One actual realloc1000 generation, diagnostic flush,
 exactly-one production free before NULL and borrowed FILE through one caller
 close must be proved together with positive original waits/FD/container/fullRoot.
+Actual new Root grantfcbf1bf6 ran the approved ONE case once: fullRootf1de4cd2
+exit0 and EXECUTIONfe2d08ba preserve actual small C compile/testlink/one real-file
+case. CASE805ece9f reports NULL, realloc1000/generation2/moved, exactly-one
+productionfree after diagnostic flush and borrowed FILE through one caller close;
+no caller descriptor compensation. Expected diagnosticd1a4167a remains preserved.
+CIDd67bac77 is terminal/removed/absent; M15Leaf Q7c4bc2d2 independently passes
+bounded result and9 original waits/18closed-fsynced streams/440 ordinary prefix
+closures/directory/lock/fullRoot. Rootcaca1927 retires ONLY this1207959552B/job1.
+Raw original_operations UNKNOWN, historical lock alias/final-report preopen
+snapshot and expected diagnostic remain intact and source-joined. Public proof
+and exact C/stage are docs/verification/m15-f02-load-interp-real-file-20261114/.
+M15Leaf successor073a0786 updated ONLY this qualified join in original9101/
+dc459 obligations; whole F02 remains NOT_GO. ONE next unmatched branch is
+successful load_interp PT_LOAD section/num_sections/entry/interp_align publication
+and returned-current-generation descriptor/borrowed section.fp lifetime. CredSource
+prepares only one real HOST case against d511 and genuine SAME SDK46d loader;
+loader whole-file SHA/PHDR facts are genuinely unissued, not a host/fabricated
+ELF substitute. CredSource froze successcaller0d2cebae/stageeb911f93 and typed
+loader-input seal contract; it is NOT complete READY_SOURCE before actual data.
+DispatchSource prepares only the exact selected SDK46d loader passive-export
+operation/lifecycle binding (read/copy/hash/fstat/ELF data, never loader execution).
+Exact original source/consumer contracts remain; no native quota.
+No old fourcase/Rust/production/ABI/provider rerun or count credit.
 Old402653184B/jobs2 and ALL overhead/other holds stay charged.
 
 NativeBinding separately authors ONLY F05 qualified-account-retained-resource-
@@ -324,7 +350,21 @@ pass;5-second failed finalflush reportsETIMEDOUT/RAIIrelease, never stuck-owner 
 F08 success. DebugContract froze BUILD-PREPARATIONba46fd8e for ONLY the changed
 monitor normal one-invocation rustc compile/link; NativeCurrent actively reviews
 its new readonly leaf overlay/effective-source proof, exact provider/config/profile
-and lifecycle scope. No invented intermediate object/link plan, staged/noevent
+and lifecycle scope. Preparation-only GOc20b93a5 is frozen; DebugContract binds
+the existing qualified serial F05 custody runner to this exact new four-phase/
+ten-mount profile plus effective changed-leaf proof before codegen. Frozen
+lifecycle handoff8afa7417 is in NativeCurrent changed-only review; the actual
+consumed admission is30 fields/outer9, not the unrelated network-route33.
+Reviewer found an actual saved-input failure: original configure baseline
+profile.stdout18753B/e02b59c8 is truncated JSON (EOF430:1). Parent would fail
+after create/inspect and retain a CID before codegen. Candidate stays UNISSUED;
+NativeCurrent grouped NO_GO1fcf2f21 proves ALL4 historical baseline profiles
+are incomplete JSON; candidate stays UNISSUED, no runtime family. DebugContract
+owns one private bounded baseline/provenance correction, reusing every unaffected
+sourceproof/wait/capture/profile body. No prefix parsing/guessed original closure
+or relaxed Config/HostConfig comparison; bind genuine complete profiles or
+explicit new same46d qualified derivation plus exact literal monitor deltas. No invented
+intermediate object/link plan, staged/noevent
 mutation, build/native/wholeF08 acceptance. SMP whole-
 crate vendor192 compile and future genuineevent/byte/cleanup proof remain required.
 Create-v2 physical handoff remains a distinct unproved provider boundary.
@@ -338,13 +378,23 @@ actualQa9850b57 verifies all3HTTP200/TLS0/redirect0, key1688B/fullfingerprint,
 gpgv0/signeddescriptor and5+parent waits/FD/capture/fullRoot. Rootfc778733 retires
 ONLYnew256MiB/job1. Public qualified descriptor record is docs/verification/
 m15-f06-official-vendor-descriptor-20261114/QUALIFIED-DESCRIPTOR.json.
-TimeSource froze authenticated-primary-source-binding-1 READYf0f38039/request
-d8367178 for ONE exact GET and bounded authenticated gzip/XML vendor192 row/
-dependency selection. FunctionalDelta actively reviews only that changed request
-and its operation bindings. Signed sizes/digests, one120s deadline, actual Q/Root
-dependency and same33+nested6 grant schema are explicit; no primary/RPM acquisition
-or runtime/compiler fact or future grant is inferred. Cached46d/e015 supplier
-and both old reservations remain untouched.
+Authenticated-primary successor READYf0f38039/requestd8367178 received exact
+operationGOf567d47d and fresh Root33-field grant1bb6c215. One GET+bounded
+gzip/XML selection actually returned PASS: result58e6eea9/fullRoot0b92391e/
+protectedcapture2f944cd1. Exact advertised rust epoch0/1.92.0-1.el10/x86_64 is
+31573199B/SHAffb092cbb80e6fbffed7ab3a9bfc23c65eb5ee7d22ef80b27f4c9432c9493abb;
+no RPM bytes/signature/ELF/runtime acquired. Proc Q5aeb9c4f positively qualifies
+actual metadata/one-GET/parser/FD/wait/capture/output/fullRoot; Rootd7bd0eda
+retires ONLY this256MiB/job1. Public proof is docs/verification/
+m15-f06-official-vendor-descriptor-20261114/QUALIFIED-PRIMARY.json. TimeSource
+froze GET-only successor43201123/request91dd0754 after preserving one unissued
+profile-annotation candidate and bounded correction. FunctionalDelta reviews
+ONLY changed GET/profile/capture/34-field bindings (prior33+actualprimaryQ nested7).
+Root alone fills genuine Q5aeb/Rootd7bd and fresh admission AFTER GO; no new RPM
+operation is issued yet. Latest userb896c0ba scope: no install/signature/content extraction/compiler or Docker phase
+in this next grant, no descriptor/primary/key refetch or inferred runtime closure.
+FunctionalDelta reviews only that new operation after freeze. Cached46d/e015
+supplier and both old reservations remain untouched.
 
 Root broad git status metadata traversal hit protected archived-directory
 PermissionError diagnostics (actual chunk ebe269, original truncated protocol
