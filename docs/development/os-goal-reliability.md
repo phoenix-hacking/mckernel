@@ -347,3 +347,29 @@ Automated tests establish these exercised contracts. Workstation adoption,
 actual provider admission, service availability and an unattended production
 observation remain separate evidence; neither a green check nor a PR guarantees
 every future milestone will close.
+
+## Sequential dispatcher and measured closure velocity
+
+The sole Root dispatcher is pinned to GPT-6.1 Sol with **max** reasoning by default;
+model preflight checks the actual app-server catalog. No workstation model choice
+is proven by publishing a GitHub commit. The dispatcher gives each *eligible*
+existing child owner a finite original-check assignment via the supported
+`followup_task` route: exact original ID/unchanged completion contract, smallest
+real code or input repair, focused test, evidence reference, and Root handoff.
+Use disjoint owners in parallel within the current original milestone. Do not
+replay a held or uncertain operation, interfere with healthy retained work, or
+move new closure assignments to M15 before M14's original acceptance.
+After M15, continue the already authorized full OS milestone goal in its
+recorded sequence, unless an invocation explicitly requested a two-milestone
+checkpoint. This does not change the saved goal identity.
+
+The progress observer records **new** canonical binary original-check 0->100
+transitions, never the initial baseline or partial evidence, in a rolling
+1800-second window. It exposes a **target of 1-5 genuine closures per 30 minutes**
+and issues one deduplicated guarded same-Root review if the measured window
+falls below one closure. The target is aspirational, not a throughput guarantee,
+resource grant, acceptance substitution, or reason to restart in-flight work.
+The existing 20-minute checkpoint and 40-minute qualified-evidence stall defaults
+are preserved; the independent velocity deficit can request a finite decision
+at 30 minutes. The 156 original checks, holds, budgets, native custody, and
+all original file/integration and milestone acceptances remain unchanged.

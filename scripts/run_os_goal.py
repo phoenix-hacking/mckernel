@@ -2854,25 +2854,29 @@ class Campaign:
                   "This invocation has no time limit beyond its actual usage and inherited controls. ")
         repair = repair_instruction() if getattr(self.args, "repair_agent_failures", False) else ""
         milestones = ("This invocation targets original M14 and M15 acceptance only. "
-                      "Prepare independent eligible work in parallel, accept M14 before M15, "
+                      "Dispatch new closure work for M14 first, and only move to M15 once M14 is accepted; "
                       "and checkpoint when BOTH original milestones are accepted. Do not "
                       "mark the larger saved whole-system goal complete at that point. "
                       if getattr(self.args, "stop_after_m14_m15", False) else "")
         closure = ""
         if self.progress_enabled():
             from os_goal_progress import (load_ledger, remaining_work_view, remaining_work_instruction,
-                                          input_resolution_instruction)
+                                          input_resolution_instruction, priority_milestone,
+                                          dispatcher_agent_instruction)
             closure = (
                 "The harness is tied to the remaining original milestone checks. Select one OPEN exact original ID "
                 "from the canonical ledger, submit its finite target with python3 scripts/run_os_goal.py "
                 "--set-closure-target PATH, then carry out its concrete next action after actual source/account/permission/owner/resource admission. "
-                "Qualify the real result at its actual original scope, reuse passing evidence, and immediately hand off to the next open original "
+                "Qualify the real result at its actual original scope, reuse passing evidence, and immediately hand off to the next open original in the earliest unaccepted milestone "
                 "when the current condition closes. If blocked, name the exact missing input and supplying owner, precisely block that check, "
                 "and continue genuinely eligible independent original work. A successful instruction delivery is not a completed fix. "
                 "Do not substitute arbitrary goals, repeated proof wrappers or harness self-improvement loops for the remaining milestone work. ")
             closure += input_resolution_instruction()
             try:
-                closure += remaining_work_instruction(remaining_work_view(load_ledger(self.repo)))
+                ledger = load_ledger(self.repo)
+                lane = priority_milestone(ledger)
+                closure += dispatcher_agent_instruction(lane)
+                closure += remaining_work_instruction(remaining_work_view(ledger), lane)
             except (OSError, ValueError, TypeError, KeyError):
                 closure += "The canonical remaining-work ledger is UNKNOWN: reconcile its exact input error before selecting or executing a check. "
         return (

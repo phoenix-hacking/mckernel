@@ -33,6 +33,9 @@ ORIGINAL_CONDITIONS_SHA256 = "e237f9433a4c0c79ac0757a76f8cd84c3b61ccd77856a4745e
 MAX_JSON_BYTES = 4 * 1024 ** 2
 CHECKPOINT_SECONDS = 20 * 60
 STALL_SECONDS = 2 * CHECKPOINT_SECONDS
+VELOCITY_WINDOW_SECONDS = 30 * 60
+VELOCITY_TARGET_LOW = 1
+VELOCITY_TARGET_HIGH = 5
 OPERATION_FRESH_SECONDS = 120
 MAX_OPERATION_SECONDS = 24 * 60 * 60
 MAX_TARGET_EVIDENCE = 64
@@ -177,6 +180,36 @@ def condition_sha256(row):
     return hashlib.sha256(row["done_when"].encode("utf-8")).hexdigest()
 
 
+def priority_milestone(ledger):
+    """One acceptance lane at a time; independent agents share its open work."""
+    validate_ledger(ledger)
+    return next((name for name in ("M14", "M15")
+                 if ledger["summaries"][name]["milestone_accepted"] is not True), None)
+
+
+def dispatcher_agent_instruction(priority):
+    """Describe actual finite agent assignments, not imaginary RPC authority."""
+    lane = ("The current closure lane is " + priority + ". " if priority else
+            "M14 and M15 are accepted; continue the remaining original whole-OS milestones in their recorded order. ")
+    return (
+        lane + "The GPT-6.1 Sol/MAX Root is the sole dispatcher/compositor. At each eligible dispatch "
+        "cycle, account for EVERY existing active or idle child owner and each genuinely free "
+        "admitted child slot. Give each eligible owner a specific finite original-check "
+        "deliverable through followup_task (or the already supported child-assignment method): "
+        "exact original ID, unchanged done_when, source/header/ABI input to resolve, smallest "
+        "implementation action, focused verification, evidence path, and return-to-Root handoff. "
+        "Assign disjoint changes and independent verification in parallel WITHIN the current "
+        "milestone; do not start new next-milestone closure work before its predecessor is "
+        "accepted. Reuse existing owners before spawning within the actual child/resource "
+        "limits. Never redirect or duplicate healthy in-flight work, held/unknown owners, "
+        "rejected requests or uncertain delivery. One Root integrates and qualifies evidence. "
+        "Target 1-5 NEW verified original-check closures per rolling 30 minutes; this is an "
+        "operational goal, never a reason to weaken acceptance, invent work or overrun limits. "
+        "At each checkpoint count only new binary original-check closures, name the next "
+        "finite fix for any deficit, and keep progressing after each verified closure. "
+    )
+
+
 def remaining_work_view(ledger):
     """Finite original obligations, without readiness claims or a new task graph."""
     tasks = validate_ledger(ledger)["tasks"]
@@ -186,22 +219,29 @@ def remaining_work_view(ledger):
             for ident, row in tasks.items() if row["percent_complete"] == 0]
 
 
-def remaining_work_instruction(remaining):
-    """A bounded selection prompt; full conditions remain in the original ledger."""
+def remaining_work_instruction(remaining, priority=None):
+    """Select bounded candidates from the earliest unfinished acceptance lane."""
     if not remaining:
         return ("No counted original check remains open. Review only the exact original binary gate/milestone "
                 "acceptance still absent; do not invent another counted check. ")
-    # Both preparation lanes stay visible. Their ordering is presentation only,
-    # especially when M14 native work is blocked and M15 source work is eligible.
-    candidates = [row for milestone in ("M14", "M15")
-                  for row in [item for item in remaining if item["original_check"].startswith(milestone + "-")][:2]]
+    if priority in ("M14", "M15"):
+        candidates = [row for row in remaining
+                      if row["original_check"].startswith(priority + "-")][:5]
+    else:
+        candidates = remaining[:5]
     text = (f"The canonical finite remaining-work view has {len(remaining)} open original checks. "
-            "Concrete candidates for the existing Root to assess (UNASSESSED, not execution grants): ")
-    text += "; ".join(row["original_check"] + " [parent=" + str(row.get("parent"))
-                      + ", recorded profile=" + str(row.get("execution_profile")) + "]: " + str(row.get("title"))
-                      for row in candidates) + ". "
+            + ("Current required milestone: " + priority + ". " if priority else "")
+            + "Concrete candidates for the existing Root to assess (UNASSESSED, not execution grants): ")
+    if candidates:
+        text += "; ".join(row["original_check"] + " [parent=" + str(row.get("parent"))
+                          + ", recorded profile=" + str(row.get("execution_profile")) + "]: " + str(row.get("title"))
+                          for row in candidates) + ". "
+    else:
+        text += ("No counted check remains open in " + priority +
+                 "; finish its unchanged original file/integration gates and binary acceptance before advancing. ")
     return text + ("Use " + str(LEDGER_PATH) + " for every exact original done_when condition and recorded dependency. "
-                   "Prepare genuinely eligible independent M14/M15 work in parallel; preserve M14-before-M15 final acceptance. "
+                   "Assign independent eligible work in the current milestone to existing admitted agents; "
+                   "do not dispatch next-milestone closure before the current milestone's original acceptance. "
                    "Recorded dependencies mix source work, native admission and acceptance order, so this list confers no readiness or resource grant. ")
 
 
@@ -409,6 +449,7 @@ def project_progress(ledger, *, repo=None, state=None, now=None):
                 "unaccepted_original_gates": sorted(ident for summary in ledger["summaries"].values()
                     for ident in summary["original_gate_ids"] if rows["requirements"][ident]["accepted"] is not True),
                 "milestone_acceptance": {name: ledger["summaries"][name]["milestone_accepted"] for name in ("M14", "M15")},
+                "priority_milestone": priority_milestone(ledger),
                 "last_original_closure": _last_closure(ledger, set(closed)),
                 "remaining_work": remaining_work_view(ledger),
                 "current_target": None, "target_status": "NEEDS_TARGET", "remaining_conditions": [],
@@ -493,12 +534,13 @@ def _advisory(snapshot, reason):
             "Functional McKernel OS/apps and Rust/allowed-assembly migration only; no security testing. "
             + reason + " Original target: " + ident + ". ")
     text += input_resolution_instruction()
+    text += dispatcher_agent_instruction(snapshot.get("priority_milestone"))
     if snapshot.get("input_resolution"):
         resolution = snapshot["input_resolution"]
         text += ("Recorded missing input: " + resolution["missing_input"] + "; supplying owner: " + resolution["supplying_owner"]
                  + "; attempted resolution: " + resolution["attempted_action"] + "; actual recorded outcome: " + resolution["outcome"] + ". ")
     if snapshot.get("remaining_work") is not None:
-        text += remaining_work_instruction(snapshot["remaining_work"])
+        text += remaining_work_instruction(snapshot["remaining_work"], snapshot.get("priority_milestone"))
     if failures:
         failure = failures[0]
         text += ("Preserve the exact failed " + failure["semantic"]["stage"] + " result and diagnostic "
@@ -611,6 +653,31 @@ def observe_progress(repo, state, now=None):
     previous_gates = set(previous_gates) if isinstance(previous_gates, list) and all(isinstance(x, str) for x in previous_gates) else set()
     current_closed, current_gates = set(snapshot["closed_original_checks"]), set(snapshot.get("accepted_original_gates", []))
     known_closed, known_gates = previous_closed | current_closed, previous_gates | current_gates
+    # Do not credit the initial 111/156 (or any baseline) as new closures.
+    # Retain only observed canonical 0->100 transitions, keyed by original ID.
+    velocity_start = _epoch(previous.get("velocity_started_at", now))
+    clock_rollback = now < velocity_start
+    closure_events = {}
+    for event in previous.get("verified_closure_events", []):
+        if not isinstance(event, dict) or event.get("original_check") not in current_closed:
+            continue
+        try:
+            observed_at = _epoch(event.get("observed_at"))
+            if observed_at >= now - 4 * VELOCITY_WINDOW_SECONDS:
+                closure_events.setdefault(event["original_check"], observed_at)
+        except (ValueError, TypeError, OverflowError):
+            continue
+    if previous and "ledger_error" not in snapshot and not (previous_closed - current_closed):
+        for ident in current_closed - previous_closed:
+            closure_events.setdefault(ident, now)
+    recent = sum(now - VELOCITY_WINDOW_SECONDS <= at <= now for at in closure_events.values())
+    velocity_state = ("UNKNOWN" if "ledger_error" in snapshot or previous_closed - current_closed or clock_rollback
+                      else "warming_up" if now - velocity_start < VELOCITY_WINDOW_SECONDS
+                      else "below_target" if recent < VELOCITY_TARGET_LOW else "meeting_target")
+    snapshot["closure_velocity"] = {
+        "window_seconds": VELOCITY_WINDOW_SECONDS, "target_min": VELOCITY_TARGET_LOW,
+        "target_max": VELOCITY_TARGET_HIGH, "new_verified_in_window": recent,
+        "state": velocity_state, "baseline_started_at": _utc(velocity_start)}
     if previous_closed - current_closed or previous_gates - current_gates:
         snapshot["acceptance_regression"] = "UNKNOWN or regressed original closure; reconcile canonical evidence before claiming progress"
     progress_keys = {key for key, record in records.items() if record["semantic"]["kind"] == "required_evidence"
@@ -634,6 +701,9 @@ def observe_progress(repo, state, now=None):
     monitor = {"schema_version": 1, "semantic_fingerprint": fingerprint,
                "last_semantic_at": last_semantic, "last_checkpoint_at": now if checkpoint_due else last_checkpoint,
                "accepted_records": [records[key] for key in sorted(records)],
+               "velocity_started_at": velocity_start,
+               "verified_closure_events": [{"original_check": ident, "observed_at": _utc(at)}
+                                           for ident, at in sorted(closure_events.items())],
                "known_closed_original_checks": sorted(known_closed), "known_accepted_original_gates": sorted(known_gates),
                "earned_progress_keys": sorted(earned_progress),
                "last_review_key": previous.get("last_review_key"),
@@ -700,6 +770,21 @@ def observe_progress(repo, state, now=None):
     elif snapshot.get("target_status") == "NEEDS_TARGET":
         advisory_key = "needs-target-" + fingerprint
         reason = "The unattended run has no finite original-check closure target."
+    elif (snapshot.get("priority_milestone") in ("M14", "M15")
+          and snapshot.get("current_target")
+          and not snapshot["current_target"]["original_check"].startswith(snapshot["priority_milestone"] + "-")):
+        advisory_key = "out-of-order-target-" + _digest({"target": binding,
+            "priority": snapshot["priority_milestone"], "semantic": fingerprint})
+        reason = ("The selected target belongs to a later milestone. Redirect NEW admitted "
+                  "agent assignments to " + snapshot["priority_milestone"] +
+                  " at the next safe decision; do not interrupt healthy owned work or clear holds.")
+    elif snapshot.get("closure_velocity", {}).get("state") == "below_target":
+        advisory_key = "closure-velocity-" + _digest({"priority": snapshot.get("priority_milestone"),
+            "semantic": fingerprint})
+        reason = ("The rolling 30-minute window has fewer than one newly verified original-check "
+                  "closure. Assign finite independent fixes to all eligible existing child owners "
+                  "within the earliest unfinished milestone; the 1-5 closure target does not grant "
+                  "resource admission or relax any original acceptance.")
     elif now - last_semantic >= stall:
         advisory_key = "closure-stall-" + _digest({"target": binding, "semantic": fingerprint})
         reason = f"No original closure or new qualified matching evidence for {int(now - last_semantic)} seconds."

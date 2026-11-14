@@ -189,6 +189,44 @@ class ProgressTests(unittest.TestCase):
         self.assertIn("acceptance_regression", regressed["snapshot"])
         self.assertEqual(regressed["monitor"]["last_semantic_at"], 0)
 
+    def test_strict_sequential_dispatch_chooses_only_current_milestone(self):
+        self.assertEqual(subject.priority_milestone(self.ledger), "M14")
+        remaining = subject.remaining_work_view(self.ledger)
+        text = subject.remaining_work_instruction(remaining, "M14")
+        self.assertIn("Current required milestone: M14", text)
+        self.assertNotIn("Concrete candidates for the existing Root to assess (UNASSESSED, not execution grants): M15-", text)
+        self.assertIn("EVERY existing active or idle child owner", subject.dispatcher_agent_instruction("M14"))
+        self.assertIn("rolling 30 minutes", subject.dispatcher_agent_instruction("M14"))
+        self.ledger["summaries"]["M14"]["milestone_accepted"] = True
+        self.assertEqual(subject.priority_milestone(self.ledger), "M15")
+
+    def test_rolling_velocity_counts_only_new_canonical_binary_closures(self):
+        first = self.observe(0)
+        self.assertEqual(first["snapshot"]["closure_velocity"]["new_verified_in_window"], 0)
+        self.target["evidence"] = [self.reference(self.receipt())]
+        self.observe(100)  # Qualified partial evidence is not a closed original check.
+        slow = self.observe(1800)
+        self.assertEqual(slow["snapshot"]["closure_velocity"]["state"], "below_target")
+        self.assertEqual(slow["snapshot"]["closure_velocity"]["new_verified_in_window"], 0)
+        self.assertTrue(slow["advisory_key"].startswith("closure-velocity-"))
+        self.row["percent_complete"] = 100
+        self.write_ledger()
+        closed = self.observe(1900)
+        self.assertEqual(closed["snapshot"]["closure_velocity"]["new_verified_in_window"], 1)
+        self.assertEqual(closed["snapshot"]["closure_velocity"]["state"], "meeting_target")
+        self.assertEqual(self.observe(2000)["snapshot"]["closure_velocity"]["new_verified_in_window"], 1)
+        later = self.observe(3701)
+        self.assertEqual(later["snapshot"]["closure_velocity"]["new_verified_in_window"], 0)
+
+    def test_out_of_order_target_requests_safe_redirection_not_operation_replay(self):
+        later = next(row for row in self.ledger["tasks"]
+                     if row.get("counted_in_requirement_rollup") and row["id"].startswith("M15-"))
+        self.target["original_check"] = later["id"]
+        seen = self.observe(0)
+        self.assertEqual(seen["snapshot"]["priority_milestone"], "M14")
+        self.assertTrue(seen["advisory_key"].startswith("out-of-order-target-"))
+        self.assertIn("do not interrupt healthy owned work", seen["advisory_text"])
+
     def test_real_original_closure_is_progress_but_changes_no_denominator(self):
         self.observe(0)
         self.row["percent_complete"] = 100
