@@ -1,0 +1,279 @@
+{
+  "schema": "mckernel.current-mcexec-F02-production-artifact-qualification.v1",
+  "scope": "Functional McKernel OS/apps/Rust/allowed assembly only; NO SECURITY TESTING",
+  "at": "2026-11-14T07:09:51.939014+00:00",
+  "status": "PASS_EXACT_CURRENT_PRODUCTION_ARTIFACT_DEFINITIONS_PROVIDERS_AND_DESCRIPTOR_RELEASE_ORDER_ONLY",
+  "actual_artifacts": {
+    "A_object": {
+      "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/output/producer-checkpoint/mcexec_helpers.o",
+      "bytes": 763256,
+      "sha256": "b245426d68723200ad11f0523f6231568e08eb935f69fd22f92faf8200dfa57b"
+    },
+    "B_ELF": {
+      "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/output/executer/user/mcexec",
+      "bytes": 398112,
+      "sha256": "80a5598d137ff336e4eaea3b189858fceaa20728394495055b72ed0911957035"
+    },
+    "B_map": {
+      "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/output/mcexec.map",
+      "bytes": 161420,
+      "sha256": "c1342a10a1aef03df09df70d87c08de22597fe4dbd7a0569fcdb451a6bdcb541"
+    },
+    "retained_ASM_archive": {
+      "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/output/executer/user/libmcexec.a",
+      "bytes": 2946,
+      "sha256": "eb866f7f55d69d6af481daa90ceaa4e319201f65c7b14925fd1b86a1d7356ddc"
+    },
+    "source": {
+      "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/source/executer/user/rust/mcexec_helpers.rs",
+      "bytes": 256244,
+      "sha256": "c33b6018308b1648287a38182e4efb95f6639f2798311a2acea218f44faf5b57"
+    }
+  },
+  "passive_capture_provenance": {
+    "Root_original_completed": {
+      "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/passive-B-correction-1/ROOT-ACTUAL-PASSIVE-EXECUTION-1/ROOT-TOOL-ORIGINAL.COMPLETED.json",
+      "bytes": 28928,
+      "sha256": "4813a07a68bee705272158a6932ac162f7134aee147a8924509c87d4c6b8e477"
+    },
+    "Root_execution": {
+      "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/passive-B-correction-1/ROOT-ACTUAL-PASSIVE-EXECUTION-1/EXECUTION.json",
+      "bytes": 17008,
+      "sha256": "818239e1b7416f912606a35ae492d3ee9670cd8c60f467e4e0469848377eea2f"
+    },
+    "changed_source_review": {
+      "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/passive-B-correction-1/independent-review-ownership-reconciliation-1/REVIEW.json",
+      "bytes": 11004,
+      "sha256": "bd244f51e8bfad99d252e2b6118e77836eb8be325aea0b7f7d8b30ec0b7389ee"
+    },
+    "request": {
+      "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/passive-B-correction-1/REQUEST.json",
+      "bytes": 14586,
+      "sha256": "28f3123f79cd5d800d174969f829577701aeb44d91d678d465246d85909642d4"
+    },
+    "execution_reported_command_exit": 0,
+    "all_new_output_pins_match_original_Root_capture": true,
+    "new_capture_pins": [
+      {
+        "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/passive-B-correction-1/output/ARTIFACTS.sha256",
+        "bytes": 428,
+        "sha256": "713430978a7087a0f88497b34569c3aa2b2e5e8031b7499f7427b1abd8c11e07",
+        "matches_original_Root_capture": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/passive-B-correction-1/output/ARTIFACTS.stat",
+        "bytes": 149,
+        "sha256": "3a79007332a85c12c9a4b8ed9c576d9840ddf888bbb7d42df4acaa47ab208f4e",
+        "matches_original_Root_capture": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/passive-B-correction-1/output/CONTINUATION-METADATA-CAPTURE-COMPLETE",
+        "bytes": 190,
+        "sha256": "a950f33fd6517579c6b54522a2e1b67d647c54565d276d0a8789ff17b5830f15",
+        "matches_original_Root_capture": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/passive-B-correction-1/output/INPUTS.after.sha256-check",
+        "bytes": 511,
+        "sha256": "0ec8612833adae025099c4c10eb1122925389797cd8d6ad5d2431a6f14269e94",
+        "matches_original_Root_capture": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/passive-B-correction-1/output/INPUTS.before.sha256-check",
+        "bytes": 511,
+        "sha256": "0ec8612833adae025099c4c10eb1122925389797cd8d6ad5d2431a6f14269e94",
+        "matches_original_Root_capture": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/passive-B-correction-1/output/metadata/mcexec.act_execve_phase2",
+        "bytes": 9447,
+        "sha256": "5e3afb871fb487e13fa03cdc78f6be0597a421fecefd7c709def5efba89e122b",
+        "matches_original_Root_capture": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/passive-B-correction-1/output/metadata/mcexec.defined",
+        "bytes": 23991,
+        "sha256": "a4c34d4cc9988f729ca4c743bdd94ce0b515cdd512bb86286a344b61cbde1a20",
+        "matches_original_Root_capture": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/passive-B-correction-1/output/metadata/new-object.act_execve_phase2",
+        "bytes": 44952,
+        "sha256": "908a777094181f1e00a28ec7358293a03c621f0303f047afc8ac2a44ee2f9f0a",
+        "matches_original_Root_capture": true
+      }
+    ],
+    "all11_original_input_pins_still_match": true,
+    "before_and_after_checks": "Exact eleven frozen input paths each OK; input artifact/readelf/undefined/trace bytes unchanged."
+  },
+  "current_complete_global_definition_profile": {
+    "Rust_count": 598,
+    "Rust_FUNC": 550,
+    "Rust_OBJECT": 48,
+    "each_current_input_definition_has_unique_final_same_kind_width_bind_visibility": true,
+    "each_current_final_definition_has_exact_Rust_map_owner_and_input_offset": true,
+    "each_current_global_has_unique_matching_nm_name_address_width": true,
+    "normalized_all598_current_joins_sha256": "5c7f3c2b8e5b1cca0ae0822f989b3aaef7c5ac4d81e8bf45c10f7f9f5d540201",
+    "assembly_count": 3,
+    "assembly_current_definitions": [
+      {
+        "name": "switch_ctx",
+        "kind": "NOTYPE_GLOBAL (qualified assembly convention)",
+        "current_final_value": 111958,
+        "source_bounded_bytes": 330,
+        "text_sha256": "5728e5d0b978aedde65eb194100eb85fd14397591df0415c0243a4d1414757e6",
+        "actual_map_owner": "libmcexec.a(archdep.S.o)"
+      },
+      {
+        "name": "compare_and_swap",
+        "kind": "NOTYPE_GLOBAL (qualified assembly convention)",
+        "current_final_value": 112288,
+        "source_bounded_bytes": 9,
+        "text_sha256": "280bbb8f36e42f3219550535ae4caff8cdfed4ddadce41e52b36dc3b32a9dc8e",
+        "actual_map_owner": "libmcexec.a(archdep.S.o)"
+      },
+      {
+        "name": "compare_and_swap_int",
+        "kind": "NOTYPE_GLOBAL (qualified assembly convention)",
+        "current_final_value": 112297,
+        "source_bounded_bytes": 7,
+        "text_sha256": "d5adf098f5857d57b1f3306d800808e662ca0f7895257641e00e1aff1763e1fd",
+        "actual_map_owner": "libmcexec.a(archdep.S.o)"
+      }
+    ],
+    "current_selected_ASM_text_bytes": 346,
+    "current_selected_ASM_text_equals_qualified_unchanged_archive": true,
+    "final_global_nm_total": 612,
+    "additional_platform_CRT_or_linker_symbols": [
+      "_IO_stdin_used",
+      "__TMC_END__",
+      "__bss_start",
+      "__data_start",
+      "__dso_handle",
+      "_edata",
+      "_end",
+      "_fini",
+      "_init",
+      "_start",
+      "data_start"
+    ],
+    "additional_platform_basis": "Actual unchanged same46d startup CRT operands and linker-synthesized symbols in current trace/map; Rust main and project ASM are separate. No project-C implementation operand selected.",
+    "key_current_Rust_definitions": {
+      "act_execve_phase2": {
+        "name": "act_execve_phase2",
+        "kind": 2,
+        "bytes": 594,
+        "bind": 1,
+        "visibility": 0,
+        "current_final_value": 28144,
+        "object_section": ".text.act_execve_phase2",
+        "actual_map_owner": "rust/mcexec_helpers.o"
+      },
+      "transfer_image": {
+        "name": "transfer_image",
+        "kind": 2,
+        "bytes": 726,
+        "bind": 1,
+        "visibility": 0,
+        "current_final_value": 111232,
+        "object_section": ".text.transfer_image",
+        "actual_map_owner": "rust/mcexec_helpers.o"
+      },
+      "main": {
+        "name": "main",
+        "kind": 2,
+        "bytes": 6,
+        "bind": 1,
+        "visibility": 0,
+        "current_final_value": 46256,
+        "object_section": ".text.main",
+        "actual_map_owner": "rust/mcexec_helpers.o"
+      }
+    },
+    "no_old_final_address_or_width_used_as_current_proof": true
+  },
+  "compiler_internal_or_inlined_functions": {
+    "emitted_local_Rust_FUNC_count": 10,
+    "all_local_current_kind_width_and_input_section_map_owners_match": true,
+    "all_remain_LOCAL_not_misreported_missing_global_exports": true,
+    "current_local_function_names": [
+      "_RNvCsYZ5JrEMmDi_14mcexec_helpers16is_sys_root_path",
+      "_RNvCsYZ5JrEMmDi_14mcexec_helpers17trim_shebang_line",
+      "_RNvCsYZ5JrEMmDi_14mcexec_helpers18overlay_checkexist",
+      "_RNvCsYZ5JrEMmDi_14mcexec_helpers18path_arg_or_return",
+      "_RNvCsYZ5JrEMmDi_14mcexec_helpers19pci_local_cpus_path",
+      "_RNvCsYZ5JrEMmDi_14mcexec_helpers21parse_i32_with_prefix",
+      "_RNvCsYZ5JrEMmDi_14mcexec_helpers22overlay_check_cpu_node",
+      "_RNvCsYZ5JrEMmDi_14mcexec_helpers22parse_i32_after_prefix",
+      "_RNvCsYZ5JrEMmDi_14mcexec_helpers25overlay_resolve_sys_links",
+      "_RNvCsYZ5JrEMmDi_14mcexec_helpers27load_desc_publish_exec_path"
+    ],
+    "normalized_current_local_joins_sha256": "eaceb9b99afb16c2a472e8dfef0b19720eae0b22ec7bd6cdef89ad36bc9a0c5b",
+    "inlining_note": "The reviewed bridge/report/cleanup helpers may be inlined inside act_execve_phase2. Required full emitted body and actual calls/control flow are proved below; standalone internal source names are not invented as additional export obligations. Exported definitions are still exhaustively joined above."
+  },
+  "provider_qualification_reused": {
+    "report": {
+      "path": "/home/holden/mckernel-work/m15-f02-production-object-20261114/passive-B-correction-1/provider-row-qualification-1/QUALIFICATION.json",
+      "bytes": 10287,
+      "sha256": "1f0dda1370d9aa5357767773ef0b5d8ad90befbef4686a22045339c2cc77bae9"
+    },
+    "new119_object_names_exact": true,
+    "new124_dynamic_name_version_kind_binding_visibility_exact": true,
+    "121_typed_definition_joins": "117libc (106FUNC\u2192FUNC +5FUNC\u2192IFUNC +6OBJECT\u2192OBJECT) +4typed NUMA; same exact immutable46d libc/NUMA namespace and header/definition/version authority.",
+    "3_optional_unversioned_WEAK_NOTYPE": "Remain optional; not fabricated as resolved real definitions.",
+    "source_edges": "118systemdynamic +1unique actual switch_ctx ASM definition now joined above.",
+    "COPY_relocations": 0,
+    "SDK_header_NUMA_type_ABI_or_provider_green_replay": false
+  },
+  "descriptor_lifetime_current_artifact": {
+    "function_bytes": 594,
+    "current_final_start": "0x6df0",
+    "object_and_final_disassembly_bytes_match_actual_full_function": true,
+    "allocation_binding": "malloc result RAX saved into R14 at object+0x2b; source desc ownership begins only on successful nonnull allocation.",
+    "pull_failure": {
+      "condition": "MCEXEC_UP_TRANSFER ioctl result tested; JNE at object+0x6d / final0x6e5d enters +0x1c5 / final0x6fb5 failure arm.",
+      "release_argument": "R14 descriptor moved to RDI at +0x1e6 / final0x6fd6.",
+      "free_call_object_offset": "0x1e9",
+      "free_relocation_object_offset": "0x1eb R_X86_64_GOTPCREL free-4",
+      "free_call_current_final": "0x6fd9",
+      "after_release": "JMP +0x212 / final0x7002 sets -1 and returns; no transfer_image call or later descriptor borrow on this arm."
+    },
+    "last_synchronous_borrow_and_release": {
+      "borrow_argument": "R14 descriptor moved to RSI at +0xa9 / final0x6e99.",
+      "transfer_image_call_object_offset": "0xac",
+      "transfer_image_relocation_object_offset": "0xae R_X86_64_GOTPCREL transfer_image-4",
+      "transfer_image_call_current_final": "0x6e9c",
+      "actual_final_GOT_resolution": "0x26a88 R_X86_64_RELATIVE addend0x1b280 \u2192 actual current unique Rust transfer_image, same-kind/width/map owner as current object.",
+      "return_preservation": "EAX image result saved into R15D at +0xb2 / final0x6ea2 before free.",
+      "release_argument": "R14 descriptor moved to RDI at +0xb5 / final0x6ea5.",
+      "free_call_object_offset": "0xb8",
+      "free_relocation_object_offset": "0xba R_X86_64_GOTPCREL free-4",
+      "free_call_current_final": "0x6ea8",
+      "actual_final_free_resolution": "Both free call instructions address GOT0x26888; current .rela.dyn GLOB_DAT names free, matching reused free@GLIBC_2.2.5 typed provider join.",
+      "result_check_after_free": "TEST R15D at +0xbe / final0x6eae occurs after release; both image success and image failure release once before downstream status handling.",
+      "later_use": "No desc borrow after release; later R14 assignment from sysconf at +0x11d changes its meaning to FD limit, and epilogue pop restores caller register."
+    },
+    "only_two_descriptor_free_relocations_in_actual_body": [
+      "0xba",
+      "0x1eb"
+    ],
+    "allocation_failure": "Null-malloc arm enters +0x1ad, never owns/frees a descriptor; original return behavior retained.",
+    "source_contract": "Exact reviewed c33b6018 production source; full actual production crate/object, not an extracted fixture. Synchronous ioctl/transfer_image borrow rule reused from exact reviewed source and existing focused six-case/32-cycle evidence; no behavior replay."
+  },
+  "matching_green_evidence_reused": "Prior accepted full original compiler/profile/generated8d BUILDID/CMake selection, SDK/storage/header78word624B ABI, retained assembly semantics/13debug-only relocations/zero runtime text relocations, typed NUMA and119/124 provider-row proof, descriptor six-case/32-success-cycle hosted test, source reviews. None rerun or broadened into old349/51 completion.",
+  "analysis_method": "Saved JSON/text and current ELF/archive bytes only; Python standard-library reading/struct decoding and private report write. No nm/readelf/objdump/helper/validator/SUT/compiler/link/container/native/network/API/download operation.",
+  "concrete_missing_delta_or_unknown": [],
+  "claims": {
+    "current_full598_Rust_plus3_ASM_definitions_and_map_ownership_PASS": true,
+    "current119edges_124dynamic_provider_set_PASS_reused": true,
+    "current_full_act_execve_phase2_descriptor_release_order_PASS": true,
+    "production_artifact_qualification_at_exact_stated_scope": true,
+    "own_family_lifecycle_or_resource_Q_performed_here": false,
+    "whole_original_F02_behavior_or_deployed_or_native_acceptance": false,
+    "whole_milestone_acceptance_or_ledger_credit": false,
+    "resource_UNKNOWN_or_hold_release": false
+  },
+  "separate_authority": "ownership_reconciliation independently owns actual passive family lifecycle/Q. Saved Root alone composes/integrates/decides original condition and native acceptance; this record neither duplicates lifecycle Q nor queues or changes existing records.",
+  "independently_queued": false,
+  "existing_record_canonical_index_state_or_ledger_edits": false
+}

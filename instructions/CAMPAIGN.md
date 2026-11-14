@@ -40,8 +40,15 @@ nm and two descriptor-order disassemblies plus input/artifact captures. All11
 readonly inputs match before/after;9 original CLI waits/18streams are closed and
 fsynced, nonOOM/exited/Pid0/remove/absence proved. FullRoot4813a07a and actual
 EXECUTION are at passive-B-correction-1/ROOT-ACTUAL-PASSIVE-EXECUTION-1. NativeBinding
-independently qualifies final definitions/lifetime and this new1.125GiB/job1 scope;
-charge remains retained until actualQ/Root receipt. WholeF02/native not accepted.
+independently qualifies final definitions/lifetime (foreground owner; duplicate
+canonical review stopped). Actual own-familyQ8329f3ad and Root scoped receipt
+f54a9171 now retire ONLY this1.125GiB/job1/exactCID. Current known Root HOST
+payload census is0bytes/jobs plus measured overhead, not native/UNKNOWN clearance
+or a future grant. ArtifactQe11ecf97 now passes598uniqueRust+3ASM/current119-124
+providers and actual descriptor release order. Public exact artifact/providerQ and
+Root scoped receipt summary: docs/verification/m15-f02-production-continuation-20261114/.
+M15Leaf reviews only the literal whole complete-ABI-behavior clause using this and
+unchanged valid behavior evidence; wholeF02/native is not accepted.
 Supplier Proc reviewc23d0236 found only buffer-before-bound/lost owning-context
 contract; originalTimeSource is correcting that exact routine in private fresh
 capture-contract-correction-1, no compiler/network or green image review. Healthy
