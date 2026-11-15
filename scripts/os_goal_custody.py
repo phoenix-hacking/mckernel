@@ -105,3 +105,29 @@ def retention_matches(state, *, worker_pid, worker_start, watcher_pid, watcher_s
             and row.get("controller_dispatch_enabled") is False
             and row.get("inflight_turn_quiescence") == "unverified"
             and row.get("operator_required") is True)
+
+
+def rejected_startup_closed(state, *, worker_pid, worker_start):
+    """Positive closure of only a server whose first Root resume was rejected.
+
+    This acknowledges no payload/native release and never authorizes a retry.
+    Generic failures, uncertain RPCs and actual thread owners remain retained.
+    """
+    identity = current_owner_identity(state, worker_pid=worker_pid, worker_start=worker_start)
+    if identity is None or not isinstance(identity.get("thread_id"), str):
+        return False
+    rejection = state.get("startup_rejection")
+    error = rejection.get("error") if isinstance(rejection, dict) else None
+    return (isinstance(rejection, dict)
+            and state.get("phase") == "stopped"
+            and state.get("stop_reason") == "thread_writer_conflict"
+            and state.get("active_turns") == {}
+            and not state.get("transport_uncertain")
+            and all(rejection.get(key) == value for key, value in identity.items())
+            and rejection.get("status") == "own_bare_server_closed"
+            and rejection.get("root_session_acquired") is False
+            and rejection.get("payload_release_authorized") is False
+            and rejection.get("close_errors") == []
+            and rejection.get("method") == "thread/resume"
+            and isinstance(error, dict) and error.get("code") == -32600
+            and error.get("message") == "thread " + identity["thread_id"] + " already has an active writer")

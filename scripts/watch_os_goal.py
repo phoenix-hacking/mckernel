@@ -17,7 +17,7 @@ from os_goal_transport import (READ_ONLY_RPC_METHODS, classify_rpc_failure,
 from os_goal_handoff import write_recovery_handoff
 from os_goal_stop_log import write_stop_record
 from os_goal_custody import (current_owner_identity, retention_enabled,
-                             retention_matches)
+                             retention_matches, rejected_startup_closed)
 
 
 def process_start(pid):
@@ -457,6 +457,7 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
     retained_owner = None
     known_owner = None
     owner_drift = False
+    startup_closed = False
     final_code = 1
     log = (directory / "watcher.jsonl").open("a", buffering=1)
 
@@ -685,6 +686,17 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                    goal_status=(attributed.get("goal") or {}).get("status"))
             if retain_owner:
                 owner = current_owner_identity(state, worker_pid=child.pid, worker_start=child_start)
+                if (retained_owner is None and not owner_drift
+                        and (known_owner is None or owner == known_owner)
+                        and rejected_startup_closed(state, worker_pid=child.pid, worker_start=child_start)):
+                    # The worker positively closed its own rejected bare server.
+                    # No thread/payload was acquired; no retry or hold release.
+                    last_state = dict(state)
+                    server_retired = startup_closed = True
+                    record("startup_rejection_closed", startup_rejection=state["startup_rejection"],
+                           automatic_resume=False, payload_release_authorized=False,
+                           native_release_authorized=False)
+                    break
                 if known_owner is None and owner is not None:
                     known_owner = owner
                     last_state = dict(state)
@@ -828,12 +840,13 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                 record("watcher_retirement", worker_retired=worker_retired,
                        server_retirement_attempted=server_retirement_attempted,
                        server_retired=server_retired,
-                       recovery_held=(retain_owner and child is not None
+                       startup_rejection_closed=startup_closed,
+                       recovery_held=(retain_owner and child is not None and not startup_closed
                                       or not (worker_retired and server_retired)),
                        owner_identity=known_owner if retain_owner else None,
                        owner_identity_drift=owner_drift if retain_owner else False,
-                       custody="UNKNOWN" if retain_owner and child is not None else None,
-                       operator_required=retain_owner and child is not None,
+                       custody="UNKNOWN" if retain_owner and child is not None and not startup_closed else None,
+                       operator_required=retain_owner and child is not None and not startup_closed,
                        native_release_authorized=False)
             except Exception as error:
                 print("[os-watch] Retirement reporting unavailable: " + str(error), flush=True)

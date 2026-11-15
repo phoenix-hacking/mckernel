@@ -13,6 +13,7 @@ import subprocess
 import sys
 
 from os_goal_service import runtime_directory
+from os_goal_writer import require_saved_writer_ready
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -47,6 +48,9 @@ def controller_command(args):
 
 def main(argv=None):
     args = arguments(argv)
+    from run_os_goal import OBJECTIVE
+    runtime = runtime_directory(REPO)
+    require_saved_writer_ready(runtime, expected_repo=REPO, expected_objective=OBJECTIVE)
     command = controller_command(args)
     if args.check:
         from os_goal_power import probe_inhibition
@@ -63,7 +67,7 @@ def main(argv=None):
         raise RuntimeError("Sleep inhibitor/taskset unavailable; no overnight run was started")
     command = [inhibitor, "--what=idle:sleep", "--mode=block", "--who=McKernel",
                "--why=Close original M14 and M15", "--", taskset, "-c", args.cpus, *command]
-    directory = runtime_directory(REPO) / "manual-launches"
+    directory = runtime / "manual-launches"
     directory.mkdir(parents=True, mode=0o700, exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     path = directory / (stamp + ".log")

@@ -65,5 +65,9 @@ readback and useful worker work in that log; submission is not progress. Optiona
 `--agents`, `--jobs`, `--work-memory-gib`, `--memory-gib`, and `--cpus` change
 the next selected limits. The default shared total is28GiB; `--memory-gib` is an
 optional smaller HOST sub-budget, not an additional per-agent allocation.
-`--check` only checks startup configuration and sleep inhibition; it launches no
-model work. The finite cumulative credit run and ceiling above remain unchanged.
+`--check` checks the exact saved Root's writer availability, startup configuration
+and sleep inhibition; it launches no model work. An already-held writer is reported
+with its actual PID before a controller is submitted. If another writer wins after
+that check, an explicit resume rejection closes the new bare server and exits
+without restarting or keeping an idle controller. The finite cumulative credit
+run and ceiling above remain unchanged.

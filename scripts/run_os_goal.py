@@ -946,6 +946,19 @@ def same_owner_resume_binding(directory):
     return binding
 
 
+class RPCResponseError(RuntimeError):
+    """An actual received JSON-RPC error, distinct from uncertain delivery."""
+    def __init__(self, method, error):
+        self.method, self.error = method, error
+        super().__init__(method + ": " + json.dumps(error))
+
+
+def thread_writer_conflict(error, thread_id):
+    return (isinstance(error, RPCResponseError) and error.method == "thread/resume"
+            and isinstance(error.error, dict) and error.error.get("code") == -32600
+            and error.error.get("message") == "thread " + thread_id + " already has an active writer")
+
+
 class RPC:
     """JSON-lines transport; waiting and goal observation consume no model tokens."""
     def __init__(self, argv, log_dir, on_event):
@@ -1115,7 +1128,7 @@ class RPC:
         if method == "account/rateLimits/read":
             self.last_account_read_completion = completion
         if "error" in response:
-            raise RuntimeError(method + ": " + json.dumps(response["error"]))
+            raise RPCResponseError(method, response["error"])
         return response["result"]
 
     def close(self):
@@ -3185,7 +3198,36 @@ class Campaign:
                 self.remember_goal(goal)
                 return
             params.update(threadId=previous_id, excludeTurns=True)
-            result = self.rpc.call("thread/resume", params)
+            try:
+                result = self.rpc.call("thread/resume", params)
+            except RPCResponseError as error:
+                if (thread_writer_conflict(error, previous_id) and not self.active
+                        and self.native_owner_control is None):
+                    # The fresh server's exact resume was rejected before it
+                    # acquired this thread. It owns no Root turn or payload.
+                    # Close only this bare server; never pause the real writer.
+                    self.controlled = False
+                    self.goal = goal
+                    self.stop_reason = "thread_writer_conflict"
+                    rejection = {"thread_id": previous_id, "method": error.method,
+                        "error": error.error, "server_pid": self.state.get("server_pid"),
+                        "server_start": self.state.get("server_start"),
+                        "worker_pid": self.state.get("worker_pid"),
+                        "worker_start": self.state.get("worker_start"), "log_dir": str(self.log_dir),
+                        "root_session_acquired": False, "payload_release_authorized": False,
+                        "at": utc(), "status": "closing_own_bare_server"}
+                    self.save(startup_rejection=rejection)
+                    rejected = self.rpc
+                    rejected.owner_custody_retained = False
+                    try:
+                        rejected.close()
+                    except BaseException:
+                        rejected.owner_custody_retained = True
+                        raise
+                    self.rpc = None
+                    self.save(startup_rejection=dict(rejection, status="own_bare_server_closed",
+                              close_errors=getattr(rejected, "close_errors", [])))
+                raise
         else:
             params.update(ephemeral=False, allowProviderModelFallback=False)
             result = self.rpc.call("thread/start", params)

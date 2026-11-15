@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-## READY FOR USER LAUNCH — full M14/M15 objective
+## READY FOR USER RELAUNCH — saved Root writer released
 
 Latest user direction: integrate the current GitHub harness, make it reliable
 without babysitting, use GPT-6.1 Sol/MAX dispatch with Sol/xhigh workers, and let
@@ -15,15 +15,21 @@ Repair or park a stuck task. If nothing can proceed, checkpoint and stop dispatc
 rather than spin BLOCKED. Target 3–5 original-check closures per rolling30minutes,
 reporting actual closed IDs and exact remaining count without guaranteeing a rate.
 
-The old dispatcher/watch processes have been stopped and their launch leases are
-free. The original app-server/runtime ownership contexts remain parked and charged;
-no payload/native/UNKNOWN hold or cumulative credit record was retired or reset.
+The user's2026-11-15T06:09Z launch failed before acquiring the saved Root: the old
+suspended app-server2661998 still held its writer lock. That server completed its
+normal stdio-EOF shutdown and released the lock. The rejected new attempt's
+server2985331, worker2985289 and watcher2985266 have also exited. The receipts are
+in `.git/os-autopilot/operator-stops/`; no payload/native/UNKNOWN hold or cumulative
+credit record was retired or reset. The launcher now checks the exact saved Root
+writer before submitting anything. A matching received writer-conflict rejection
+also closes only its own unacquired server and exits without an idle keeper/retry.
 The20-minute supervision timer is inactive. Do not restart anything automatically:
 the user requested the final Python command and will start the next run manually.
-The final functional harness suite passed884tests with no skips. Actual read-only
-startup verified GPT-6.1 Sol/MAX,11slots,five aggregate HOST jobs,28GiB shared total,
-10GiB HOST sub-budget, and sleep-inhibition permission. New controllers/workers
-and payloads have not been launched. The Python launcher opens the combined log;
+The functional reliability suite passed902unique tests with no skips. Actual
+read-only startup verified GPT-6.1 Sol/MAX,11slots,five aggregate HOST jobs,28GiB shared total,
+10GiB HOST sub-budget, sleep-inhibition permission and the now-free saved writer.
+Engineering has not resumed; the failed attempt started no Root turn or payload.
+The Python launcher opens the combined log;
 closing that viewer leaves the background run active.
 
 Read instructions/M14-M15-OVERNIGHT.md for the small next-action handoff. Begin with
