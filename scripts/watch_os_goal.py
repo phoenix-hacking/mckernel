@@ -38,6 +38,25 @@ def snapshot(path):
         return {}
 
 
+def retained_dispatch_label(current, known_owner):
+    """Describe dispatch separately from the unchanged runtime-custody latch."""
+    stopped = "DISPATCH STOPPED; runtime custody retained"
+    if not isinstance(current, dict) or not isinstance(known_owner, dict):
+        return stopped
+    owner = current_owner_identity(current, worker_pid=known_owner.get("worker_pid"),
+                                   worker_start=known_owner.get("worker_start"))
+    goal = current.get("goal")
+    if (owner != known_owner or not isinstance(known_owner.get("thread_id"), str)
+            or not known_owner["thread_id"] or not isinstance(goal, dict)
+            or goal.get("threadId", known_owner["thread_id"]) != known_owner["thread_id"]
+            or current.get("phase") != "running" or goal.get("status") != "active"
+            or current.get("controller_dispatch_enabled") is not True
+            or current.get("stop_reason") is not None or current.get("stop_now") is not False
+            or current.get("checkpoint_requested") is not False):
+        return stopped
+    return "DISPATCH ACTIVE; runtime custody retained"
+
+
 def watchdog_requested(directory, worker_pid):
     """Authenticate a persisted hang request for this worker and live parent."""
     if type(worker_pid) is not int or worker_pid != os.getpid():
@@ -602,7 +621,7 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                 if now >= next_notice:
                     record("heartbeat", worker_start=child_start)
                     # Keep the supervisor visible during startup, RPC waits and shutdown.
-                    label = ("DISPATCH STOPPED; runtime custody retained" if retained_owner is not None
+                    label = (retained_dispatch_label(current, known_owner) if retained_owner is not None
                              else "HEARTBEAT alive")
                     print("[os-watch] " + label + "; worker_pid=" + str(child.pid)
                           + "; uptime=" + str(int(now - started))
