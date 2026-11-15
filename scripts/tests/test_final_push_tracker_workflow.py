@@ -4,6 +4,7 @@
 from __future__ import print_function
 
 import ast
+import json
 import os
 import subprocess
 import tempfile
@@ -68,7 +69,12 @@ class FinalPushTrackerWorkflowTests(unittest.TestCase):
             'set -euo pipefail\n'
             'python3 -B scripts/restore_ihk_source.py \\\n'
             '  --repo "$GITHUB_WORKSPACE" \\\n'
-            '  --destination "$GITHUB_WORKSPACE/ihk"\n',
+            '  --destination "$GITHUB_WORKSPACE/ihk"\n'
+            'python3 -B scripts/restore_ihk_source.py \\\n'
+            '  --repo "$GITHUB_WORKSPACE" \\\n'
+            '  --destination "$RUNNER_TEMP/final-push-ihk-history"\n'
+            "printf 'MCKERNEL_IHK_HISTORY=%s\\n' \\\n"
+            '  "$RUNNER_TEMP/final-push-ihk-history" >> "$GITHUB_ENV"\n',
         )
         self.assertNotIn("git submodule update", self.text)
         self.assertLess(names.index("Verify exact candidate identity"), restore_index)
@@ -77,6 +83,73 @@ class FinalPushTrackerWorkflowTests(unittest.TestCase):
             "Validate locked scope, policy, and behavior contract",
         ):
             self.assertLess(restore_index, names.index(consumer))
+
+    def test_frozen_history_input_is_exported_and_survives_isolation(self):
+        steps = self.workflow["jobs"]["tracker"]["steps"]
+        restore = next(step["run"] for step in steps
+                       if step.get("name") == "Restore frozen IHK source")
+        contracts = next(step["run"] for step in steps if step.get("name") ==
+                         "Validate locked scope, policy, and behavior contract")
+        # Exercise the exact restoration shell with a recording transport. No
+        # repository, bundle fetch, checker, build or native operation runs.
+        with tempfile.TemporaryDirectory(prefix="tracker-history-input-") as temporary:
+            root = Path(temporary)
+            workspace, runner_temp, commands = (
+                root / "workspace with spaces", root / "runner with spaces", root / "commands"
+            )
+            commands.mkdir()
+            python = commands / "python3"
+            python.write_text(
+                '#!/bin/sh\nprintf \'%s\\n\' "$@" >> "$RESTORE_CALLS"\n'
+                '[ "$6" != "${RESTORE_FAIL_DESTINATION-}" ] || exit 17\n',
+                encoding="utf-8")
+            python.chmod(0o755)
+            environment = os.environ.copy()
+            environment.update({
+                "PATH": str(commands) + os.pathsep + os.defpath,
+                "GITHUB_WORKSPACE": str(workspace),
+                "RUNNER_TEMP": str(runner_temp),
+                "GITHUB_ENV": str(root / "environment"),
+                "RESTORE_CALLS": str(root / "calls"),
+            })
+            completed = subprocess.run(["bash", "-c", restore], env=environment,
+                                       stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            self.assertEqual(0, completed.returncode,
+                             completed.stderr.decode("utf-8", "replace"))
+            history = str(runner_temp / "final-push-ihk-history")
+            common = ["-B", "scripts/restore_ihk_source.py", "--repo", str(workspace),
+                      "--destination"]
+            self.assertEqual(common + [str(workspace / "ihk")] + common + [history],
+                             (root / "calls").read_text(encoding="utf-8").splitlines())
+            self.assertEqual("MCKERNEL_IHK_HISTORY=" + history + "\n",
+                             (root / "environment").read_text(encoding="utf-8"))
+
+            (root / "environment").unlink()
+            environment["RESTORE_FAIL_DESTINATION"] = history
+            completed = subprocess.run(["bash", "-c", restore], env=environment,
+                                       stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            self.assertEqual(17, completed.returncode)
+            self.assertFalse((root / "environment").exists())
+
+            # Execute the actual env-i prefix with a tiny data-only child so a
+            # dropped history input fails here before the authority checks run.
+            prefix = contracts.split("fp_authority() {\n", 1)[1].split(
+                "/usr/bin/python3 -I -S -B -c", 1
+            )[0]
+            environment.update({"EXPECTED_HEAD_SHA": "a" * 40,
+                                "MCKERNEL_IHK_HISTORY": history})
+            probe = prefix + (
+                "/usr/bin/python3 -I -S -B -c 'import json,os; "
+                "print(json.dumps({key: os.environ.get(key) for key in "
+                "(\"MCKERNEL_IHK_HISTORY\", \"FP_AUTHORITY_EXPECTED_HEAD\")}))'\n"
+            )
+            completed = subprocess.run(["bash", "-c", probe], env=environment,
+                                       stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            self.assertEqual(0, completed.returncode,
+                             completed.stderr.decode("utf-8", "replace"))
+            self.assertEqual({"MCKERNEL_IHK_HISTORY": history,
+                              "FP_AUTHORITY_EXPECTED_HEAD": "a" * 40},
+                             json.loads(completed.stdout.decode("utf-8")))
 
     def test_behavior_contract_uses_commit_bound_isolated_authority(self):
         step = self.text.split(
@@ -95,6 +168,27 @@ class FinalPushTrackerWorkflowTests(unittest.TestCase):
         self.assertIn("git -C ihk apply --check", step)
         self.assertIn("git -C ihk apply", step)
         self.assertIn("scripts/patches/ihk-linux-compat.patch", step)
+
+    def test_frozen_host_inventory_supplies_pinned_rustc_to_uid1000(self):
+        steps = self.workflow["jobs"]["tracker"]["steps"]
+        inventory = next(step["run"] for step in steps if step.get("name") ==
+                         "Validate frozen host-module inventory")
+        focused = (WORKFLOW_PATH.parent / "m14-focused.yml").read_text(encoding="utf-8")
+        pinned = "nightly-2026-02-19"
+        version = "rustc 1.95.0-nightly (c04308580 2026-02-18)"
+        for workflow in (focused, inventory):
+            self.assertIn("rustup toolchain install " + pinned + " --profile minimal",
+                          workflow)
+            self.assertIn(version, workflow)
+        self.assertIn('compiler="$(rustup which --toolchain ' + pinned + ' rustc)"',
+                      inventory)
+        self.assertIn('[[ "$compiler" = /* ]]', inventory)
+        self.assertIn('"$compiler" --version | grep -Fx', inventory)
+        self.assertIn('--reuid=1000 --regid=1000 --clear-groups', inventory)
+        self.assertIn('RUSTC="$compiler"', inventory)
+        self.assertLess(inventory.index('rustup toolchain install ' + pinned),
+                        inventory.index('python3 -m unittest discover -s scripts/tests'))
+        self.assertNotIn('skipTest(', inventory)
 
     def test_authority_predecessors_cannot_leave_repository_bytecode(self):
         self.assertIn('PYTHONDONTWRITEBYTECODE: "1"', self.text)
@@ -171,7 +265,9 @@ class FinalPushTrackerWorkflowTests(unittest.TestCase):
                 self.assertNotIn("if", step)
         inventory = next(step for step in steps
                          if step.get("name") == "Validate frozen host-module inventory")
-        self.assertIn("python3 -m unittest discover -s scripts/tests -v", inventory["run"])
+        self.assertIn("python3 -m unittest discover -s scripts/tests -v --failfast\n",
+                      inventory["run"])
+        self.assertNotIn("continue-on-error", inventory)
 
     def test_bounded_host_workflows_keep_compilers_and_new_regressions(self):
         for filename, job_name, timeout in (

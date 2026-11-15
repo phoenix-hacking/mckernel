@@ -22,13 +22,14 @@ def extracted():
     nodes = [node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name in names]
     campaign = next(node for node in tree.body if isinstance(node, ast.ClassDef) and node.name == 'Campaign')
     methods = [node for node in campaign.body if isinstance(node, ast.FunctionDef)
-               and node.name in {'register_instruction_capture_progress', 'deliver_instruction', 'poll_capture_progress'}]
+               and node.name in {'register_instruction_capture_progress', 'deliver_instruction', 'poll_capture_progress',
+                                 'instruction_receipt', 'persist_delivery_attempt', 'finish_control_instruction'}]
     version = next(node for node in tree.body if isinstance(node, ast.Assign)
                    and any(isinstance(target, ast.Name) and target.id == 'CAPTURE_PROGRESS_CAPABILITY'
                            for target in node.targets))
     capability = ast.literal_eval(version.value)
     scope = dict(CAPTURE_PROGRESS_CAPABILITY=capability, datetime=datetime, timezone=timezone, json=json, os=os, Path=Path,
-                 stat=stat, tempfile=tempfile, uuid4=uuid4)
+                 stat=stat, tempfile=tempfile, uuid4=uuid4, hashlib=__import__('hashlib'))
     exec(compile(ast.Module(body=nodes + methods, type_ignores=[]), '<private-queue-methods>', 'exec'), scope)
     fixture = type('FixtureCampaign', (), {node.name: scope[node.name] for node in methods})
     return scope, fixture
@@ -189,6 +190,7 @@ class QueueRegistrationTests(unittest.TestCase):
         output = type('Output', (), dict(snapshot=lambda self: {}, agent_event_count=0))()
         fake = type('SavedCampaign', (), {})()
         fake.args = SimpleNamespace(same_owner_control=False)
+        fake.progress_enabled = lambda: False
         fake.state = {}
         fake.log_dir = Path('/private-fixture-run')
         fake.state_path = Path('/private-fixture-state.json')

@@ -23,6 +23,8 @@ class MailboxTests(unittest.TestCase):
         self.directory = self.repo / "control"
         self.directory.mkdir()
         self.saved = {"thread_id": "saved-root", "phase": "waiting_for_input",
+                      "log_dir": "/saved/invocation-current", "worker_pid": 111, "worker_start": "222",
+                      "server_pid": 333, "server_start": "444",
                       "goal": {"status": "blocked"}, "stop_reason": None}
         (self.directory / "state.json").write_text(json.dumps(self.saved))
         self.config = {"repo": "phoenix-hacking/mckernel", "issue_number": 123,
@@ -405,12 +407,102 @@ class MailboxTests(unittest.TestCase):
         self.assertIsNone(self.state()["last_error"])
 
     def write_delivery(self, request_id, **changes):
-        receipt = {"id": request_id, "status": "accepted_by_server", "thread_id": "saved-root",
+        source = json.loads((self.directory / "instructions/sources" / (request_id[7:] + ".json")).read_text())["item"]
+        receipt = {"schema_version": 2, "id": request_id, "status": "accepted_by_server", "thread_id": "saved-root",
+                   "source_id": source["source_id"], "text_sha256": source["text_sha256"],
+                   "log_dir": self.saved["log_dir"], "invocation_id": "invocation-current",
+                   "worker_pid": 111, "worker_start": "222", "server_pid": 333, "server_start": "444",
+                   "delivery_method": "turn/start", "expected_turn_id": None,
                    "turn_id": "accepted-turn", "delivered_at": "2026-11-10T03:10:00Z"}
+        attempts = self.directory / "instructions/attempts"
+        attempts.mkdir(parents=True, exist_ok=True)
+        (attempts / (request_id + ".json")).write_text(json.dumps(dict(receipt, status="sending", turn_id=None)))
         receipt.update(changes)
         directory = self.directory / "instructions/delivered"
         directory.mkdir(parents=True, exist_ok=True)
         (directory / (request_id + ".json")).write_text(json.dumps(receipt))
+
+    def test_old_delivery_receipt_is_historical_and_never_requeues(self):
+        self.comments = [self.comment()]
+        request_id = self.mailbox.poll(self.context)["queued_instruction_ids"][0]
+        self.write_delivery(request_id, schema_version=1)
+        self.advance(10)
+        self.mailbox.poll(self.context)
+        message = self.state()["messages"]["10"]
+        self.assertEqual(message["delivery_status"], "HISTORICAL_ACCEPTED")
+        self.assertNotIn("accepted_event_id", message)
+        self.assertEqual(len(self.pending()), 1)
+        self.advance(600)
+        self.mailbox.poll(self.context)
+        self.assertEqual(len(self.pending()), 1)
+
+    def test_versioned_receipt_must_join_source_hash_root_and_attempt(self):
+        self.comments = [self.comment()]
+        request_id = self.mailbox.poll(self.context)["queued_instruction_ids"][0]
+        for changes in ({"text_sha256": "b" * 64}, {"source_id": "unrelated"},
+                        {"schema_version": 3}, {"schema_version": "2"},
+                        {"thread_id": "other-root"}, {"invocation_id": "other-invocation"},
+                        {"worker_start": "999"}, {"server_pid": 999},
+                        {"delivery_method": "turn/steer", "expected_turn_id": "different-turn"}):
+            with self.subTest(changes=changes):
+                self.write_delivery(request_id, **changes)
+                self.advance(10)
+                self.mailbox.poll(self.context)
+                message = self.state()["messages"]["10"]
+                self.assertEqual(message["delivery_status"], "WAITING")
+                self.assertIn("receipt_issue", message)
+        self.assertEqual(len(self.pending()), 1)
+
+    def test_prior_invocation_v2_receipt_is_historical_without_current_acceptance_notice(self):
+        self.comments = [self.comment()]
+        request_id = self.mailbox.poll(self.context)["queued_instruction_ids"][0]
+        self.write_delivery(request_id)
+        changed = dict(self.saved, log_dir="/saved/next-invocation")
+        (self.directory / "state.json").write_text(json.dumps(changed))
+        self.advance(10)
+        self.mailbox.poll(self.context)
+        message = self.state()["messages"]["10"]
+        self.assertEqual(message["delivery_status"], "HISTORICAL_ACCEPTED")
+        self.assertNotIn("accepted_event_id", message)
+
+    def test_pending_resume_read_is_local_and_does_not_wait_for_poll_lock(self):
+        self.comments = [self.comment(body="/mckernel-resume\nContinue eligible work.")]
+        queued = self.mailbox.poll(self.context)["queued_instruction_ids"]
+        with self.mailbox._locked():
+            self.api_mock.reset_mock()
+            reply = self.mailbox.pending_resume()
+        self.assertEqual(reply["resume_request_id"], queued[0])
+        self.assertEqual(reply["status"], "LOCAL")
+        self.api_mock.assert_not_called()
+
+    def test_restarted_observer_polls_once_before_old_future_deadline_without_requeue(self):
+        self.comments = [self.comment()]
+        first_context = dict(self.context, observer={"monitor_id": "a" * 32})
+        first = self.mailbox.poll(first_context)
+        self.assertEqual(first["next_poll_at"], 1600)
+        self.advance(10)
+        self.assertEqual(self.mailbox.poll(first_context)["status"], "BACKOFF")
+        replacement = dict(self.context, observer={"monitor_id": "b" * 32})
+        second = self.mailbox.poll(replacement)
+        self.assertEqual(second["status"], "POLLED")
+        self.assertEqual(second["queued_instruction_ids"], [])
+        self.assertEqual(self.state()["poll_observer_id"], "b" * 32)
+        self.assertEqual(self.state()["last_successful_poll_at"], 1010)
+        self.assertEqual(sum(call.args[0] == "graphql" for call in self.api_mock.call_args_list), 2)
+        self.assertEqual(len(self.pending()), 1)
+
+    def test_replacement_observer_failed_first_poll_keeps_normal_error_backoff(self):
+        first = dict(self.context, observer={"monitor_id": "a" * 32})
+        self.mailbox.poll(first)
+        self.advance(10)
+        replacement = dict(self.context, observer={"monitor_id": "b" * 32})
+        self.api_mock.side_effect = RuntimeError("Network unavailable")
+        self.assertEqual(self.mailbox.poll(replacement)["status"], "ERROR")
+        attempts = self.api_mock.call_count
+        self.advance(10)
+        self.mailbox.poll(replacement)
+        self.assertEqual(self.api_mock.call_count, attempts)
+        self.assertEqual(self.state()["poll_observer_id"], "a" * 32)
 
     def test_ten_minute_reads_allow_one_prompt_receipt_post_each_monitor_tick(self):
         self.comments = [self.comment(10), self.comment(11)]

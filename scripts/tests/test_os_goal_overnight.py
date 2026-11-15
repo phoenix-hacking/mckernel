@@ -434,8 +434,8 @@ class OvernightTests(unittest.TestCase):
 
     def test_stop_signals_only_current_watcher_using_pidfd(self):
         self.persist_receipt()
-        with patch.object(overnight.os, "pidfd_open", return_value=777) as opened, \
-                patch.object(overnight.signal, "pidfd_send_signal") as send, \
+        with patch.object(overnight, "pidfd_open", return_value=777) as opened, \
+                patch.object(overnight, "pidfd_send_signal") as send, \
                 patch.object(overnight.os, "close", wraps=overnight.os.close) as closed, \
                 patch.object(overnight.os, "kill", side_effect=AssertionError("no pid-based signal")):
             # Close the fake pidfd without touching any actual unrelated descriptor.
@@ -454,8 +454,8 @@ class OvernightTests(unittest.TestCase):
             with self.subTest(change=change):
                 self.identities[110].update(change)
                 with patch.object(overnight.os, "kill") as kill, \
-                        patch.object(overnight.os, "pidfd_open") as opened, \
-                        patch.object(overnight.signal, "pidfd_send_signal") as send:
+                        patch.object(overnight, "pidfd_open") as opened, \
+                        patch.object(overnight, "pidfd_send_signal") as send:
                     result = overnight.stop(self.directory)
                 self.assertNotEqual(result["status"], "STOP_REQUESTED")
                 kill.assert_not_called()
@@ -469,8 +469,8 @@ class OvernightTests(unittest.TestCase):
             self.assertEqual(pid, 110)
             self.identities[110]["start"] = "reused-after-open"
             return 777
-        with patch.object(overnight.os, "pidfd_open", side_effect=open_reused), \
-                patch.object(overnight.signal, "pidfd_send_signal") as send, \
+        with patch.object(overnight, "pidfd_open", side_effect=open_reused), \
+                patch.object(overnight, "pidfd_send_signal") as send, \
                 patch.object(overnight.os, "close", wraps=overnight.os.close) as closed:
             real_close = closed._mock_wraps
             closed.side_effect = lambda fd: None if fd == 777 else real_close(fd)
@@ -492,7 +492,7 @@ class OvernightTests(unittest.TestCase):
         self.assertEqual(data["status"], "DRY_RUN")
         self.assertEqual(data["model_calls"], 0)
         self.assertIn("--hours", data["arguments"])
-        self.assertEqual(len(data["units"]), 2)
+        self.assertEqual(len(data["units"]), 3)
         self.assertTrue(any("WatchdogSec=90" in unit for unit in data["units"].values()))
 
 

@@ -146,6 +146,11 @@ class OwnerTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
+        # Production pins the workstation owner path; do not rewrite it for CI.
+        # Fake-Docker tests read identical owner bytes in the checked-out tree.
+        self.assertEqual(owner.REPO, "/home/holden/mckernel")
+        self.assertEqual(owner.SELF, "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py")
+        self.patch("SELF", str(SOURCE.resolve(strict=True)))
         self.parent = self.root / "attempts"
         self.parent.mkdir(mode=0o700)
         self.patch("SCRATCH", str(self.root))
@@ -1046,7 +1051,22 @@ class OwnerTests(unittest.TestCase):
             backend.call(owner.PREFIX + ["ps"], timeout=4)
         command.assert_called_once_with(["/usr/bin/sudo", "-A", "/usr/bin/docker", "ps"], 4,
             env={"PATH": "/usr/bin:/bin", "LANG": "C", "LC_ALL": "C", "SUDO_ASKPASS": "/reviewed/helper"},
-            ledger=backend.children)
+            ledger=backend.children, admission_check=None)
+
+    def test_root_docker_forwards_actual_admission_guard(self):
+        # When an admission guard exists it must reach the bounded subprocess
+        # owner unchanged; a default None is an explicit absence, not consent.
+        backend = owner.DockerBackend()
+        guard = mock.Mock()
+        backend.admission_check = guard
+        with mock.patch.object(owner.os, "getuid", return_value=0), mock.patch.object(owner.os, "geteuid", return_value=0), \
+             mock.patch.dict(owner.os.environ, {"SUDO_ASKPASS": "/reviewed/helper", "DOCKER_HOST": "evil"}, clear=True), \
+             mock.patch.object(owner, "bounded_command", return_value=result()) as command:
+            backend.call(owner.PREFIX + ["ps"], timeout=4)
+        command.assert_called_once_with(["/usr/bin/sudo", "-A", "/usr/bin/docker", "ps"], 4,
+            env={"PATH": "/usr/bin:/bin", "LANG": "C", "LC_ALL": "C", "SUDO_ASKPASS": "/reviewed/helper"},
+            ledger=backend.children, admission_check=guard)
+        guard.assert_not_called()  # only the actual command owner invokes the veto
 
     def test_inner_parent_must_stay_uid1000_even_for_root_owner(self):
         with mock.patch.object(owner.os, "geteuid", return_value=0):

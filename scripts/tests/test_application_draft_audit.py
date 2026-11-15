@@ -1,7 +1,14 @@
-"""Evidence-integrity and literal-input regressions for the draft-only auditor."""
+"""Evidence-integrity and literal-input regressions for the draft-only auditor.
+
+Run the current auditor over exact historical draft input bytes, not over later
+functional fixture revisions in the live checkout. Neither mode runs fixtures.
+"""
 import importlib.util
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
+import shutil
+import subprocess
+import tarfile
 import tempfile
 import unittest
 
@@ -11,11 +18,57 @@ SPEC = importlib.util.spec_from_file_location("application_draft_audit", ROOT / 
 audit = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(audit)
 
+# The reviewed frozen DATA-only input closure; never substitute the live fixtures.
+FROZEN_DRAFT_DATA_COMMIT = "9326d8e616962eb974d30a63b9a8ea83917caf47"
+FROZEN_DRAFT_PATHS = (
+    "scripts/application-tests",
+    "scripts/tests/test_application_draft_audit.py",
+    "docs/verification/application-draft-corrections-20260913.json",
+    "docs/verification/evidence/application-draft-audit-initial-failure-20260913.json",
+    "docs/verification/evidence/application-drafts-20260909/ultra-handoff-1",
+    "docs/verification/ultra-drafting-handoff-20260909.json",
+    "docs/verification/ultra-draft-capabilities-20260909.json",
+)
+
+
+def historical_draft_snapshot(destination):
+    """Materialize pinned Git blobs as inert files; never run archived programs.
+
+    The GitHub workflow checks out full history. The archive contains only the
+    exact frozen audit input closure. Extract regular files only, without a
+    checkout reset, symlinks, or modification of current functional sources.
+    """
+    with tempfile.TemporaryFile() as archive:
+        subprocess.run(
+            ["git", "-C", str(ROOT), "archive", "--format=tar",
+             FROZEN_DRAFT_DATA_COMMIT, *FROZEN_DRAFT_PATHS],
+            stdout=archive, stderr=subprocess.PIPE, check=True, timeout=60,
+        )
+        archive.seek(0)
+        with tarfile.open(fileobj=archive, mode="r:") as payload:
+            for entry in payload:
+                path = PurePosixPath(entry.name)
+                if path.is_absolute() or ".." in path.parts or str(path) != entry.name:
+                    raise AssertionError("uncanonical archived draft path: " + entry.name)
+                target = destination.joinpath(*path.parts)
+                if entry.isdir():
+                    target.mkdir(parents=True, exist_ok=True)
+                elif entry.isfile():
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    with payload.extractfile(entry) as source, target.open("xb") as output:
+                        shutil.copyfileobj(source, output)
+                else:
+                    raise AssertionError("non-regular archived draft input: " + entry.name)
+
 
 class FrozenDraftAuditTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.result = audit.audit(ROOT)
+        cls.archive = tempfile.TemporaryDirectory(prefix="mckernel-frozen-drafts-")
+        cls.addClassCleanup(cls.archive.cleanup)
+        cls.historical_root = Path(cls.archive.name)
+        historical_draft_snapshot(cls.historical_root)
+        cls.result = audit.audit(cls.historical_root)
 
     def test_complete_immutable_accounting_has_no_acceptance_credit(self):
         counts = self.result["counts"]
@@ -30,7 +83,7 @@ class FrozenDraftAuditTests(unittest.TestCase):
         self.assertTrue(all(c["acceptance_status"] == "not-verified" for c in self.result["cases"]))
 
     def test_every_question_is_preserved_and_conservatively_routed(self):
-        original = json.loads((ROOT / audit.BASE / "queue-summary.json").read_text())
+        original = json.loads((self.historical_root / audit.BASE / "queue-summary.json").read_text())
         questions = self.result["question_classifications"]
         self.assertEqual([q["text"] for q in questions], original["prioritized_max_questions"])
         self.assertEqual(len(questions), 220)
@@ -60,11 +113,20 @@ class FrozenDraftAuditTests(unittest.TestCase):
         self.assertEqual(self.result["counts"]["input_specifications"], 20)
 
     def test_audit_is_deterministic_and_inputs_remain_unchanged(self):
-        second = audit.audit(ROOT)
+        second = audit.audit(self.historical_root)
         self.assertEqual(audit.canonical(self.result), audit.canonical(second))
-        reader = audit.Reader(ROOT)
+        reader = audit.Reader(self.historical_root)
         for identity in self.result["inputs"]:
             reader.verify(identity)
+
+
+    def test_current_functional_fixture_drift_is_explicitly_refused(self):
+        path = "scripts/application-tests/cases/startup/startup.argv-empty.c"
+        self.assertNotEqual((ROOT / path).read_bytes(),
+                            (self.historical_root / path).read_bytes())
+        with self.assertRaisesRegex(audit.AuditError, "hash mismatch: " +
+                                    r"scripts/application-tests/cases/startup/startup\.argv-empty\.c"):
+            audit.audit(ROOT)
 
 
 class BoundaryTests(unittest.TestCase):

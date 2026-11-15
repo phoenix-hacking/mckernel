@@ -78,12 +78,88 @@ jobs:
           python3 -B scripts/restore_ihk_source.py \
             --repo "$GITHUB_WORKSPACE" \
             --destination "$GITHUB_WORKSPACE/ihk"
+          python3 -B scripts/restore_ihk_source.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --destination "$RUNNER_TEMP/final-push-ihk-history"
+          printf 'MCKERNEL_IHK_HISTORY=%s\n' \
+            "$RUNNER_TEMP/final-push-ihk-history" >> "$GITHUB_ENV"
 
       - name: Validate frozen host-module inventory
         if: steps.host-scope.outputs.required == 'true'
         run: |
           set -euo pipefail
-          python3 -m unittest discover -s scripts/tests -v
+          # The frozen native diagnostic owner contract requires real
+          # uid/gid 1000 for its private attempt directory, even in fake-Docker
+          # tests. Exercise it under that actual identity on the isolated CI
+          # runner rather than weakening the owner check or manufacturing stat
+          # identities. Git sees only this exact checked-out workspace as safe.
+          test -x /usr/bin/setpriv
+          test "$(sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups /usr/bin/id -u)" = 1000
+          # GitHub's hosted runner workspace is beneath directories private to
+          # the runner user. The independent UID 1000 cannot import the real
+          # scripts/tests tree until it can traverse those parent directories.
+          # The owner's descriptor-based walk opens each ancestor O_RDONLY,
+          # requiring read AND search permission (not merely --x). Grant r-x
+          # only to UID 1000 on these CI-runner directory ancestors and the two
+          # exact checked-out source/history roots. No file ownership, group,
+          # production policy, native custody or owner assertion is changed.
+          if ! command -v setfacl >/dev/null 2>&1; then
+            sudo -n apt-get update -qq
+            sudo -n apt-get install -y -qq --no-install-recommends acl
+          fi
+          ancestor="$(dirname "$GITHUB_WORKSPACE")"
+          while [[ "$ancestor" != / ]]; do
+            sudo -n setfacl -m u:1000:r-x "$ancestor"
+            ancestor="$(dirname "$ancestor")"
+          done
+          sudo -n setfacl -m u:1000:r-x "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$MCKERNEL_IHK_HISTORY"
+          sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups \
+            /usr/bin/test -r "$GITHUB_WORKSPACE/scripts/tests/test_application_draft_audit.py"
+          sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups \
+            /usr/bin/test -r "$MCKERNEL_IHK_HISTORY/.git/HEAD"
+          # A pathname test -r is insufficient: native_diagnostic_container_owner
+          # opens every ancestor with O_RDONLY|O_DIRECTORY|O_NOFOLLOW.
+          # Fail here if ACLs permit path traversal but deny descriptor walks.
+          sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups \
+            /usr/bin/python3 -B - \
+            "$GITHUB_WORKSPACE/scripts/application-tests/native_diagnostic_container_owner.py" \
+            "$MCKERNEL_IHK_HISTORY/.git/HEAD" <<'PY'
+          import os
+          import sys
+
+          for source in sys.argv[1:]:
+              assert source.startswith("/") and not source.endswith("/")
+              parent_fd = os.open("/", os.O_RDONLY | os.O_DIRECTORY | os.O_CLOEXEC)
+              try:
+                  for part in source.split("/")[1:-1]:
+                      next_fd = os.open(part, os.O_RDONLY | os.O_DIRECTORY |
+                                        os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=parent_fd)
+                      os.close(parent_fd)
+                      parent_fd = next_fd
+                  file_fd = os.open(source.rsplit("/", 1)[1],
+                                    os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC,
+                                    dir_fd=parent_fd)
+                  os.close(file_fd)
+              finally:
+                  os.close(parent_fd)
+          PY
+          # M14-F03 exec-completeness checks compile and run actual Rust.
+          # Resolve the same pinned HOST toolchain as M14 focused CI rather
+          # than treating missing rustc as a reason to skip full discovery.
+          # A real uid=1000 compiler invocation must pass before the suite.
+          rustup toolchain install nightly-2026-02-19 --profile minimal
+          compiler="$(rustup which --toolchain nightly-2026-02-19 rustc)"
+          [[ "$compiler" = /* ]]
+          test "$("$compiler" --version)" = 'rustc 1.95.0-nightly (c04308580 2026-02-18)'
+          sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups \
+            "$compiler" --version | grep -Fx 'rustc 1.95.0-nightly (c04308580 2026-02-18)'
+          sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups \
+            /usr/bin/env PYTHONDONTWRITEBYTECODE=1 \
+            RUSTC="$compiler" \
+            MCKERNEL_IHK_HISTORY="$MCKERNEL_IHK_HISTORY" \
+            GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory \
+            GIT_CONFIG_VALUE_0="$GITHUB_WORKSPACE" \
+            /usr/bin/python3 -m unittest discover -s scripts/tests -v --failfast
           python3 scripts/host_module_inventory.py --check
           python3 scripts/rocky_kernel_source_lock.py --check
           python3 scripts/rocky_kernel_source_review.py --check
@@ -111,6 +187,7 @@ jobs:
               PATH=/usr/bin:/bin \
               LC_ALL=C \
               FP_AUTHORITY_EXPECTED_HEAD="$EXPECTED_HEAD_SHA" \
+              MCKERNEL_IHK_HISTORY="$MCKERNEL_IHK_HISTORY" \
               /usr/bin/python3 -I -S -B -c "if True:
             import os,subprocess,sys,types
             trusted_type=type

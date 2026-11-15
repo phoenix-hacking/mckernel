@@ -174,7 +174,7 @@ class StopLogTests(unittest.TestCase):
         target = self.directory / "target"
         target.write_text("original")
         journal = self.directory / subject.JOURNAL
-        journal.hardlink_to(target)
+        os.link(target, journal)
         with self.assertRaises(ValueError):
             self.write()
         self.assertEqual(target.read_text(), "original")

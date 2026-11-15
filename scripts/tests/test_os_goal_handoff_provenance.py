@@ -86,6 +86,7 @@ class HandoffProvenanceTests(unittest.TestCase):
         campaign.credit_guard = None
         campaign.output = Mock()
         campaign.rpc = None
+        campaign.native_owner_control = None
         campaign.goal = copy.deepcopy(self.state["goal"])
         campaign.state_path = self.directory / "not-written-state.json"
         campaign.begin = Mock(side_effect=RuntimeError("current launch exception"))

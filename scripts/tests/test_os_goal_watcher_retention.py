@@ -98,6 +98,8 @@ class WatcherRetentionTests(unittest.TestCase):
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(value))
+        if path == self.state_path and getattr(self, "coarse_state_clock", False):
+            os.utime(path, ns=(1000000000, 1000000000))
 
     def retain(self):
         self.state["phase"] = custody.RETAINED_PHASE
@@ -277,6 +279,7 @@ class WatcherRetentionTests(unittest.TestCase):
 
     def test_watchdog_identity_read_does_not_replace_pinned_watcher_birth(self):
         self.args.watchdog_seconds = 0.1
+        self.coarse_state_clock = True
 
         def advance(clock):
             if clock.sleeps == 1:

@@ -37,8 +37,34 @@ class StatusFeed:
             notes.append(name + " is unavailable: " + type(error).__name__)
             return {}
 
-    def _revision(self):
-        result = subprocess.run(["git", "-C", str(self.repo), "rev-parse", "HEAD"],
+    @staticmethod
+    def _git_common_dir(repo):
+        """Validate a checkout's shared Git object store, including worktrees."""
+        result = subprocess.run(["git", "-C", str(repo), "rev-parse", "--git-common-dir"],
+                                capture_output=True, text=True, timeout=5, check=False)
+        value = result.stdout.strip()
+        if result.returncode or not value:
+            raise RuntimeError("Cannot verify the saved engine checkout's Git identity")
+        path = Path(value)
+        return (path if path.is_absolute() else repo / path).resolve(strict=True)
+
+    def _ledger_repo(self, state):
+        """A detached observer must report the existing Root's working tree, not its own."""
+        recorded = state.get("repo")
+        if recorded is None:
+            return self.repo
+        if not isinstance(recorded, str) or not recorded or not Path(recorded).is_absolute():
+            raise RuntimeError("Saved engine checkout path is invalid; refusing stale ledger publication")
+        active = Path(recorded).resolve(strict=True)
+        observer = self.repo.resolve(strict=True)
+        if not active.is_dir():
+            raise RuntimeError("Saved engine checkout is not a directory")
+        if active != observer and self._git_common_dir(active) != self._git_common_dir(observer):
+            raise RuntimeError("Saved engine checkout belongs to another Git repository; refusing publication")
+        return active
+
+    def _revision(self, repo=None):
+        result = subprocess.run(["git", "-C", str(repo if repo is not None else self.repo), "rev-parse", "HEAD"],
                                 capture_output=True, text=True, timeout=5, check=False)
         value = result.stdout.strip()
         return value if result.returncode == 0 and re.fullmatch(r"[0-9a-f]{40}", value) else None
@@ -52,28 +78,45 @@ class StatusFeed:
         result = {"schema_version": 1, "url": PUBLIC_URL, "path": str(self.directory / "status.txt"),
                   "attempted_at": now, "next_refresh_at": now + self.interval if publish else prior.get("next_refresh_at", 0)}
         try:
-            ledger = read_json(self.repo / "docs/verification/m14-m15-closure-progress.json")
+            source = context.get("publication_source") if isinstance(context, dict) else None
+            if isinstance(source, dict):
+                result["publication_source"] = dict(source)
+                notes.append("Status source: " + str(source.get("mode", "UNKNOWN")) + ". "
+                             "Checkout binding does not establish a live controller or source execution authority.")
             if isinstance(context, dict):
                 state = context.get("engine_state")
                 state = state if isinstance(state, dict) else {}
             else:
                 state = self._snapshot("state.json", notes)
-            guardian = ({key: value for key, value in context.items() if key != "engine_state"}
+            source_repo = self._ledger_repo(state)
+            ledger = read_json(source_repo / "docs/verification/m14-m15-closure-progress.json")
+            result["source_repo"] = str(source_repo)
+            observer = (context.get("observer") if isinstance(context, dict)
+                        else self._snapshot("mailbox-monitor.json", notes))
+            observer = observer if isinstance(observer, dict) else {}
+            guardian = ((context.get("guardian") or {}) if isinstance(context, dict) and "observer" in context else
+                        {key: value for key, value in context.items() if key != "engine_state"}
                         if isinstance(context, dict) else self._snapshot("guardian.json", notes))
             runtime = None
-            if state or guardian:
+            if state or guardian or observer:
                 runtime = {"state": state, "guardian": guardian,
                            "watcher": self._snapshot("watcher.json", notes),
                            "mailbox": self._snapshot("mailbox-state.json", notes),
                            "latest_stop": self._snapshot("latest-stop.json", notes)}
+                if observer:
+                    runtime["observer"] = observer
+                    result["observer"] = {key: observer.get(key) for key in
+                                          ("monitor_id", "pid", "start", "started_at")}
             publication = self._snapshot("status-publish.json", notes)
             if publication.get("published_verified_at"):
                 notes.append("Last verified publication before this rendering: " + str(publication["published_verified_at"]))
             if publication.get("last_error"):
                 notes.append("Status publication needs attention: " + (redacted_text(publication["last_error"], 500) or "unknown"))
-            notes.append("The progress ledger is the current working-tree snapshot; checkout HEAD does not assert it is committed or that a milestone is accepted.")
+            notes.append("The progress ledger comes from the saved engine checkout when known; the observer's isolated checkout does not replace active Root evidence.")
+            notes.append("The progress ledger is a working-tree snapshot; checkout HEAD does not assert it is committed or that a milestone is accepted.")
             rendered = write_status_text(self.directory / "status.txt", ledger,
-                                         source_commit=self._revision(), runtime=runtime,
+                                         source_commit=self._revision(source_repo), runtime=runtime,
+                                         source_repo=source_repo,
                                          generated_at=now, identity_checker=self._identity, notes=notes)
             result.update(status="GENERATED", generated_at=now, report=rendered)
             atomic_json(self.directory / STATE_FILE, result)

@@ -38,7 +38,7 @@ class ContinuousCampaignTests(unittest.TestCase):
         # This exemption is scoped to an injected fake transport. It neither
         # changes production resource admission nor admits a real workload.
         self.assertIsInstance(rpc, FakeRPC)
-        with patch.object(launcher, "check_resources"), patch.object(
+        with patch.object(launcher, "check_resources"), patch.object(launcher, "check_machine_headroom"), patch.object(
                 launcher.time, "monotonic", side_effect=lambda: self.clock[0]), \
                 redirect_stdout(io.StringIO()):
             campaign = launcher.Campaign(
@@ -48,6 +48,68 @@ class ContinuousCampaignTests(unittest.TestCase):
 
     def starts(self, rpc):
         return [params for method, params in rpc.calls if method == "turn/start"]
+
+    def test_idle_blocked_run_stops_after_one_repair_instead_of_spinning(self):
+        self.saved(goal("blocked"))
+        self.args.blocked_idle_seconds = 10
+        rpc = FakeRPC(self.args, goal("blocked"), [
+            lambda r: r.completed(),
+            lambda r: self.clock.__setitem__(0, 111.0),
+        ])
+        state = self.run_fake(rpc, 10)
+        self.assertEqual(state["stop_reason"], "blocked_no_ready_work")
+        self.assertEqual(state["blocked_idle"]["status"], "stopped_no_ready_work")
+        self.assertFalse(state["controller_dispatch_enabled"])
+        self.assertEqual(len(self.starts(rpc)), 1)
+        self.assert_no_activation(rpc)
+
+    def test_useful_child_work_survives_idle_blocked_timeout(self):
+        self.saved(goal("blocked"))
+        self.args.blocked_idle_seconds = 10
+
+        def start_child(rpc):
+            rpc.completed()
+            rpc.started("useful-child-turn", "child")
+            self.clock[0] = 200.0
+
+        def finish_child(rpc):
+            self.assertNotEqual(self.state().get("stop_reason"), "blocked_no_ready_work")
+            self.clock[0] = 500.0
+            rpc.completed("child")
+            rpc.status("paused")
+
+        rpc = FakeRPC(self.args, goal("blocked"), [start_child, finish_child])
+        state = self.run_fake(rpc, 10)
+        self.assertNotEqual(state.get("stop_reason"), "blocked_no_ready_work")
+        self.assertEqual(len(self.starts(rpc)), 1)
+        self.assert_no_activation(rpc)
+
+    def test_machine_pressure_stops_dispatch_before_any_repair(self):
+        self.saved(goal("blocked"))
+        rpc = FakeRPC(self.args, goal("blocked"), [])
+        with patch.object(launcher, "check_resources"), \
+                patch.object(launcher, "check_machine_headroom", side_effect=RuntimeError("low memory")), \
+                redirect_stdout(io.StringIO()):
+            campaign = launcher.Campaign(self.args, self.directory, self.directory, rpc.factory)
+            self.assertEqual(campaign.run(), 10)
+        self.assertEqual(self.state()["stop_reason"], "machine_headroom_exhausted")
+        self.assertEqual(self.starts(rpc), [])
+
+    def test_stuck_active_child_cannot_keep_blocked_dispatch_alive_forever(self):
+        self.saved(goal("blocked"))
+        self.args.blocked_idle_seconds = 10
+        self.args.progress_stall_seconds = 30
+
+        def stuck(rpc):
+            rpc.completed()
+            rpc.started("stuck-child-turn", "child")
+
+        rpc = FakeRPC(self.args, goal("blocked"), [stuck, lambda r: self.clock.__setitem__(0, 131.0),
+                                                 lambda r: r.completed("child")])
+        state = self.run_fake(rpc, 10)
+        self.assertEqual(state["stop_reason"], "blocked_no_ready_work")
+        self.assertEqual(len(self.starts(rpc)), 1)
+        self.assert_no_activation(rpc)
 
     def assert_no_activation(self, rpc):
         self.assertFalse(any(method == "thread/goal/set" and params.get("status") == "active"
@@ -317,41 +379,48 @@ class MilestoneAcceptanceTests(unittest.TestCase):
         self.path.parent.mkdir(parents=True)
 
     def accepted(self):
-        summaries, rows = {}, []
-        for milestone, files, integrations in (("M14", 6, 3), ("M15", 8, 4)):
-            ids = (["%s-F%02d" % (milestone, n) for n in range(1, files + 1)] +
-                   ["%s-I%02d" % (milestone, n) for n in range(1, integrations + 1)])
-            summaries[milestone] = {"original_gate_ids": ids,
-                                    "milestone_accepted": True, "completion_percent": 100}
-            rows.extend({"id": ident, "accepted": True, "completion_percent": 100} for ident in ids)
-        return {"original_criteria_unchanged": True, "summaries": summaries, "requirements": rows}
+        # Preserve the actual original identities and completion conditions.
+        data = json.loads((launcher.REPO / "docs/verification/m14-m15-closure-progress.json").read_text())
+        for summary in data["summaries"].values():
+            summary.update(milestone_accepted=True, checklist_percent_complete=100)
+        for row in data["requirements"]:
+            row.update(accepted=True, percent_complete=100)
+        for row in data["tasks"]:
+            if row.get("counted_in_requirement_rollup") is True:
+                row["percent_complete"] = 100
+        return data
 
     def write(self, data):
         self.path.write_text(json.dumps(data))
 
+    def unaccept_gate(self, data):
+        next(row for row in data["requirements"] if row["id"] == "M14-F01")["accepted"] = False
+
     def test_percentages_never_replace_original_binary_acceptance(self):
-        for mutation in (
+        for index, mutation in enumerate((
             lambda d: d["summaries"]["M14"].update(milestone_accepted=False),
             lambda d: d["summaries"]["M15"].update(milestone_accepted=False),
-            lambda d: d["requirements"][0].update(accepted=False),
+            self.unaccept_gate,
             lambda d: d.update(original_criteria_unchanged=False),
-        ):
+            lambda d: d["tasks"][0].update(percent_complete=0),
+            lambda d: d["tasks"][0].update(done_when="Weakened condition"),
+        )):
             data = self.accepted()
             mutation(data)
-            with self.subTest(data=data):
+            with self.subTest(mutation=index):
                 self.write(data)
                 self.assertFalse(launcher.m14_m15_closed(self.repo))
 
     def test_missing_and_duplicate_original_gates_are_rejected(self):
-        for mutation in (
+        for index, mutation in enumerate((
             lambda d: d["requirements"].pop(),
             lambda d: d["requirements"].append(dict(d["requirements"][0])),
             lambda d: d["summaries"]["M14"]["original_gate_ids"].pop(),
             lambda d: d["summaries"]["M15"]["original_gate_ids"].append("M15-F01"),
-        ):
+        )):
             data = self.accepted()
             mutation(data)
-            with self.subTest(data=data):
+            with self.subTest(mutation=index):
                 self.write(data)
                 self.assertFalse(launcher.m14_m15_closed(self.repo))
 
@@ -382,7 +451,11 @@ class MilestoneAcceptanceTests(unittest.TestCase):
         # All transport and state are isolated FakeRPC/tempdir fixtures. The
         # original ledger is genuinely closed, not a mocked acceptance result.
         self.assertIsInstance(rpc, FakeRPC)
-        with patch.object(launcher, "check_resources"), redirect_stdout(io.StringIO()):
+        # These finite scenarios isolate terminal/milestone arbitration. The
+        # real progress steering path has separate FakeRPC integration tests;
+        # its optional review must not consume this fixture's one active turn.
+        with patch.object(launcher, "check_resources"), \
+                patch.object(launcher.Campaign, "poll_progress"), redirect_stdout(io.StringIO()):
             campaign = launcher.Campaign(self.terminal_args, self.repo, self.repo, rpc.factory)
             self.assertEqual(campaign.run(), expected)
         self.assertTrue(rpc.closed)
@@ -451,7 +524,7 @@ class MilestoneAcceptanceTests(unittest.TestCase):
         for status, expected in (("complete", 0), ("usageLimited", 21), ("budgetLimited", 22)):
             with self.subTest(status=status):
                 data = self.accepted()
-                data["requirements"][0]["accepted"] = False
+                self.unaccept_gate(data)
                 self.write(data)
                 self.assertFalse(launcher.m14_m15_closed(self.repo))
                 self.terminal_milestone_saved("active")
@@ -499,7 +572,7 @@ class MilestoneAcceptanceTests(unittest.TestCase):
         ):
             with self.subTest(kind=kind):
                 data = self.accepted()
-                data["requirements"][0]["accepted"] = False
+                self.unaccept_gate(data)
                 self.write(data)
                 self.terminal_milestone_saved("active")
 
