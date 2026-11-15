@@ -1,178 +1,84 @@
 # McKernel: M14 → M15 → complete supported system
 
-## PAUSED — harness stop closure_decision_unresolved; no automatic resume
+## ACTIVE — explicit user resume; continue same Root without a restart
 
-Authoritative stop received: closure_decision_unresolved. New dispatch STOPPED.
-Every child model turn is terminal; no new payload or recovery is authorized.
-Do not resume this run. Root is checkpointing the already completed qualifications
-and pausing the saved larger goal; original M14/M15 remain unaccepted.
+Current user resume source0651143a supersedes the historical harness
+closure_decision_unresolved pause. The existing invocation
+20261115T063109Z-9a7c2e96 is running on saved Root
+01a18bc3-e072-7810-9426-75101b0856c0. Low closure cadence is advisory;
+actual user/account/budget/source/service stops and runtime holds remain binding.
+Do not repeat the configuration transition or restart a healthy owner.
+Functional McKernel OS/apps/Rust/allowed assembly only; NO SECURITY TESTING.
 
-Final current checkpoint:112/156 accepted,44open; M14=80.19%,M15=76.25%.
-Only new original counted closure this invocation wasM15-I02-ACCEPT (+1 from111).
-No new original closure in the final rolling30minute window. Do not relabel
-source/review/compile/cleanup increments as accepted original checks.
+Verified acceptance:112/156,44open; M14=80.19%,M15=76.25%, both OPEN.
+The only original counted closure this invocation isM15-I02-ACCEPT (+1 from111).
+No new original closure is claimed for source, compiler, control or cleanup work.
+M14 final acceptance precedes M15 final acceptance. After BOTH acceptances,
+checkpoint and pause the larger saved goal; do not mark the whole OS complete.
 
-Completed and reusable: corrected whole-SMP vendor192 compilation-Dwarnings EXIT0,
-object+depfile artifactGO086f78cf (28clauses) and ownfamilyQa432a527. Public proof:
+Current original target:M14-I03-E1. Reuse the qualified whole-SMP object1f3372a5,
+depfile4e9d2139, artifactGO086f78cf and ownfamilyQa432a527. Root scoped retirement
+e2329ad5 already closes ONLY its successful2147483648B/job1 family. Public proof:
 docs/verification/m14-i03-smp-compile-20261115/QUALIFIED-WHOLE-SMP-OBJECT.json.
-Root retires ONLY that successful2147483648B/job1 family; NO passing SMP rerun.
-Copied10metadata=111189474B plus the original8B build-id already inSOURCE50 equals
-original11-input111189482B bundle; rawreports/initialgap preserved, no input missing.
-The qualified process-VM Rust+C repair and focused regression are pushed/fetch
-verified at26deaeb7123e986ddd767773c499afb50a96f10d; do not rerun green cases.
+Do not rebuild passing SMP/SDK/compiler layers. The next actual dependency is
+paired IHK-core13-source332852B os_runtime.cf1f, exact62-token rustc command and
+original18-token objtool tail, with a durable raw-object checkpoint before objtool.
+Source recipe9e4dad65 is frozen in
+/home/holden/mckernel-work/m14-i03-paired-ihk-object-20261115/HANDOFF.SOURCE-ONLY.json.
+DispatchSource owns its minimal private operation binding; Proc reviews only the
+new binding when frozen. Root alone admits and executes it. A successful object
+feeds matching module/image/provider/native/application/restoration proof; it
+does not closeE1 by itself.
+
+Actual next input obtained: one admitted stock readelf operation on retained
+objtool96a6212b exited0,4297B stdout/0stderr. It reports ELF64 x86-64 EXEC,
+/lib64/ld-linux-x86-64.so.2, DT_NEEDED libelf.so.1 and libc.so.6, no RPATH/RUNPATH.
+Raw facts and original Root result are retained under
+/home/holden/mckernel-work/manual-resume-20261115T063109Z-9a7c2e96/ROOT-ACTUAL-OBJTOOL-PASSIVE-FACTS-1.
+Proc Qfb4f561e and Root91e82901 retire ONLY its new268435456B/job1. These facts
+do not prove SDK runtime/provider closure; objtool/loader were never executed.
+
+Independent ready work: NativeBinding SOURCE GOeeec7f57 for22 fixed vDSO resolver
+controls b7242bf1/4e9c6254 and corrected observerc85a/GO7058. Actual two warning-clean C compilations and22 fixed controls PASS, Qec89e38f;
+Rootf837ebf2 retires only that536870912B/job1 family. The separate single actual
+HOST sample returned unavailable/no_at_sysinfo_ehdr (exit2); this is NOT a functional
+pass. Q49e29e5d and Root8f9b2b52 retire only that second536870912B/job1 family.
+No compile/control rerun occurred. Public proof:
+docs/verification/m14-vdso-resolver-controls-20261115/QUALIFIED-CONTROLS-AND-HOST-UNAVAILABLE.json.
+Guest/TSC/time-page/generation/native proof remains open.
+Generic froze the affected whole-production guestRust actor1b60b2e1/requesteb73;
+FunctionalDelta reviews only its new source/copy/capture/operation boundaries.
+This is the next affected object binding for the
+qualified process-VM repair, using retained exact compiler70eb/core7ec5/builtins63b0
+and original96+2cfgs. No green two-case regression is rerun. The repair is already
+integrated/pushed/fetchverified26deaeb71, with public proof
+ docs/verification/m14-process-vm-vectors-20261115/QUALIFIED-RESULTS.json.
+F02 successfulload_elf remains parked on the exact NOT_SUPPLIED matched mcctrl
+provider/device inputd919; no repeated lookup, fake ioctl or no-device substitute.
 
 PRESERVED RUNTIME CUSTODY: failedSMP Tool10774/CIDa1fb82a00bd3eb268353653621b621dfffffe9d461a76989b93131cad475ceda
 and Tool42785/CIDf0c62b172b8ab1c2f84ebb3a4a8161046973d180ae89b1bf264a9a38234ecfb4
 remain unjoined/UNKNOWN with2147483648B/job1 EACH. Old14790/32916 families retain
-402653184B/jobs2. Total retainedHOST4697620480B/jobs4, plus ALL actual overhead;
-separate native12GiB and every actual source/account/service/lease/IPC/UNKNOWN/
-excluded-worker-turn hold remain. No signal, cancellation, removal, oldwait or
-physical-release inference is authorized by this checkpoint. Keep original
-Root/server handles and the controlled engine custody; do not restart a keeper.
+402653184B/jobs2. Baseline retainedHOST4697620480B/jobs4, plus unretired new families
+and ALL measured overhead. No absence/death-based release, oldwait, signal,
+cancellation or denied/proc/2685747/fd retry/privileged alternative is authorized.
+Separate native12GiB/source/lease/IPC/scratch21/globalUNKNOWN and rejected worker
+01a1c48d-4d96-7cc3-b733-73a97973152f/turn01a1ce01-20cf-7e03-9442-f6d521fb8b02
+and its signal-frame collector/equivalents stay excluded.
 
-Next dependency is PREPARED, NOT DISPATCHED under this stop: actual paired IHK-core
-13-source332852B os_runtime.cf1f recipe (NOTmcctrl), exact62-token rustc plus original
-18-token objtool stage/raw-object checkpoint. Private handoff:
-/home/holden/mckernel-work/m14-i03-paired-ihk-object-20261115/HANDOFF.SOURCE-ONLY.json
-SHA9e4dad65d7936b80b242dfd73a8bcfa8039148c94a0848f64bbe9d61f59a1367.
-Objtool96a6212b exists; its needed-loader/provider observation and operation
-binding remain unissued. Then matching finalmodules/image/provider/one-owner
-native/application/restoration proof remains required. F02 GET_CREDV stays parked
-on exact current matched-device/provider input, never fake/no-device substituted.
-Other retained source-only handoffs: affected wholeguestRust proposal+compiler
-rebindea9010d1; corrected vDSOobserver SourceGO7058688a and new fixedcontrols
-b7242bf1/4e9c6254 (unreviewed controls/unrun); perfconsumer07f14f14; ordinaryHOST
-admission adapter grouped correction remains execution-refused/unqualified.
-No extra source/control framework or review should be launched while stopped.
+Actual selected resources: HOST CPUs0,6,7/max5 aggregate jobs/10GiB TOTAL within
+28GiB shared including18GiB preserved non-HOST reservations; retain2GiB machine
+reserve, fresh accounting/MemAvailable and packet/disk floors before every family.
+Native CPUs2-5/12GiB remains one separately admitted owner. Eleven is a source
+coordination ceiling, not eleven payload grants or multiplied RAM. Root stays
+Sol/MAX; useful direct owners use Sol/xhigh/depth1 and disjoint private writers.
+Same finite cumulative creditrun7c6ef3604bfb4008a917bba8cfb6cfaa and
+ceiling52079.8011050000 remain unchanged. Preserve dirty work and every prior pass.
 
-The running-invocation details below are historical evidence, superseded by this
-stop and final completed-result checkpoint. Only a future explicit user resume
-may authorize new engineering; this run must not auto-resume.
-
-Current invocation20261115T063109Z-9a7c2e96 is ACTUALLY running on the same saved
-Root. Worker2995304/b81053533 and server2995306/b81053545 completed normal
-startup/model catalog/config and exact thread model-effort/permission readback:
-GPT-6.1 Sol/MAX,11source slots, depth1, Sol/xhigh children, HOST CPUs0,6,7/jobs5,
-28GiB shared total containing18GiB non-HOST plus10GiB HOST. No further restart.
-Finite original targetM14-I03-E1 is APPLIED through the checked controller,
-receiptfe77de6432f609d5e8ca4cbcfcc07cdacc556f72b1a09ff6b4d716115a1ed81a.
-Actual first exact62-token vendor192 whole-SMP compilation RAN and exited1 on
-mcd_memory.rs141/142 E0609 (direct vm_start/end absent from Linux6.12 bindings).
-Compiler wait/capture/FD closure is qualified FAIL_PARTIAL_HELD fbdf96ef.
-The parent/outer Tool10774 and CIDa1fb82a00bd3eb268353653621b621dfffffe9d461a76989b93131cad475ceda
-remain in original custody; retain its2147483648B/job1 in addition to original
-402653184B/jobs2 and every other hold. No successful object or retirement inferred.
-TimeSource's exact two-line anonymous union/struct projection repair is SOURCE GO
-e1497db3; corrected leaf12282B/e57dd860,50-file cohort1025696B (other49 unchanged).
-DispatchSource owns the fresh isolated operation binding; sameProc reviews only
-changed source/count/output/retained-floor joins. Root then freshly admits ONE
-changed-source compile using the unchanged62tokens/17mounts/vendor/1.5GiB+512MiB.
-No unchanged compiler retry, old-source/output mutation or held-family release.
-Public actual diagnostic/qualified partial source record:
-docs/verification/m14-i03-smp-compile-20261115/QUALIFIED-COMPILER-FAILURE-AND-BINDING-REPAIR.json.
-The next two-case process-VM actual-body regression is separately SOURCE GO728bc899,
-with productionRust+C fallback source GO4842b4cc; Root is preparing its exact tools,
-fresh output/admission and bounded serial execution (no broad equivalence rerun).
-Current rolling30-minute original closure delta is0; invocation delta remains+1
-(M15-I02-ACCEPT).112/156/44open,M14=80.19%,M15=76.25%,both OPEN. Concrete
-critical action: candidate2 actually failed BEFORE compiler creation at actor325,
-because unchanged MANIFEST_SHA256c606 disagreed with exact78607B mountedPACKAGESa842.
-Retain its additional2147483648B/job1/Tool42785/CIDf0c62b172b8ab1c2f84ebb3a4a8161046973d180ae89b1bf264a9a38234ecfb4.
-Total retained HOST now4697620480B/jobs4 (two failedSMP families plus old384MiB/jobs2).
-DispatchSource owns ONLY isolated actor64-char pin+dependent/fresh-output repair;
-sameProc review then actual fresh Root admission for one corrected-source compile.
-No unchanged failed pin, source, output, grant or old-family replay.
-The independent VM regression is ACTUALLY PASS and integrated: both Rust and real
-C fallback pass both split-vector cases; six original waits0,21fixtureABI checks,
-Q c6ad097c / Root30b20ce4 retire ONLY new2.25GiB/job1. Source postimagesd02c/160e/c080;
-public proof docs/verification/m14-process-vm-vectors-20261115/QUALIFIED-RESULTS.json.
-Do not rerun these green cases. Next VM proof is affected whole-production Rust
-object/current coherent provider/lifetime/native qualification; Generic owns
-that source/producer proposal. Corrected vDSO observer SourceGO7058688a is ready
-for separately admitted warning-clean ordinary compile/functional controls.
-TimeSource derives the actual paired IHK-core(notmcctrl)13-source object/objtool
-recipe owning os_runtime.cf1f. No new whole original acceptance or hold release.
-
-NEW ORIGINAL ACCEPTANCE: M15-I02-ACCEPT is explicitly accepted by saved Root on
-the full four already-qualified children and exact099/c964+a2f/f133 delivered
-three-module artifact cohort. Record:
-docs/verification/m15-i02-original-acceptance-20261115/ROOT-ORIGINAL-I02-ACCEPTANCE.json
-SHA b07e10ccd422aff1555b24903eda0531b9bc9b09d085408109574e8d526f8c6a.
-Current112/156 accepted,44open (18M14/26M15), delta+1 from111 baseline;
-M14=80.19%,M15=76.25%, neither milestone accepted. New SMP source, module-load,
-applications/native/restoration/current-free and every actual hold remain separate.
-Current closure lane remainsM14; this completes the retained I02 review explicitly
-requested at startup, and does not dispatch a new M15 runtime lane.
-
-Useful owners: DispatchSource prepares only the current SMP operation binding;
-M14Generic authored one-line process-VM remote-index repair plus two actual-body
-regressions, under FunctionalDelta independent review; M14Arch implements the
-source-defined vDSO observer; CredSource resolves participating perf/reference
-lifetime; DebugContract implements the real ordinary HOST admission-provider
-adapter. All private/disjoint, no payload/compiler/native effects yet.
-The old time/VM whole original functional rows remain OPEN until matching runtime.
-A read-only source observation measured MemTotal33199697920/MemAvailable30307774464,
-all conservative selected controller/workerRSS1657585664 and old384MiB/jobs2;
-this snapshot is not payload admission and will be renewed before execution.
-
-Existing independent observer2985281/b80922657/monitor5337917a6d344274ad79c4ca2f415cb1
-has verified identity+lease, current poll06:39:41Z and verified publication06:39:56Z,
-SHA4debfd9240fa1a556cc0a29ea759d448f65bb7b8ec7286198f2a8e99db88ea8a.
-No second observer or timer was started. Exact PR14 source271e2364 is already an
-ancestor of current source9581b04d; loaded controller advertises closure capability1.
-Read mailboxc2c63fdd/blob4f14124b and adoption01345300 + dispatch271e2364 in full;
-existing receipt/delivery chain is reused. Source/observer/model/target facts do
-not imply a qualified ordinary runner operation or unattended engineering acceptance.
-
-The relaunch/operator-stop details below are historical; this manual invocation
-supersedes the previous waiting-for-launch banner without releasing any hold.
-
-Latest user direction: integrate the current GitHub harness, make it reliable
-without babysitting, use GPT-6.1 Sol/MAX dispatch with Sol/xhigh workers, and let
-the dispatcher adjust resources using measured capacity. Keep ready M14 and M15
-work moving in parallel; final M14 acceptance still precedes final M15 acceptance.
-Use one continuous dependency chain: qualified output becomes input to the next
-ready original checks, with no manual restart between increments. The selected
-28GiB total shared work pool includes18GiB non-HOST reservations plus10GiB HOST
-capacity; it is not28GiB added on top of the native reservation. The host reports
-30.9GiB usable, leaving about3GiB outside that budget for the OS.
-Repair or park a stuck task. If nothing can proceed, checkpoint and stop dispatch
-rather than spin BLOCKED. Target 3–5 original-check closures per rolling30minutes,
-reporting actual closed IDs and exact remaining count without guaranteeing a rate.
-
-The user's2026-11-15T06:09Z launch failed before acquiring the saved Root: the old
-suspended app-server2661998 still held its writer lock. That server completed its
-normal stdio-EOF shutdown and released the lock. The rejected new attempt's
-server2985331, worker2985289 and watcher2985266 have also exited. The receipts are
-in `.git/os-autopilot/operator-stops/`; no payload/native/UNKNOWN hold or cumulative
-credit record was retired or reset. The launcher now checks the exact saved Root
-writer before submitting anything. A matching received writer-conflict rejection
-also closes only its own unacquired server and exits without an idle keeper/retry.
-The20-minute supervision timer is inactive. Do not restart anything automatically:
-the user requested the final Python command and will start the next run manually.
-The functional reliability suite passed902unique tests with no skips; after the
-viewer fix, all7launcher tests passed, including actual ordinary child/tail exit.
-Actual
-read-only startup verified GPT-6.1 Sol/MAX,11slots,five aggregate HOST jobs,28GiB shared total,
-10GiB HOST sub-budget, sleep-inhibition permission and the now-free saved writer.
-Engineering has not resumed; the failed attempt started no Root turn or payload.
-The old stuck viewer was closed and its original parent reaped the exited child.
-The Python launcher now reaps finished children while following the combined log,
-so an ended launch exits the viewer normally. Closing that viewer with Ctrl+C
-leaves a healthy background run active.
-
-Read instructions/M14-M15-OVERNIGHT.md for the small next-action handoff. Begin with
-the ready whole-SMP GO74c72af7 packet serving M15-F06-device-behavior and the coherent
-cohort for M14-I03-E1/E2/E3; use the new explicitly selected aggregate resource pool
-only after fresh accounting. Reuse every passing compiler/SDK/provider/object and
-qualify the actual new result. Keep eligible F02/F05/F08 owner work in parallel.
-
-Verified tracker remains111/156 accepted,45open; M14=80.19%, M15=74.59%, neither
-milestone accepted. Engineering estimates do not change these binary statuses.
-Keep savedRoot01a18bc3-e072-7810-9426-75101b0856c0, finite cumulative credit
-run7c6ef3604bfb4008a917bba8cfb6cfaa and ceiling52079.8011050000. Functional OS/Rust
-and allowed assembly only; NO SECURITY TESTING. After both original milestone
-acceptances checkpoint and pause the larger goal.
+Historical pause and its custody checkpoint are retained in commit9881b9917;
+that pause is superseded by the explicit current user resume. Existing observer,
+mailbox delivery and same-controller receipts remain reused; no new poller,
+source control framework or timer is needed for the engineering dependency chain.
 
 ## Closure plan: all44 current original opens, chained to full M14/M15 acceptance
 
