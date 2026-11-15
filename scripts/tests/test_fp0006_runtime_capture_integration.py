@@ -26,6 +26,49 @@ CONTRACT = ROOT / "host-kernel/contracts/fp0006-runtime-capture-integration-v1.j
 SOURCE_ROOT = ROOT
 
 
+def _pinned_historical_native_workflow(repo, binding):
+    """Recover digest-bound historical workflow *data*, not runtime authority.
+
+    An edited current workflow cannot satisfy the frozen FP-0006 record. Its
+    original bytes may be copied to the isolated fixture from local Git history
+    only after exact size and SHA-256 verification. No old program is executed.
+    """
+    relative = ".github/workflows/native-rust-host-modules-exact-build.yml"
+    if binding["path"] != relative:
+        raise ValueError("unexpected historical workflow binding")
+    expected_size = binding["size"]
+    expected_digest = binding["sha256"]
+    current = repo / relative
+    if current.is_symlink() or not current.is_file():
+        raise ValueError("historical workflow source is not a regular file")
+    current_bytes = current.read_bytes()
+    if (len(current_bytes) == expected_size and
+            hashlib.sha256(current_bytes).hexdigest() == expected_digest):
+        return current_bytes
+    history = subprocess.run(
+        ["git", "-C", str(repo), "log", "--format=%H", "--", relative],
+        check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30,
+    ).stdout.decode("ascii").splitlines()
+    for commit in history:
+        if len(commit) != 40 or any(c not in "0123456789abcdef" for c in commit):
+            raise ValueError("historical workflow revision is not an exact commit")
+        object_name = commit + ":" + relative
+        size = subprocess.run(
+            ["git", "-C", str(repo), "cat-file", "-s", object_name],
+            check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=10,
+        ).stdout.decode("ascii").strip()
+        if size != str(expected_size):
+            continue
+        candidate = subprocess.run(
+            ["git", "-C", str(repo), "show", object_name],
+            check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=10,
+        ).stdout
+        if (len(candidate) == expected_size and
+                hashlib.sha256(candidate).hexdigest() == expected_digest):
+            return candidate
+    raise ValueError("no pinned historical workflow matches declared digest and size")
+
+
 def setUpModule():
     global ROOT, LEGACY_WORKFLOW, NATIVE_WORKFLOW, CONTRACT, _AUTHORITY_DIRECTORY
     _AUTHORITY_DIRECTORY = tempfile.TemporaryDirectory(prefix="fp0006-integration-frozen-")
@@ -47,7 +90,12 @@ def setUpModule():
     for name in sorted(inputs):
         target = ROOT / name
         target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(SOURCE_ROOT / name, target)
+        if name == contract["bound_files"]["native_workflow"]["path"]:
+            target.write_bytes(_pinned_historical_native_workflow(
+                SOURCE_ROOT, contract["bound_files"]["native_workflow"]
+            ))
+        else:
+            shutil.copyfile(SOURCE_ROOT / name, target)
     frozen = materialize(SOURCE_ROOT, temporary / "frozen",
                          "host-kernel/contracts/fp0006-ihk-device-negative-dispatch-v1.json")
     for source in frozen.rglob("*"):
