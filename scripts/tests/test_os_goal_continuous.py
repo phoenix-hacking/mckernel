@@ -59,6 +59,7 @@ class ContinuousCampaignTests(unittest.TestCase):
         state = self.run_fake(rpc, 10)
         self.assertEqual(state["stop_reason"], "blocked_no_ready_work")
         self.assertEqual(state["blocked_idle"]["status"], "stopped_no_ready_work")
+        self.assertEqual(state["goal"]["status"], "paused")
         self.assertFalse(state["controller_dispatch_enabled"])
         self.assertEqual(len(self.starts(rpc)), 1)
         self.assert_no_activation(rpc)
@@ -355,8 +356,10 @@ class ContinuousCampaignTests(unittest.TestCase):
         first = self.run_fake(rpc, 10)
         receipts = first["blocked_repair_reviews"]
         self.assertEqual(len(receipts), 1)
-        self.assertEqual(first["goal"]["status"], "blocked")
-        changed = dict(first["goal"], updatedAt=99, tokensUsed=9000, timeUsedSeconds=700)
+        self.assertEqual(first["goal"]["status"], "paused")
+        # A later blocked observation with the same cause must not rearm the
+        # already completed diagnostic, even after a user-stop checkpoint.
+        changed = dict(first["goal"], status="blocked", updatedAt=99, tokensUsed=9000, timeUsedSeconds=700)
 
         def finish_wait(rpc):
             self.assertEqual(self.starts(rpc), [])

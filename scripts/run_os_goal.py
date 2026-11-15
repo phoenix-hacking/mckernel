@@ -3340,7 +3340,11 @@ class Campaign:
         receipt = None
         transport_receipt = None
         paused_active = bool(current and current["status"] == "active")
-        if paused_active:
+        pause_blocked = bool(current and current["status"] == "blocked" and
+            (self.stop_reason in {"blocked_no_ready_work", "machine_headroom_exhausted",
+                                  "closure_decision_unresolved", "work_window"}
+             or (self.stop_reason or "").startswith("signal_")))
+        if paused_active or pause_blocked:
             before = dict(current)
             generation = self.primary_stop_generation
             current = self.rpc.call("thread/goal/set", {"threadId": ident, "status": "paused"})["goal"]
@@ -4111,7 +4115,7 @@ def main(argv=None):
                 ensure_mailbox_ready(REPO, directory,
                                      timeout_seconds=60 if args.mailbox_monitor == "required" else 0)
                 say("Mailbox reader and its current successful poll are verified.")
-            except (OSError, RuntimeError, ValueError) as error:
+            except (OSError, RuntimeError, ValueError, subprocess.SubprocessError) as error:
                 if args.mailbox_monitor == "required":
                     raise
                 say("Mailbox observation unavailable: " + str(error)

@@ -78,17 +78,21 @@ class StartupTests(unittest.TestCase):
             repo = Path(directory)
             (repo / "scripts").mkdir()
             (repo / "scripts/os_goal_mailbox.json").write_text("{}")
-            for mode in ("auto", "required"):
+            failures = [("auto", RuntimeError("observer unavailable")),
+                        ("required", RuntimeError("observer unavailable")),
+                        ("auto", launcher.subprocess.TimeoutExpired("observer unavailable", 1)),
+                        ("required", launcher.subprocess.TimeoutExpired("observer unavailable", 1))]
+            for mode, failure in failures:
                 with self.subTest(mode=mode), patch.object(launcher, "REPO", repo), \
                         patch.object(launcher.subprocess, "check_output", return_value=".git"), \
                         patch.object(launcher.shutil, "which", return_value="codex"), \
                         patch.object(launcher, "launch_resources", return_value={}), \
                         patch.object(launcher, "check_resources"), \
-                        patch.object(launcher, "ensure_mailbox_ready", side_effect=RuntimeError("observer unavailable")) as monitor, \
+                        patch.object(launcher, "ensure_mailbox_ready", side_effect=failure) as monitor, \
                         patch.object(watch_os_goal, "supervise", return_value=0) as launch, \
                         redirect_stdout(io.StringIO()):
                     if mode == "required":
-                        with self.assertRaisesRegex(RuntimeError, "observer unavailable"):
+                        with self.assertRaises(type(failure)):
                             launcher.main(["--supervisor", "--mailbox-monitor", mode])
                         launch.assert_not_called()
                     else:
