@@ -324,6 +324,7 @@ class ReliabilityIntegrationTests(unittest.TestCase):
         self.assertEqual(len(self.campaign.state["progress_snapshot"]["closed_original_checks"]), self.closed_count)
 
     def test_unresolved_bounded_followup_stops_dispatch_without_a_third_review(self):
+        self.campaign.args.stop_on_closure_stall = True
         self.campaign.poll_progress()
         first = self.campaign.state["progress_review"]["key"]
         now = time.time()

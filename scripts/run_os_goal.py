@@ -694,7 +694,8 @@ def accepted_account_observation(state, ledger, owner, now_utc_ns, now_mono_ns,
 
 
 TECHNICAL_CONTROL_STOPS = frozenset({"watchdog_recovery", "guardian_recovery",
-                                     "active_goal_did_not_continue"})
+                                     "active_goal_did_not_continue", "closure_decision_unresolved",
+                                     "blocked_no_ready_work"})
 _CONTROL_HOLD_FLAGS = ("service_hold", "policy_hold", "auth_hold", "billing_hold",
                        "budget_hold", "permission_hold", "account_hold",
                        "accounting_unknown", "budget_unknown", "auth_unknown",
@@ -1601,7 +1602,7 @@ class Campaign:
             any((control / "pending").glob("*.json")) or any((control / "sending").glob("*.json")))
 
     def poll_progress(self):
-        """Turn qualified outcomes and stagnation into one guarded Root decision."""
+        """Observe results; closure cadence is advisory unless explicitly opted in."""
         if not self.progress_enabled():
             return
         now = time.monotonic()
@@ -1622,7 +1623,23 @@ class Campaign:
         elif isinstance(pending, dict) and pending.get("status") == "pending":
             if pending.get("key") != observed["applicable_advisory_key"]:
                 pending = dict(pending, status="superseded_before_dispatch", at=utc())
-        self.save(progress_snapshot=snapshot, progress_monitor=monitor, progress_advisory=pending)
+        cadence_advisory = self.state.get("progress_stall_advisory")
+        new_cadence_advisory = False
+        if snapshot.get("stop_required") and not getattr(self.args, "stop_on_closure_stall", False):
+            snapshot.update(stop_required=False, decision_status="overdue_advisory")
+            monitor["decision_status"] = "overdue_advisory"
+            key = _account_value_sha256({"review": observed["applicable_advisory_key"],
+                "semantic": snapshot["semantic_fingerprint"], "epoch": self.state.get("progress_review_epoch")})
+            if not isinstance(cadence_advisory, dict) or cadence_advisory.get("key") != key:
+                cadence_advisory = {"key": key, "at": utc(), "status": "advisory_only",
+                    "reason": "closure_decision_overdue", "execution_admission": False,
+                    "release_authorized": False}
+                new_cadence_advisory = True
+        self.save(progress_snapshot=snapshot, progress_monitor=monitor, progress_advisory=pending,
+                  progress_stall_advisory=cadence_advisory)
+        if new_cadence_advisory:
+            self.output.notice("The closure decision is overdue; cadence is advisory. Continue eligible "
+                               "engineering and preserve all actual account, resource and user stops.")
         if (snapshot.get("stop_required") and not self.stop_reason and not self.stop_now
                 and not self.checkpoint_requested and self.goal and self.goal.get("status") == "active"):
             self.stop_reason = "closure_decision_unresolved"
@@ -1639,7 +1656,11 @@ class Campaign:
             return
         reviews = self.directory / "progress-reviews"
         reviews.mkdir(mode=0o700, parents=True, exist_ok=True)
-        path = reviews / (pending["key"] + ".json")
+        epoch = self.state.get("progress_review_epoch")
+        if epoch is not None and (not isinstance(epoch, str) or len(epoch) != 64
+                or any(char not in "0123456789abcdef" for char in epoch)):
+            raise ValueError("Progress decision epoch is UNKNOWN")
+        path = reviews / ((epoch + "-" if epoch is not None else "") + pending["key"] + ".json")
         if path.exists():
             prior = _read_private_json(path)
             if prior.get("status") in {"sending", "delivery_uncertain"}:
@@ -1649,7 +1670,7 @@ class Campaign:
             elif prior.get("status") == "refused_before_rpc" and prior.get("rpc_attempted") is False:
                 # Positive proof of no RPC permits a guarded retry of this same
                 # review. Preserve the prior intent/refusal before replacing it.
-                archive = reviews / (pending["key"] + ".refused-" + uuid4().hex + ".json")
+                archive = reviews / (path.stem + ".refused-" + uuid4().hex + ".json")
                 atomic_json(archive, prior)
             else:
                 self.save(progress_advisory=dict(pending, status=prior.get("status", "unknown_prior_attempt")))
@@ -1916,6 +1937,38 @@ class Campaign:
             finally:
                 os.close(fd)
 
+    def rearm_progress_decision(self, receipt):
+        """Supersede only review timing after an authenticated technical resume.
+
+        The delivered control receipt retains the prior monitor and decisions.
+        Original evidence, semantic timestamps, closure velocity, holds and the
+        cumulative financial ledger keep their existing values.
+        """
+        prior_monitor = self.state.get("progress_monitor")
+        epoch = _account_value_sha256({"instruction_id": receipt["id"],
+            "owner": receipt["owner"], "primary_stop_generation": self.primary_stop_generation})
+        receipt["progress_decision_rearm"] = {"epoch": epoch, "at": utc(),
+            "prior_monitor": prior_monitor, "prior_review": self.state.get("progress_review"),
+            "prior_advisory": self.state.get("progress_advisory"),
+            "canonical_evidence_reset": False, "financial_reset": False}
+        if isinstance(prior_monitor, dict):
+            self.state["progress_monitor"] = dict(prior_monitor, issued_review_keys={},
+                accepted_review_times={}, last_review_key=None, last_review_at=None,
+                review_required=False, decision_pending_seconds=0,
+                decision_status="rearmed_by_explicit_resume")
+        for name in ("progress_review", "progress_advisory"):
+            row = self.state.get(name)
+            if isinstance(row, dict):
+                self.state[name] = dict(row, status="superseded_by_explicit_resume",
+                                        superseded_by=receipt["id"])
+        snapshot = self.state.get("progress_snapshot")
+        if isinstance(snapshot, dict):
+            self.state["progress_snapshot"] = dict(snapshot, stop_required=False,
+                review_required=False, decision_pending_seconds=0,
+                decision_status="rearmed_by_explicit_resume")
+        self.state["progress_review_epoch"] = epoch
+        self.next_progress_check = 0
+
     def deliver_same_owner_resume(self, item, receipt, sending):
         """Apply an explicit bound control on this RPC; never grant job resources."""
         from os_goal_guard_protocol import read_json
@@ -2068,6 +2121,7 @@ class Campaign:
                         if stops_changed() or self.primary_stop_generation != generation:
                             raise ValueError("Technical checkpoint changed before acknowledgement")
                         receipt["acknowledged_checkpoint"] = dict(technical)
+                        self.rearm_progress_decision(receipt)
                         self.stop_reason, self.stop_now, self.checkpoint_requested = None, False, False
                         self.save(stop_reason=None, last_instruction=receipt,
                                   acknowledged_technical_checkpoint={
@@ -2275,9 +2329,12 @@ class Campaign:
                               path.name))
         if not pending:
             return
-        if (control_only or control_waiting and not waiting and ident not in self.active) \
-                and json.loads(pending[0].read_text()).get("control") is None:
-            return
+        if control_only or control_waiting and not waiting and ident not in self.active:
+            # A paused owner cannot consume ordinary work yet. Preserve it in
+            # order, while allowing its explicit recovery control to reach it.
+            pending = [path for path in pending if _read_private_json(path).get("control") is not None]
+            if not pending:
+                return
         sending_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
         source = pending[0]
         sending = sending_dir / source.name
@@ -3899,6 +3956,8 @@ def arguments(argv=None):
                         help="Report original closure/evidence progress at this interval (default 1200)")
     parser.add_argument("--progress-stall-seconds", type=float, default=2400,
                         help="Request one concrete decision after this long without required progress (default 2400)")
+    parser.add_argument("--stop-on-closure-stall", action="store_true",
+                        help="Opt in to checkpointing after unresolved closure reviews; default is advisory")
     parser.add_argument("--blocked-idle-seconds", type=float, default=300,
                         help="Stop dispatch after this idle blocked interval (default 300; active work is preserved)")
     parser.add_argument("--grace-seconds", type=float, default=600, help="Reserve up to this many seconds for a checkpoint")

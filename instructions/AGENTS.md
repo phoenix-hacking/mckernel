@@ -20,6 +20,8 @@ nothing can proceed, checkpoint and stop dispatch instead of spinning blocked.
 Target 3–5 verified original-check closures per rolling 30 minutes; report actual
 closed IDs and the exact remaining count. Do not promise that rate or weaken a
 criterion to meet it.
+Closure cadence is advisory: a missed rate target or delayed progress registration
+must not pause useful engineering. Keep ready work moving without user babysitting.
 
 The dispatcher may adjust CPU, total RAM, concurrent jobs and container budgets
 using measured machine headroom. The next launch selects28GiB TOTAL shared RAM,

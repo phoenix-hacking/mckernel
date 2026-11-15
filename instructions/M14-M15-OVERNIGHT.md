@@ -13,24 +13,31 @@ fresh aggregate accounting and actual ownership support them. Preserve passing
 work and use the existing SDK/images rather than rebuilding unchanged layers.
 
 Chain each qualified result into its dependent checks without a manual restart.
-First review `M15-I02-ACCEPT`: its four counted children are already closed; use
-their retained full-scope evidence and accept only if the original gate is satisfied.
-Do not invent a new build just for that review. In parallel, start from the last
-unfinished functional check. The ready whole-SMP source/operation packet
-is `m15-f06-affected-smp-crate-20261114/reviewer-as-metadata-correction-1` under
-`/home/holden/mckernel-work`, with `READY.SOURCE-ONLY.json`, `REQUEST.FROZEN.json`,
-`PROFILE.json` and `independent-proc-review-1/REVIEW.json` (GO74c72af7). Its actual
-admission failed only because 4456984576 bytes exceeded the old 4 GiB aggregate
-pool. Reuse the reviewed 62-token compiler command, 50-source cohort, 17 mounts,
-vendor compiler and actual 1.5 GiB container hard cap plus 512 MiB control slice.
-The new28GiB TOTAL shared pool includes18GiB preserved non-HOST reservations
-and a10GiB HOST ceiling. It removes the old numerical ceiling only after fresh
-accounting passes, without changing the real container/control family or clearing
-a different hold. Bind `work_memory_ceiling_bytes=30064771072` and
+The saved checkpoint has112/156 accepted and44open. `M15-I02-ACCEPT` is accepted;
+reuse its full retained evidence. The changed whole-SMP compilation now passes
+with the pinned vendor compiler and original `-Dwarnings` command. Reuse its
+qualified object/depfile and successful-family closure from
+`docs/verification/m14-i03-smp-compile-20261115/QUALIFIED-WHOLE-SMP-OBJECT.json`.
+The process-VM Rust/C repair and focused tests are qualified and pushed at
+`26deaeb71`; reuse `docs/verification/m14-process-vm-vectors-20261115/QUALIFIED-RESULTS.json`.
+Do not rerun either passing increment.
+
+Continue the next unfinished `M14-I03-E1` prerequisite: the actual paired IHK-core
+13-source/332852-byte recipe owning `os_runtime.cf1f`, at
+`/home/holden/mckernel-work/m14-i03-paired-ihk-object-20261115/HANDOFF.SOURCE-ONLY.json`
+(9e4dad65). It supplies the original62-token Rust command and18-token objtool tail,
+with a durable raw-object checkpoint between stages. Bind the necessary actual
+objtool loader/provider facts and the smallest operation through fresh admission;
+the source recipe alone is not a compiler grant. Reuse the existing SDK/image,
+metadata and providers. Preserve both failed SMP families and all other actual
+holds; only the successful family has qualified retirement.
+
+The28GiB TOTAL shared pool includes18GiB preserved non-HOST reservations and a
+10GiB HOST ceiling. Bind `work_memory_ceiling_bytes=30064771072` and
 `host_memory_ceiling_bytes=10737418240` in the operation request, with the selected
 CPU/job limits and actual fresh `MemTotal_bytes` measurement.
 
-This shared SMP repair serves `M15-F06-device-behavior` and the coherent native
+The passing shared SMP object serves `M15-F06-device-behavior` and the coherent native
 cohort needed by `M14-I03-E1/E2/E3`. Keep the executor owner advancing
 `M15-F02-complete-ABI-behavior` from the qualified main/interpreter/non-ELF work;
 successful real GET_CREDV still needs the current matched mcctrl device/provider
@@ -45,6 +52,10 @@ minutes report actual newly accepted original IDs, count/156 and remaining count
 M14/M15 weighted totals, current owners, next missing proofs and rough engineering
 estimate ranges separately from verified acceptance. Target 3–5 closures per 30
 minutes as fast as the actual work supports.
+Closure cadence and progress-registration delays are advisory and must not stop
+useful work. The controller's `--stop-on-closure-stall` checkpoint policy requires
+explicit opt-in; it is off by default. Explicit recovery uses the same retained
+controller and Root, with ordinary instructions preserved until recovery completes.
 
 Preserve cumulative credit run `7c6ef3604bfb4008a917bba8cfb6cfaa` and ceiling
 `52079.8011050000`, all genuine account/source/native/UNKNOWN holds, excluded
