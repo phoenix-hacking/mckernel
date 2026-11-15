@@ -95,6 +95,26 @@ jobs:
           # identities. Git sees only this exact checked-out workspace as safe.
           test -x /usr/bin/setpriv
           test "$(sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups /usr/bin/id -u)" = 1000
+          # GitHub's hosted runner workspace is beneath directories private to
+          # the runner user. The independent UID 1000 cannot import the real
+          # scripts/tests tree until it can traverse those parent directories.
+          # Grant only UID 1000 traversal there, and read/traverse on the two
+          # exact checked-out source/history roots. No file ownership, group,
+          # production policy, native custody or owner assertion is changed.
+          if ! command -v setfacl >/dev/null 2>&1; then
+            sudo -n apt-get update -qq
+            sudo -n apt-get install -y -qq --no-install-recommends acl
+          fi
+          ancestor="$(dirname "$GITHUB_WORKSPACE")"
+          while [[ "$ancestor" != / ]]; do
+            sudo -n setfacl -m u:1000:--x "$ancestor"
+            ancestor="$(dirname "$ancestor")"
+          done
+          sudo -n setfacl -m u:1000:r-x "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$MCKERNEL_IHK_HISTORY"
+          sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups \
+            /usr/bin/test -r "$GITHUB_WORKSPACE/scripts/tests/test_application_draft_audit.py"
+          sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups \
+            /usr/bin/test -r "$MCKERNEL_IHK_HISTORY/.git/HEAD"
           sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups \
             /usr/bin/env PYTHONDONTWRITEBYTECODE=1 \
             MCKERNEL_IHK_HISTORY="$MCKERNEL_IHK_HISTORY" \
