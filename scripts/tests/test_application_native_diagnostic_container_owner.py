@@ -146,6 +146,11 @@ class OwnerTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
+        # Production pins the workstation owner path; do not rewrite it for CI.
+        # Fake-Docker tests read identical owner bytes in the checked-out tree.
+        self.assertEqual(owner.REPO, "/home/holden/mckernel")
+        self.assertEqual(owner.SELF, "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py")
+        self.patch("SELF", str(SOURCE.resolve(strict=True)))
         self.parent = self.root / "attempts"
         self.parent.mkdir(mode=0o700)
         self.patch("SCRATCH", str(self.root))
