@@ -169,6 +169,27 @@ class FinalPushTrackerWorkflowTests(unittest.TestCase):
         self.assertIn("git -C ihk apply", step)
         self.assertIn("scripts/patches/ihk-linux-compat.patch", step)
 
+    def test_frozen_host_inventory_supplies_pinned_rustc_to_uid1000(self):
+        steps = self.workflow["jobs"]["tracker"]["steps"]
+        inventory = next(step["run"] for step in steps if step.get("name") ==
+                         "Validate frozen host-module inventory")
+        focused = (WORKFLOW_PATH.parent / "m14-focused.yml").read_text(encoding="utf-8")
+        pinned = "nightly-2026-02-19"
+        version = "rustc 1.95.0-nightly (c04308580 2026-02-18)"
+        for workflow in (focused, inventory):
+            self.assertIn("rustup toolchain install " + pinned + " --profile minimal",
+                          workflow)
+            self.assertIn(version, workflow)
+        self.assertIn('compiler="$(rustup which --toolchain ' + pinned + ' rustc)"',
+                      inventory)
+        self.assertIn('[[ "$compiler" = /* ]]', inventory)
+        self.assertIn('"$compiler" --version | grep -Fx', inventory)
+        self.assertIn('--reuid=1000 --regid=1000 --clear-groups', inventory)
+        self.assertIn('RUSTC="$compiler"', inventory)
+        self.assertLess(inventory.index('rustup toolchain install ' + pinned),
+                        inventory.index('python3 -m unittest discover -s scripts/tests'))
+        self.assertNotIn('skipTest(', inventory)
+
     def test_authority_predecessors_cannot_leave_repository_bytecode(self):
         self.assertIn('PYTHONDONTWRITEBYTECODE: "1"', self.text)
         self.assertNotIn("python3 -m py_compile", self.text)

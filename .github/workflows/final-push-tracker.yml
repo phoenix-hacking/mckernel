@@ -143,8 +143,19 @@ jobs:
               finally:
                   os.close(parent_fd)
           PY
+          # M14-F03 exec-completeness checks compile and run actual Rust.
+          # Resolve the same pinned HOST toolchain as M14 focused CI rather
+          # than treating missing rustc as a reason to skip full discovery.
+          # A real uid=1000 compiler invocation must pass before the suite.
+          rustup toolchain install nightly-2026-02-19 --profile minimal
+          compiler="$(rustup which --toolchain nightly-2026-02-19 rustc)"
+          [[ "$compiler" = /* ]]
+          test "$("$compiler" --version)" = 'rustc 1.95.0-nightly (c04308580 2026-02-18)'
+          sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups \
+            "$compiler" --version | grep -Fx 'rustc 1.95.0-nightly (c04308580 2026-02-18)'
           sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups \
             /usr/bin/env PYTHONDONTWRITEBYTECODE=1 \
+            RUSTC="$compiler" \
             MCKERNEL_IHK_HISTORY="$MCKERNEL_IHK_HISTORY" \
             GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory \
             GIT_CONFIG_VALUE_0="$GITHUB_WORKSPACE" \
