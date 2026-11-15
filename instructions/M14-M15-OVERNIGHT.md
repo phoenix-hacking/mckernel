@@ -60,7 +60,9 @@ python3 -B /home/holden/mckernel/scripts/launch_m14_m15.py
 
 The launcher starts in the background, prints the log path/START_REQUESTED and
 streams the combined dispatcher/worker log in the current terminal tab. Closing
-the log viewer leaves the background run active. Confirm actual Root model
+the log viewer leaves the background run active. It reaps an exited launcher while
+following the log, so a finished run closes the viewer without a zombie-PID wait.
+Confirm actual Root model
 readback and useful worker work in that log; submission is not progress. Optional
 `--agents`, `--jobs`, `--work-memory-gib`, `--memory-gib`, and `--cpus` change
 the next selected limits. The default shared total is28GiB; `--memory-gib` is an

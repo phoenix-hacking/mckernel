@@ -25,12 +25,16 @@ writer before submitting anything. A matching received writer-conflict rejection
 also closes only its own unacquired server and exits without an idle keeper/retry.
 The20-minute supervision timer is inactive. Do not restart anything automatically:
 the user requested the final Python command and will start the next run manually.
-The functional reliability suite passed902unique tests with no skips. Actual
+The functional reliability suite passed902unique tests with no skips; after the
+viewer fix, all7launcher tests passed, including actual ordinary child/tail exit.
+Actual
 read-only startup verified GPT-6.1 Sol/MAX,11slots,five aggregate HOST jobs,28GiB shared total,
 10GiB HOST sub-budget, sleep-inhibition permission and the now-free saved writer.
 Engineering has not resumed; the failed attempt started no Root turn or payload.
-The Python launcher opens the combined log;
-closing that viewer leaves the background run active.
+The old stuck viewer was closed and its original parent reaped the exited child.
+The Python launcher now reaps finished children while following the combined log,
+so an ended launch exits the viewer normally. Closing that viewer with Ctrl+C
+leaves a healthy background run active.
 
 Read instructions/M14-M15-OVERNIGHT.md for the small next-action handoff. Begin with
 the ready whole-SMP GO74c72af7 packet serving M15-F06-device-behavior and the coherent

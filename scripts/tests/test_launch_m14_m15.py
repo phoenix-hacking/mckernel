@@ -63,14 +63,48 @@ class LaunchTests(unittest.TestCase):
         child = Mock(pid=123456)
         with patch.object(launch.shutil, "which", side_effect=lambda name: "/usr/bin/" + name), \
                 patch.object(launch.subprocess, "run", side_effect=[Mock(returncode=0), KeyboardInterrupt]), \
-                patch.object(launch.subprocess, "Popen", return_value=child) as spawn:
+                patch.object(launch.subprocess, "Popen", return_value=child) as spawn, \
+                patch.object(launch, "Thread") as waiter:
             self.assertEqual(launch.main([]), 0)
             self.assertTrue(spawn.call_args.kwargs["start_new_session"])
             self.assertIn("/usr/bin/taskset", spawn.call_args.args[0])
+            waiter.assert_called_once_with(target=child.wait, daemon=True, name="m14-m15-child-wait")
+            waiter.return_value.start.assert_called_once_with()
             child.terminate.assert_not_called()
             child.kill.assert_not_called()
             child.send_signal.assert_not_called()
             child.wait.assert_not_called()
+
+    def test_exited_ordinary_child_is_reaped_while_real_tail_finishes(self):
+        viewer = launch.shutil.which("tail")
+        self.assertIsNotNone(viewer)
+        path = self.directory / "ordinary-child.log"
+        actual_run = launch.subprocess.run
+        results = []
+
+        def bounded_view(command, **kwargs):
+            result = actual_run(command, timeout=5, capture_output=True, text=True, **kwargs)
+            results.append(result)
+            return result
+
+        with path.open("w") as output:
+            child = launch.subprocess.Popen(
+                [sys.executable, "-B", "-c", "import time; print('ordinary child exited', flush=True); "
+                 "time.sleep(0.1); raise SystemExit(23)"], stdin=launch.subprocess.DEVNULL,
+                stdout=output, stderr=launch.subprocess.STDOUT, start_new_session=True)
+        try:
+            with patch.object(launch.subprocess, "run", side_effect=bounded_view):
+                self.assertEqual(launch.follow_log(child, path, viewer), 23)
+            self.assertEqual(child.returncode, 23)
+            self.assertEqual(len(results), 1)
+            self.assertEqual(results[0].returncode, 0)
+            self.assertIn("ordinary child exited", results[0].stdout)
+            with self.assertRaises(ChildProcessError):
+                os.waitpid(child.pid, os.WNOHANG)
+        finally:
+            if child.poll() is None:
+                child.kill()
+            child.wait(timeout=5)
 
     def test_held_saved_writer_blocks_check_and_background_submission(self):
         lock = self.codex_home / "thread-writer-locks" / (SAVED_ROOT + ".lock")

@@ -11,6 +11,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+from threading import Thread
 
 from os_goal_service import runtime_directory
 from os_goal_writer import require_saved_writer_ready
@@ -44,6 +45,14 @@ def controller_command(args):
     if args.memory_gib is not None:
         command += ["--memory-gib", str(args.memory_gib)]
     return command
+
+
+def follow_log(child, path, viewer):
+    # tail --pid also sees an unreaped zombie as alive. Reap concurrently so
+    # the viewer can finish; Popen.wait serializes concurrent callers safely.
+    Thread(target=child.wait, daemon=True, name="m14-m15-child-wait").start()
+    subprocess.run([viewer, "--pid=" + str(child.pid), "-n", "+1", "-F", str(path)], check=False)
+    return child.wait()
 
 
 def main(argv=None):
@@ -81,8 +90,7 @@ def main(argv=None):
         viewer = shutil.which("tail")
         if viewer:
             try:
-                subprocess.run([viewer, "--pid=" + str(child.pid), "-n", "+1", "-F", str(path)], check=False)
-                return child.wait()
+                return follow_log(child, path, viewer)
             except KeyboardInterrupt:
                 print("Log view closed; the background run continues. Log: " + str(path), flush=True)
     return 0
