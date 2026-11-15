@@ -98,7 +98,9 @@ jobs:
           # GitHub's hosted runner workspace is beneath directories private to
           # the runner user. The independent UID 1000 cannot import the real
           # scripts/tests tree until it can traverse those parent directories.
-          # Grant only UID 1000 traversal there, and read/traverse on the two
+          # The owner's descriptor-based walk opens each ancestor O_RDONLY,
+          # requiring read AND search permission (not merely --x). Grant r-x
+          # only to UID 1000 on these CI-runner directory ancestors and the two
           # exact checked-out source/history roots. No file ownership, group,
           # production policy, native custody or owner assertion is changed.
           if ! command -v setfacl >/dev/null 2>&1; then
@@ -107,7 +109,7 @@ jobs:
           fi
           ancestor="$(dirname "$GITHUB_WORKSPACE")"
           while [[ "$ancestor" != / ]]; do
-            sudo -n setfacl -m u:1000:--x "$ancestor"
+            sudo -n setfacl -m u:1000:r-x "$ancestor"
             ancestor="$(dirname "$ancestor")"
           done
           sudo -n setfacl -m u:1000:r-x "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$MCKERNEL_IHK_HISTORY"
@@ -115,6 +117,32 @@ jobs:
             /usr/bin/test -r "$GITHUB_WORKSPACE/scripts/tests/test_application_draft_audit.py"
           sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups \
             /usr/bin/test -r "$MCKERNEL_IHK_HISTORY/.git/HEAD"
+          # A pathname test -r is insufficient: native_diagnostic_container_owner
+          # opens every ancestor with O_RDONLY|O_DIRECTORY|O_NOFOLLOW.
+          # Fail here if ACLs permit path traversal but deny descriptor walks.
+          sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups \
+            /usr/bin/python3 -B - \
+            "$GITHUB_WORKSPACE/scripts/application-tests/native_diagnostic_container_owner.py" \
+            "$MCKERNEL_IHK_HISTORY/.git/HEAD" <<'PY'
+          import os
+          import sys
+
+          for source in sys.argv[1:]:
+              assert source.startswith("/") and not source.endswith("/")
+              parent_fd = os.open("/", os.O_RDONLY | os.O_DIRECTORY | os.O_CLOEXEC)
+              try:
+                  for part in source.split("/")[1:-1]:
+                      next_fd = os.open(part, os.O_RDONLY | os.O_DIRECTORY |
+                                        os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=parent_fd)
+                      os.close(parent_fd)
+                      parent_fd = next_fd
+                  file_fd = os.open(source.rsplit("/", 1)[1],
+                                    os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC,
+                                    dir_fd=parent_fd)
+                  os.close(file_fd)
+              finally:
+                  os.close(parent_fd)
+          PY
           sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups \
             /usr/bin/env PYTHONDONTWRITEBYTECODE=1 \
             MCKERNEL_IHK_HISTORY="$MCKERNEL_IHK_HISTORY" \
