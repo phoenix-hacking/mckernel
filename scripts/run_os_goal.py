@@ -695,7 +695,7 @@ def accepted_account_observation(state, ledger, owner, now_utc_ns, now_mono_ns,
 
 TECHNICAL_CONTROL_STOPS = frozenset({"watchdog_recovery", "guardian_recovery",
                                      "active_goal_did_not_continue", "closure_decision_unresolved",
-                                     "blocked_no_ready_work"})
+                                     "blocked_no_ready_work", "account_read_recovered"})
 _CONTROL_HOLD_FLAGS = ("service_hold", "policy_hold", "auth_hold", "billing_hold",
                        "budget_hold", "permission_hold", "account_hold",
                        "accounting_unknown", "budget_unknown", "auth_unknown",
@@ -750,6 +750,26 @@ def _paused_retained_control(state):
                                 "thread_id", "log_dir")))
 
 
+def account_read_retry_eligible(state):
+    """Permit account reads for a classified transport failure, never resume.
+
+    The stopped flags and original custody remain intact, including while an
+    existing turn drains. Any real hold or unclassified accounting error vetoes.
+    """
+    if (not isinstance(state, dict) or state.get("stop_reason") != "credit_budget_unknown"
+            or classify_usage_failure(state.get("credit_budget_error")) is None
+            or not _paused_retained_control(state)
+            or (state.get("goal") or {}).get("status") not in {"paused", "blocked"}
+            or state.get("auth_mode") != "chatgpt"
+            or type(state.get("stop_now")) is not bool
+            or type(state.get("checkpoint_requested")) is not bool
+            or type(state.get("same_owner_control_capability")) is not int
+            or state["same_owner_control_capability"] != SAME_OWNER_CONTROL_CAPABILITY):
+        return False
+    view = dict(state, stop_reason=None, credit_budget_error=None)
+    return _same_owner_control_blocker(view) is None
+
+
 def control_context_eligible(state, *, current_receipt=None):
     """Permit factual reads/typed control, never execution or hold release.
 
@@ -759,6 +779,8 @@ def control_context_eligible(state, *, current_receipt=None):
     """
     if not isinstance(state, dict):
         return False
+    if account_read_retry_eligible(state):
+        return True  # Read-only recovery; queueing/delivery independently forbid activation.
     reason = state.get("stop_reason")
     technical = (isinstance(reason, str) and reason in TECHNICAL_CONTROL_STOPS)
     if technical:
@@ -920,6 +942,8 @@ def same_owner_resume_binding(directory):
     """Bind explicit user control to a fresh observation of the original owner."""
     from os_goal_guard_protocol import read_json
     state = read_json(Path(directory) / "state.json")
+    if account_read_retry_eligible(state):
+        raise ValueError("A fresh successful account observation is required before same-owner resume")
     if (type(state.get("same_owner_control_capability")) is not int
             or state["same_owner_control_capability"] != SAME_OWNER_CONTROL_CAPABILITY):
         raise ValueError("Resident controller does not advertise same-owner control capability v1; no resume command queued")
@@ -2296,6 +2320,9 @@ class Campaign:
 
     def deliver_instruction(self, *, control_only=False):
         """Steer one active coordinator turn; retain uncertain deliveries for audit."""
+        if account_read_retry_eligible(dict(self.state, goal=self.goal, stop_reason=self.stop_reason,
+                stop_now=self.stop_now, checkpoint_requested=self.checkpoint_requested)):
+            return  # Only the retained loop's account refresh may proceed during this transport stop.
         self.state.pop("repair_context", None)
         if (self.controlled and getattr(self.args, "same_owner_control", False)
                 and getattr(self.args, "repair_agent_failures", False)
@@ -2643,6 +2670,33 @@ class Campaign:
         order = lambda item: (item["received_mono_ns"], item["sequence"])
         late_read = (context is not None and previous is not None
                      and order(context) < order(previous))
+        recovering = account_read_retry_eligible(dict(self.state, goal=self.goal,
+            stop_reason=self.stop_reason, stop_now=self.stop_now,
+            checkpoint_requested=self.checkpoint_requested))
+        if recovering:
+            from os_goal_guard_protocol import read_json
+            original_error = self.state["credit_budget_error"]
+            original_flags = (self.stop_now, self.checkpoint_requested, self.primary_stop_generation)
+            if (not isinstance(context, dict) or context.get("response_error", False) is not False
+                    or not notification and "response_error" not in context
+                    or context.get("source") != ("notification" if notification else "read")
+                    or context.get("method") != ("account/rateLimits/updated" if notification else "account/rateLimits/read")
+                    or any(type(context.get(key)) is not int for key in
+                           ("received_utc_ns", "received_mono_ns", "sequence"))
+                    or context["sequence"] < 1
+                    or previous is not None and order(context) <= order(previous)
+                    or not 0 <= time.time_ns() - context["received_utc_ns"] <= 25_000_000_000
+                    or not 0 <= time.monotonic_ns() - context["received_mono_ns"] <= 25_000_000_000):
+                raise ValueError("Account transport recovery requires a new fresh successful receive")
+            owner = _account_control_owner(self.state, self.directory, self.repo)
+            if (not self.controlled or self.credit_guard is None
+                    or owner["worker_pid"] != os.getpid() or owner["server_pid"] != self.rpc.proc.pid
+                    or context.get("server_pid") != owner["server_pid"]
+                    or owner["credit_run_id"] != self.credit_guard.identifier
+                    or amount(owner["credit_budget"], positive=True) != self.credit_guard.budget
+                    or owner["credit_ledger_path"] != str(self.credit_guard.path)
+                    or read_json(self.credit_guard.path) != self.state.get("credit_budget")):
+                raise ValueError("Account transport recovery original owner/finite ledger differs")
         if context is not None:
             if context.get("rate_limits_sha256") != _account_value_sha256(limits):
                 raise ValueError("account receive payload mismatch")
@@ -2658,6 +2712,23 @@ class Campaign:
         # Original accounting, including the original durable ledger and all
         # real holds.  Even a late read remains conservatively accounted.
         self._record_rate_limits_accounting(limits, notification=notification)
+        if recovering:
+            mask = signal.pthread_sigmask(signal.SIG_BLOCK,
+                {signal.SIGINT, signal.SIGTERM, signal.SIGHUP, signal.SIGUSR1})
+            try:
+                view = dict(self.state, goal=self.goal, stop_reason="account_read_recovered",
+                            stop_now=self.stop_now, checkpoint_requested=self.checkpoint_requested)
+                if (self.stop_reason == "credit_budget_unknown" and self.state.get("credit_budget_error") is None
+                        and (self.stop_now, self.checkpoint_requested, self.primary_stop_generation) == original_flags
+                        and control_context_eligible(view)
+                        and _account_control_owner(self.state, self.directory, self.repo) == owner
+                        and read_json(self.credit_guard.path) == self.state.get("credit_budget")):
+                    self.stop_reason = "account_read_recovered"
+                    self.save(stop_reason=self.stop_reason, account_read_recovery={"at": utc(),
+                        "prior_error": original_error, "owner": owner, "receive": context,
+                        "execution_admission": False, "hold_release": False})
+            finally:
+                signal.pthread_sigmask(signal.SIG_SETMASK, mask)
         if context is None:
             return
         if late_read:
