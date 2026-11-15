@@ -1,8 +1,8 @@
 McKernel M14/M15 progress and agent status
 
-Generated UTC: 2026-11-15T06:29:56.198867Z
-Generated America/Boise: 2026-11-14T23:29:56.198867-07:00
-Treat this snapshot as stale after UTC: 2026-11-15T06:44:56.198867Z; America/Boise: 2026-11-14T23:44:56.198867-07:00 (15 minutes after generation; check for a newer report).
+Generated UTC: 2026-11-15T06:39:56.751935Z
+Generated America/Boise: 2026-11-14T23:39:56.751935-07:00
+Treat this snapshot as stale after UTC: 2026-11-15T06:54:56.751935Z; America/Boise: 2026-11-14T23:54:56.751935-07:00 (15 minutes after generation; check for a newer report).
 Ledger updated UTC: 2026-11-14T16:28:04.825629Z
 Source commit: 9581b04da39dddd7a55d6fcac11d28ab8299ca2b
 Canonical ledger: docs/verification/m14-m15-closure-progress.json; human plan: CAMPAIGN.md.
@@ -13,13 +13,14 @@ CLOSURE DECISION VIEW
 Original checks: 111/156 closed; 45 remaining. Original conditions and weights unchanged.
 Last original closure: M14-I01-ACCEPT | UTC=2026-11-14T06:59:39.282101Z
 Current sequential milestone: M14
-Original-check closure velocity: UNKNOWN (no fresh matching controller observation)
-Current target: UNKNOWN | owner=UNKNOWN | state=NEEDS_TARGET
-Next concrete action: Existing Root must choose one exact original check and submit a finite closure target
+Original-check closure velocity: 0 verified in rolling 30m; target 3-5; warming_up
+Current target: M14-I03-E1 | owner=saved Root 01a18bc3-e072-7810-9426-75101b0856c0 | state=UNKNOWN
+Next concrete action: Complete the reviewed changed whole-SMP dependency under fresh selected 28GiB shared/10GiB HOST admission, then bind matching image/modules and exact one-owner source-view/current-free authority for the original M14-I03-E1 condition. Preserve all existing holds and the frozen native cohort.
 Matching operation: UNKNOWN | UNKNOWN | liveness=UNKNOWN | declared deadline=UNKNOWN
-Results: {"qualified_matching_records": "UNKNOWN"}
+Results: {"evidence_error_count": 0, "ordinary_failed_stages": [], "qualified_matching_records": 0}
 Retained capacity: "UNKNOWN; retain all existing owner/resource/UNKNOWN reservations"
-Review required: False; decision=UNKNOWN; decision pending seconds=0
+Review required: False; decision=no_review_due; decision pending seconds=0
+Remaining original condition: Obtain exact one-owner native/source-view/current-free admission for the coherent matched image/modules; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation. Workload results, descriptor/reference/callback ownership, assigned CPUs/RAM and all resource restoration observations refer to that same coherent image/module cohort; no additional S01-S06 quotas are introduced.
 Readiness requires positive matching operation evidence and fresh actual admission. Ledger dependency order confers no execution authority.
 
 MILESTONE SUMMARY
@@ -33,36 +34,43 @@ Uncounted rows remain visible and do not add checklist credit. A 100% task is ve
 
 WORKSTATION AND AGENTS
 
-Snapshot attribution: STALE OR UNVERIFIED: saved agent status does not establish live agents.
-Worker exact birth verified: False; watcher exact birth verified: False; guardian exact birth verified: False
-Controller phase: owner_retained; goal: blocked
+Snapshot attribution: CURRENT: exact worker/watcher births verified and heartbeat <=120 seconds old.
+Worker exact birth verified: True; watcher exact birth verified: True; guardian exact birth verified: False
+Controller phase: running; goal: active
 Independent observer: POLLING; poll error: UNKNOWN; publication error: UNKNOWN
-State heartbeat UTC: 2026-11-15T06:23:10.728458Z; state updated UTC: 2026-11-15T06:23:10.728517Z
-State heartbeat age seconds: 405.5
+State heartbeat UTC: 2026-11-15T06:39:40.945449Z; state updated UTC: 2026-11-15T06:39:56.581858Z
+State heartbeat age seconds: 15.8
 Guardian phase: HELD; reason: user_requested
-Watcher event: watcher_retirement; observation UTC: 2026-11-15T06:23:16.191586Z
-Mailbox last attempt UTC: 2026-11-15T06:29:34.958865Z; last successful poll UTC: 2026-11-15T06:29:34.958865Z
-Mailbox next GET UTC: 2026-11-15T06:39:34.958865Z; error: UNKNOWN
-Saved roster records: 0; saved active-turn records: 0.
-Fresh controller snapshot active-turn count: UNKNOWN
+Watcher event: heartbeat; observation UTC: 2026-11-15T06:39:55.823540Z
+Mailbox last attempt UTC: 2026-11-15T06:39:41.159150Z; last successful poll UTC: 2026-11-15T06:39:41.159150Z
+Mailbox next GET UTC: 2026-11-15T06:49:41.159150Z; error: UNKNOWN
+Saved roster records: 4; saved active-turn records: 4.
+Fresh controller snapshot active-turn count: 4
 Per-agent models, efforts and assignments are unavailable unless explicitly recorded; no defaults are inferred.
-Agent roster: UNAVAILABLE or historical empty snapshot; live count UNKNOWN.
-Last stop diagnostic attribution: matches saved worker invocation
+AGENT 01a18bc3-e072-7810-9426-75101b0856c0 | ACTIVE TURN OBSERVED | label=dispatcher | saved status=inProgress | turn=01a1dde7-1b67-7092-988d-36d26e20ad27
+  Recorded agent metadata: controller role=Root (recorded primary thread) | last event UTC=2026-11-15T06:39:55.761802Z | quiet_seconds=0.8
+AGENT 01a18bc4-4654-7ba0-bf0f-876327f511b6 | ACTIVE TURN OBSERVED | label=/root/m14_generic | saved status=inProgress | turn=01a1ddee-a3e7-7ef2-a374-0fd64118e9e4
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-15T06:39:26.713705Z | quiet_seconds=29.9 | child=True
+AGENT 01a18bc4-584a-7582-b05e-4dfa1ad5e7af | ACTIVE TURN OBSERVED | label=/root/m14_arch | saved status=inProgress | turn=01a1ddee-7cc2-7852-bc1a-e58c2de25ad7
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-15T06:39:50.740885Z | quiet_seconds=5.8 | child=True
+AGENT 01a18e0c-9f25-77b0-ae26-9a5d649e365b | ACTIVE TURN OBSERVED | label=/root/dispatch_source | saved status=inProgress | turn=01a1ddee-43b0-7ba2-8619-64c700f69895
+  Recorded agent metadata: controller role=child (recorded) | last event UTC=2026-11-15T06:39:54.648857Z | quiet_seconds=1.9 | child=True
+Last stop diagnostic attribution: retained/unattributed; not asserted as the current blocker
 Recorded stop: technical_failure | launcher_error
 Recorded error: UNKNOWN | thread/resume: {"code": -32600, "message": "thread 01a18bc3-e072-7810-9426-75101b0856c0 already has an active writer"}
 Recorded next action: Diagnose and fix the current launcher, transport or source failure; verify operation delivery and preserved controls before a bounded normal retry.
-Instruction receipts: WAITING=6; ACCEPTED=0; NOT_QUEUED=86; HISTORICAL_ACCEPTED=63. Acceptance is not completed work.
+Instruction receipts: WAITING=0; ACCEPTED=6; NOT_QUEUED=86; HISTORICAL_ACCEPTED=63. Acceptance is not completed work.
 Recent instruction receipt metadata: 100 shown of 155 total.
-Instruction message #6875834438 | WAITING | received UTC=2026-11-15T06:09:21.156131Z | source=https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6875834438
-Instruction message #6884807290 | WAITING | received UTC=2026-11-15T06:09:21.156131Z | source=https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6884807290
-Instruction message #6885581060 | WAITING | received UTC=2026-11-15T06:09:21.156131Z | source=https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6885581060
-Instruction message #6885630477 | WAITING | received UTC=2026-11-15T06:09:21.156131Z | source=https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6885630477
-Instruction message #6885779809 | WAITING | received UTC=2026-11-15T06:09:21.156131Z | source=https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6885779809
-Last controller instruction: source-1682e03c0557c8634daff5f7675627b5ebde5d47ea1c2833545b1b3b5ad2e5e9 | accepted_by_server | accepted timestamp=2026-11-14T21:44:47.371890Z
+Instruction message #6875834438 | ACCEPTED | received UTC=2026-11-15T06:09:21.156131Z | source=https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6875834438
+Instruction message #6884807290 | ACCEPTED | received UTC=2026-11-15T06:09:21.156131Z | source=https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6884807290
+Instruction message #6885581060 | ACCEPTED | received UTC=2026-11-15T06:09:21.156131Z | source=https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6885581060
+Instruction message #6885630477 | ACCEPTED | received UTC=2026-11-15T06:09:21.156131Z | source=https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6885630477
+Instruction message #6885779809 | ACCEPTED | received UTC=2026-11-15T06:09:21.156131Z | source=https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6885779809
+Last controller instruction: source-972a5eab1b4bf15d1f306ae3dfed6359e2d863bc19cd306d2e3550c283bb34d8 | accepted_by_server | accepted timestamp=2026-11-15T06:31:18.352695Z
 
 ATTRIBUTED NOTES
 Status source: SAVED_CONTROLLER_WORKTREE. Checkout binding does not establish a live controller or source execution authority.
-Last verified publication before this rendering: 2026-11-15T06:19:45.160547Z
+Last verified publication before this rendering: 2026-11-15T06:29:56.296732Z
 The progress ledger comes from the saved engine checkout when known; the observer's isolated checkout does not replace active Root evidence.
 The progress ledger is a working-tree snapshot; checkout HEAD does not assert it is committed or that a milestone is accepted.
 
