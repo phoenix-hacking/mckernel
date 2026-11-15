@@ -369,11 +369,13 @@ def _source_work_binding(owner):
 
 
 def queue_instruction(directory, instruction, capture_progress_directory=None, *, source_id=None,
-                      resume_same_owner=False, source_work=None):
+                      resume_same_owner=False, source_work=None, resume_active_primary=False):
     """Queue an owner's instruction without touching the running server lease."""
     if not (directory / "state.json").is_file():
         raise RuntimeError("No saved OS campaign exists; start the runner first.")
     _validate_instruction(instruction)
+    if type(resume_active_primary) is not bool or resume_active_primary and not resume_same_owner:
+        raise ValueError("Active-primary opt-in requires an explicit same-owner resume")
     item = {"submitted_at": utc(), "text": instruction}
     if source_work is not None:
         if source_id is None or resume_same_owner or capture_progress_directory is not None:
@@ -385,6 +387,8 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
             raise ValueError("Same-owner resume requires an explicit source ID and no capture registration")
         item["control"] = {"kind": "resume_same_owner", "schema_version": 1}
         item["capture_progress"] = dict(SAME_OWNER_CONTROL_LEGACY_BARRIER)
+        if resume_active_primary:
+            item["resume_active_primary"] = True
     if capture_progress_directory is not None:
         path = validate_capture_progress_directory(capture_progress_directory)
         state = json.loads((directory / 'state.json').read_text())
@@ -424,6 +428,7 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
                 if (prior_item.get("text_sha256") != item["text_sha256"]
                         or prior_item.get("source_id") != source_id
                         or prior_item.get("source_work_spec_sha256") != item.get("source_work_spec_sha256")
+                        or bool(prior_item.get("resume_active_primary")) != resume_active_primary
                         or bool(prior_item.get("control")) != resume_same_owner
                         or resume_same_owner and (prior_item.get("control") or {}).get("kind") != "resume_same_owner"):
                     raise ValueError("Source instruction content changed; refusing replay")
@@ -443,7 +448,7 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
             if resume_same_owner and prior is None:
                 # Only the first publication binds a source. A repeated source
                 # returns its original command, even after the goal changes.
-                item["control"] = same_owner_resume_binding(directory)
+                item["control"] = same_owner_resume_binding(directory, allow_active_primary=resume_active_primary)
             atomic_json(registry, {"status": "intent", "item": item})
             atomic_json(inbox / (ident + ".json"), item)
             atomic_json(registry, {"status": "queued", "item": item})
@@ -455,10 +460,10 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
     return ident
 
 
-def queue_same_owner_resume(directory, instruction, *, source_id):
+def queue_same_owner_resume(directory, instruction, *, source_id, allow_active_primary=False):
     """Queue one explicit control command; never create a server or admit work."""
     return queue_instruction(directory, instruction, source_id=source_id,
-                             resume_same_owner=True)
+                             resume_same_owner=True, resume_active_primary=allow_active_primary)
 
 
 def queue_closure_target(directory, repo, path):
@@ -938,10 +943,19 @@ def observed_account_control(state, ledger, owner, now_utc_ns, now_mono_ns,
     return dict(observed)
 
 
-def same_owner_resume_binding(directory):
+def same_owner_resume_binding(directory, *, allow_active_primary=False):
     """Bind explicit user control to a fresh observation of the original owner."""
     from os_goal_guard_protocol import read_json
     state = read_json(Path(directory) / "state.json")
+    if type(allow_active_primary) is not bool:
+        raise ValueError("Active-primary resume requires an explicit boolean opt-in")
+    active = state.get("active_turns")
+    active_primary = None
+    if allow_active_primary:
+        if (not isinstance(active, dict) or set(active) != {state.get("thread_id")}
+                or not isinstance(active[state["thread_id"]], str) or not active[state["thread_id"]]):
+            raise ValueError("Active-primary resume requires exactly the existing original Root turn")
+        active_primary = active[state["thread_id"]]
     if account_read_retry_eligible(state):
         raise ValueError("A fresh successful account observation is required before same-owner resume")
     if (type(state.get("same_owner_control_capability")) is not int
@@ -954,7 +968,7 @@ def same_owner_resume_binding(directory):
             or not (current.get("status") == "blocked" or
              current.get("status") == "paused" and _paused_retained_control(state))
             or current.get("objective") != OBJECTIVE
-            or state.get("active_turns")
+            or not allow_active_primary and active
             or type(state.get("primary_stop_generation")) is not int
             or state["primary_stop_generation"] < 0):
         raise ValueError("Same-owner resume requires the exact idle blocked campaign")
@@ -965,6 +979,8 @@ def same_owner_resume_binding(directory):
                "expected_owner": owner, "goal_sha256": _account_value_sha256(current),
                "primary_stop_generation": state["primary_stop_generation"],
                "execution_admission": False, "hold_release": False}
+    if active_primary is not None:
+        binding["active_primary_turn_id"] = active_primary
     if technical:
         binding["technical_checkpoint"] = {key: state[key] for key in
             ("stop_reason", "stop_now", "checkpoint_requested")}
@@ -2000,6 +2016,8 @@ class Campaign:
         read_failed = False
         control = item.get("control")
         technical = control.get("technical_checkpoint") if isinstance(control, dict) else None
+        active_primary = control.get("active_primary_turn_id") if isinstance(control, dict) else None
+        expected_active = {self.state.get("thread_id"): active_primary} if active_primary is not None else {}
         receipt.update(control_kind="resume_same_owner", execution_admission=False, hold_release=False)
 
         def stop_flags():
@@ -2032,7 +2050,7 @@ class Campaign:
         def ready():
             if (not getattr(self.args, "same_owner_control", False)
                     or self.state.get("same_owner_control_capability") != SAME_OWNER_CONTROL_CAPABILITY
-                    or not self.controlled or self.active or stops_changed()
+                    or not self.controlled or self.active != expected_active or stops_changed()
                     or self.primary_stop_generation != control["primary_stop_generation"]
                     or self.state.get("primary_stop_generation") != self.primary_stop_generation
                     or not self.goal or not (self.goal.get("status") == "blocked" or
@@ -2060,6 +2078,14 @@ class Campaign:
                         "primary_stop_generation", "execution_admission", "hold_release"}
             if technical is not None:
                 required.add("technical_checkpoint")
+            if isinstance(control, dict) and "active_primary_turn_id" in control:
+                required.add("active_primary_turn_id")
+                if (not isinstance(active_primary, str) or not 0 < len(active_primary) <= 128
+                        or item.get("resume_active_primary") is not True):
+                    raise ValueError("Invalid explicit active-primary resume binding")
+                receipt["resumed_active_primary_turn_id"] = active_primary
+            elif item.get("resume_active_primary"):
+                raise ValueError("Active-primary opt-in has no exact existing turn binding")
             if (not isinstance(control, dict) or set(control) != required
                     or control.get("kind") != "resume_same_owner" or control.get("schema_version") != 1
                     or control.get("execution_admission") is not False or control.get("hold_release") is not False
@@ -2097,8 +2123,12 @@ class Campaign:
             self.refresh_credit_budget(control_only=True)
             ready()
             page = read("thread/turns/list", {"threadId": self.state["thread_id"],
-                        "limit": 1, "sortDirection": "desc", "itemsView": "notLoaded"})
-            if any(turn.get("status") == "inProgress" for turn in page["data"]):
+                        "limit": 100 if active_primary is not None else 1,
+                        "sortDirection": "desc", "itemsView": "notLoaded"})
+            running = [turn.get("id") for turn in page["data"] if turn.get("status") == "inProgress"]
+            if active_primary is not None and running != [active_primary]:
+                raise ValueError("Same-owner control did not confirm the exact sole active Root turn")
+            if active_primary is None and running:
                 raise ValueError("Same-owner control found an existing active turn")
             generation = self.primary_stop_generation
             current = read("thread/goal/get", {"threadId": self.state["thread_id"]})["goal"]
@@ -2122,6 +2152,7 @@ class Campaign:
             attempted = True
             result = self.rpc.call("thread/goal/set", {"threadId": owner["thread_id"], "status": "active"})["goal"]
             if (stops_changed()
+                    or active_primary is not None and self.active != expected_active
                     or _same_owner_control_blocker(self.state, receipt, allow_technical=technical is not None)
                     or self.primary_stop_generation != generation or not self.goal
                     or self.goal.get("status") in {"complete", "usageLimited", "budgetLimited"}):
@@ -2333,12 +2364,15 @@ class Campaign:
         ident = self.state.get("thread_id")
         waiting = (getattr(self.args, "repair_agent_failures", False) and self.goal
                    and self.goal.get("status") == "blocked" and not self.active)
+        primary_control_waiting = (control_only and set(self.active) == {ident}
+                                   and isinstance(self.active.get(ident), str) and bool(self.active[ident]))
         control_waiting = (getattr(self.args, "same_owner_control", False) and self.goal
                            and (self.goal.get("status") == "blocked" or
                                 self.goal.get("status") == "paused" and
                                 getattr(self.args, "continuous", False) and
-                                _paused_retained_control(self.state)) and not self.active)
-        eligible_control = (control_only and control_waiting and not self.active
+                                _paused_retained_control(self.state))
+                           and (not self.active or primary_control_waiting))
+        eligible_control = (control_only and control_waiting
             and control_context_eligible(dict(self.state, goal=self.goal, stop_reason=self.stop_reason,
                 stop_now=self.stop_now, checkpoint_requested=self.checkpoint_requested)))
         if (not ident or not self.controlled or
@@ -2360,6 +2394,14 @@ class Campaign:
             # A paused owner cannot consume ordinary work yet. Preserve it in
             # order, while allowing its explicit recovery control to reach it.
             pending = [path for path in pending if _read_private_json(path).get("control") is not None]
+            if primary_control_waiting:
+                def matching_primary(path):
+                    item = _read_private_json(path)
+                    command = item.get("control")
+                    return (isinstance(command, dict) and command.get("kind") == "resume_same_owner"
+                            and command.get("active_primary_turn_id") == self.active[ident]
+                            and item.get("resume_active_primary") is True and isinstance(item.get("source_id"), str))
+                pending = [path for path in pending if matching_primary(path)]
             if not pending:
                 return
         sending_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
@@ -4003,6 +4045,8 @@ def arguments(argv=None):
     mode.add_argument("--instruct", metavar="TEXT", help="Send a live instruction to the coordinator; queues through checkpoints")
     mode.add_argument("--resume-same-owner", metavar="TEXT",
                       help="Queue explicit source-bound resume control for an opted-in idle blocked owner; grants no jobs or hold releases")
+    parser.add_argument("--resume-active-primary", action="store_true",
+                        help="Bind same-owner resume to its sole already-running Root turn; creates no turn")
     parser.add_argument("--instruction-source-id", help="Stable user-source identity for an instruction or explicit same-owner resume")
     parser.add_argument("--source-work-file", type=Path,
                         help="Attach exact non-executable source spec to --instruct; requires a source ID and capable resident")
@@ -4108,6 +4152,8 @@ def arguments(argv=None):
     if args.resume_same_owner is not None and (args.instruction_source_id is None
             or args.capture_progress_directory is not None):
         parser.error("same-owner resume requires instruction-source-id and no capture registration")
+    if args.resume_active_primary and args.resume_same_owner is None:
+        parser.error("resume-active-primary requires explicit resume-same-owner")
     if args.source_work_file is not None and (args.instruct is None or args.instruction_source_id is None
             or args.capture_progress_directory is not None or args.resume_same_owner is not None):
         parser.error("source-work-file requires instruct/source ID and no capture or resume control")
@@ -4221,7 +4267,8 @@ def main(argv=None):
         return 0
     if args.resume_same_owner is not None:
         ident = queue_same_owner_resume(directory, args.resume_same_owner,
-                                        source_id=args.instruction_source_id)
+                                        source_id=args.instruction_source_id,
+                                        allow_active_primary=args.resume_active_primary)
         print("Queued explicit same-owner control " + ident + "; this admits no jobs and releases no holds.")
         return 0
     if args.dry_run:
