@@ -1,84 +1,86 @@
 # McKernel: M14 → M15 → complete supported system
 
-## ACTIVE — explicit user resume; continue same Root without a restart
+## ACTIVE — same Root; module/image linkage is the next operation
 
-Current user resume source0651143a supersedes the historical harness
-closure_decision_unresolved pause. The existing invocation
-20261115T063109Z-9a7c2e96 is running on saved Root
-01a18bc3-e072-7810-9426-75101b0856c0. Low closure cadence is advisory;
-actual user/account/budget/source/service stops and runtime holds remain binding.
-Do not repeat the configuration transition or restart a healthy owner.
-Functional McKernel OS/apps/Rust/allowed assembly only; NO SECURITY TESTING.
+Current user resume source0651143a supersedes the historical progress-policy pause.
+Invocation20261115T063109Z-9a7c2e96 continues on saved Root
+01a18bc3-e072-7810-9426-75101b0856c0. No further resume/restart/control repair is
+needed. Functional McKernel OS/apps/Rust/allowed assembly only; NO SECURITY TESTING.
+Cadence is advisory; actual user/account/budget/source/service stops remain binding.
 
 Verified acceptance:112/156,44open; M14=80.19%,M15=76.25%, both OPEN.
-The only original counted closure this invocation isM15-I02-ACCEPT (+1 from111).
-No new original closure is claimed for source, compiler, control or cleanup work.
-M14 final acceptance precedes M15 final acceptance. After BOTH acceptances,
-checkpoint and pause the larger saved goal; do not mark the whole OS complete.
+OnlyM15-I02-ACCEPT closed this invocation (+1 from111); this interval closed0.
+Qualified objects and cleanup are dependency increments, not original acceptance.
+M14 final acceptance precedes M15 final acceptance. After BOTH checkpoint and
+pause the larger saved goal; do not mark the whole OS complete.
 
-Current original target:M14-I03-E1. Reuse the qualified whole-SMP object1f3372a5,
-depfile4e9d2139, artifactGO086f78cf and ownfamilyQa432a527. Root scoped retirement
-e2329ad5 already closes ONLY its successful2147483648B/job1 family. Public proof:
-docs/verification/m14-i03-smp-compile-20261115/QUALIFIED-WHOLE-SMP-OBJECT.json.
-Do not rebuild passing SMP/SDK/compiler layers. The next actual dependency is
-paired IHK-core13-source332852B os_runtime.cf1f, exact62-token rustc command and
-original18-token objtool tail, with a durable raw-object checkpoint before objtool.
-Source recipe9e4dad65 is frozen in
-/home/holden/mckernel-work/m14-i03-paired-ihk-object-20261115/HANDOFF.SOURCE-ONLY.json.
-DispatchSource owns its minimal private operation binding; Proc reviews only the
-new binding when frozen. Root alone admits and executes it. A successful object
-feeds matching module/image/provider/native/application/restoration proof; it
-does not closeE1 by itself.
+Current finite original target:M14-I03-E1. Checked targetb713e43b records the
+actual module/image next action. Reuse successful whole-SMP object1f3372a5 and
+depfile4e9d2139, Q086f78cf/a432a527/Root e2329ad5; no rebuild.
+Paired IHK13-source332852B exact62-token Rust plus18-token objtool ACTUALLY PASS,
+raw8754478f/dep1b3e3310 checkpointed before finalobjtool e4d348ac.
+ArtifactQ0a248dff/familyQf6db5eaf/Root3ab840d0 retire ONLY its2GiB/job1.
+Whole-production guestRust for qualified process-VM repair26deaeb71 ACTUALLY PASS:
+object3679adb0/dep e5c963fe, unchanged35-word ABI, Q84b237a3/Rootc74d77bc retire
+ONLY its3.5GiB/job1. Original flags retain204 warnings/zero error headers; no claim
+of warning-free compilation. Public scoped records are under
+ docs/verification/m14-i03-smp-compile-20261115/ and
+ docs/verification/m14-process-vm-vectors-20261115/.
+Do not repeat SMP/IHK/guestRust/SDK/compiler/ABI or green process-VM cases.
 
-Actual next input obtained: one admitted stock readelf operation on retained
-objtool96a6212b exited0,4297B stdout/0stderr. It reports ELF64 x86-64 EXEC,
-/lib64/ld-linux-x86-64.so.2, DT_NEEDED libelf.so.1 and libc.so.6, no RPATH/RUNPATH.
-Raw facts and original Root result are retained under
-/home/holden/mckernel-work/manual-resume-20261115T063109Z-9a7c2e96/ROOT-ACTUAL-OBJTOOL-PASSIVE-FACTS-1.
-Proc Qfb4f561e and Root91e82901 retire ONLY its new268435456B/job1. These facts
-do not prove SDK runtime/provider closure; objtool/loader were never executed.
+ACTUAL current module failure: created-only own09a7 CID never started; strict
+HostConfig comparison refused ONLY Docker omission of output ReadOnly:false.
+No linker ran. Exact DATA correction/profile81777913/GO38a23847/argv791bc4d3 is
+ready under m14-i03-paired-module-link-20261115/operation-binding-1/current-account-binding-1/current-validator-pin-1/e088-physical-metadata-1/output-mount-serialization-1.
+Success-only parent failure path skipped normal removal/input-FD closure and
+retained its own context. Failed cleanupTool31543 first inspect exited1/joined
+because its ENV omitted established SUDO_ASKPASS; no removal occurred. Current
+moduleTool11446 and this failed cleanup remain held, not a global credit stop.
+M15CLI prepares only current own controls/CID cleanup; NativeBinding reviews only
+its changed effect boundary. Root alone fresh-admits, executes and joins the
+original tools; canceled physical FD scope must not be called normal-close.
+Preserve all failures. No old supplier/native/denied-scope action is authorized.
 
-Independent ready work: NativeBinding SOURCE GOeeec7f57 for22 fixed vDSO resolver
-controls b7242bf1/4e9c6254 and corrected observerc85a/GO7058. Actual two warning-clean C compilations and22 fixed controls PASS, Qec89e38f;
-Rootf837ebf2 retires only that536870912B/job1 family. The separate single actual
-HOST sample returned unavailable/no_at_sysinfo_ehdr (exit2); this is NOT a functional
-pass. Q49e29e5d and Root8f9b2b52 retire only that second536870912B/job1 family.
-No compile/control rerun occurred. Public proof:
-docs/verification/m14-vdso-resolver-controls-20261115/QUALIFIED-CONTROLS-AND-HOST-UNAVAILABLE.json.
-Guest/TSC/time-page/generation/native proof remains open.
-Generic froze the affected whole-production guestRust actor1b60b2e1/requesteb73;
-FunctionalDelta reviews only its new source/copy/capture/operation boundaries.
-This is the next affected object binding for the
-qualified process-VM repair, using retained exact compiler70eb/core7ec5/builtins63b0
-and original96+2cfgs. No green two-case regression is rerun. The repair is already
-integrated/pushed/fetchverified26deaeb71, with public proof
- docs/verification/m14-process-vm-vectors-20261115/QUALIFIED-RESULTS.json.
-F02 successfulload_elf remains parked on the exact NOT_SUPPLIED matched mcctrl
-provider/device inputd919; no repeated lookup, fake ioctl or no-device substitute.
+Next fresh module parent also folds ONLY user-supplied patch653467d1: prestart
+inspect/profile failure normal own-CID cleanup and original FD closure, original
+failure preserved; three offline fixtures already PASS. DispatchSource owns its
+necessary source/pin successor. This FUTURE helper is not a current held-parent
+control. After genuine current-only closure and fresh admission execute the
+existing seven serial module-link/modpost commands, preserving inputs/17mounts/
+resource guards. No new semantic audit or green rerun.
 
-PRESERVED RUNTIME CUSTODY: failedSMP Tool10774/CIDa1fb82a00bd3eb268353653621b621dfffffe9d461a76989b93131cad475ceda
-and Tool42785/CIDf0c62b172b8ab1c2f84ebb3a4a8161046973d180ae89b1bf264a9a38234ecfb4
-remain unjoined/UNKNOWN with2147483648B/job1 EACH. Old14790/32916 families retain
-402653184B/jobs2. Baseline retainedHOST4697620480B/jobs4, plus unretired new families
-and ALL measured overhead. No absence/death-based release, oldwait, signal,
-cancellation or denied/proc/2685747/fd retry/privileged alternative is authorized.
-Separate native12GiB/source/lease/IPC/scratch21/globalUNKNOWN and rejected worker
-01a1c48d-4d96-7cc3-b733-73a97973152f/turn01a1ce01-20cf-7e03-9442-f6d521fb8b02
-and its signal-frame collector/equivalents stay excluded.
+Independent image link: Generic owns minimal normal Root lifecycle binding for
+actor070d418a/GOa1410952 under m14-03-03-affected-production-objects-20261115/current-coherent-image-binding-1/actor-binding-1.
+Use qualified3679 plus twelve unchanged inputs, exact13-input recipe/35-word ABI,
+SDK46d and matching ld825f11b6. Root alone admits and links once; actual image/map/
+provider/import/ABI and family qualification follow. Modules/image then feed
+matching native/application/restoration proof; none of these builds closesE1.
 
-Actual selected resources: HOST CPUs0,6,7/max5 aggregate jobs/10GiB TOTAL within
-28GiB shared including18GiB preserved non-HOST reservations; retain2GiB machine
-reserve, fresh accounting/MemAvailable and packet/disk floors before every family.
-Native CPUs2-5/12GiB remains one separately admitted owner. Eleven is a source
-coordination ceiling, not eleven payload grants or multiplied RAM. Root stays
-Sol/MAX; useful direct owners use Sol/xhigh/depth1 and disjoint private writers.
-Same finite cumulative creditrun7c6ef3604bfb4008a917bba8cfb6cfaa and
-ceiling52079.8011050000 remain unchanged. Preserve dirty work and every prior pass.
+Other reusable scope:22 vDSO controls PASS; separate HOST sample is unavailable
+(no_at_sysinfo_ehdr/exit2), not native proof. Qec89e38f/49e29e5d and Rootf837/8f9b
+already retire only their own512MiB families. Do not rerun controls or sample.
+F02 successfulload_elf remains parked on NOT_SUPPLIED matched mcctrl/device inputd919;
+no repeated lookup, fake ioctl or no-device substitute. Other disjoint source
+work proceeds only for concrete ready original proofs; do not fill idle slots.
 
-Historical pause and its custody checkpoint are retained in commit9881b9917;
-that pause is superseded by the explicit current user resume. Existing observer,
-mailbox delivery and same-controller receipts remain reused; no new poller,
-source control framework or timer is needed for the engineering dependency chain.
+Retained baselineHOST4697620480B/jobs4: old14790/32916 total384MiB/jobs2 plus two
+failed SMP families2GiB/job1 EACH, unjoined/UNKNOWN. Additional current module
+2GiB/job1 and failed cleanup512MiB/job1 stay charged until positive scopedQ/Root
+receipt. Every new recovery family also stays charged. Preserve native12GiB,
+source/lease/IPC/scratch21/UNKNOWN and excluded rejected worker01a1c48d/turn01a1ce01
+signal-frame collector/equivalents. Never retry denied/proc/2685747/fd/e015 or use
+privileged alternatives; no absence/death-based release or accounting reset.
+
+HOST CPUs0,6,7;28GiB TOTAL shared includes18GiB non-HOST reservation and10GiB HOST.
+Preserve2GiB machine reserve, fresh paired-clock/MemAvailable/disk floors and ALL
+controller/worker/capture/retained charges. User permits measured per-operation
+job/CPU changes; selectedmax5 is not a waiver to drop charges. A max7 current-own
+cleanup projection fits9733386240B/jobs7 with all six retained charges, but is NOT
+an execution grant; actual source/account/owner/permission/resource checks precede
+any effect. Native CPUs2-5/12GiB remain separately owned/admitted. Eleven is a
+coordination ceiling, not multiplied RAM. Root is sole integrator/native executor;
+new turns follow current explicit model routing. Same finite7c6 creditrun and
+ceiling52079.8011050000, dirty work and every accepted original check are preserved.
 
 ## Closure plan: all44 current original opens, chained to full M14/M15 acceptance
 
@@ -114,8 +116,8 @@ Each passing artifact/scenario becomes input to its dependent original checks.
 The Root records actual scope, closes every original condition it fully proves,
 then immediately feeds the next ready check. Reuse healthy workers and existing
 SDK/image/provider/ABI/install/test/review results. Eleven useful source/qualification
-lanes are available initially; five aggregate HOST job slots allow the retained
-two jobs plus three new compiles/checks when actual accounting permits. Independent
+lanes are available initially; aggregate HOST job slots include every retained family;
+explicit measured selected limits govern any new compiles/checks. Independent
 HOST Docker work may overlap within HOST10GiB/shared28GiB; do not serialize it
 behind an unrelated native prerequisite or multiply budgets by container count.
 One Root integrates and executes the separately owned native cohort.
@@ -146,52 +148,14 @@ minutes report newly accepted exact IDs, accepted/156, remaining count, weighted
 M14/M15 totals, current owners, next missing proofs and separately labelled rough
 engineering estimate ranges. The3–5 closure target is not a guaranteed rate.
 
-## Last saved execution failure — checkpoint 2026-11-14T22:06:19+00:00
+## Current failure and next trigger
 
-
-CURRENT EXECUTION BLOCK: corrected whole-SMP Source/operation GO74c72af7 is
-COMPLETE (Proc, no findings), original62-token-Dwarnings command/coherent50files/
-retained111189482B/17mounts/34+6+identity8 reused. Requested/configured BashAS2GiB
-preserved; actualeffectiveinheritanceUNOBSERVED. No SMP compiler/object/depinfo,
-Kbuild/module/native operation has run. Same real1.5GiB container+512MiBcontrol=
-2GiBfamily/CPU7/job1 remains. Public scoped record:
-docs/verification/m15-f06-official-vendor-descriptor-20261114/SMP-SOURCE-GO-RESOURCE-BLOCK.json.
-ONE bounded NativeCurrent control-memory proof043c8307 found NO DEFENSIBLE SMALLER
-resident slice: capped pipe/capture bytes and total RSS observations do not bound
-parent/outer/CLI/interpreter/JSON/source/account heaps and qualified failure-frame
-retention. No profile delta, new helper/test, kill/restart, quota reduction or RAM
-waiver was issued. Do not rerun this proof/inventory unchanged.
-ONE actual fresh Root resource admissiond61cc924 REFUSED: old402653184B/jobs2 +
-ALL infrastructure/descendantRSS1906847744B + new2147483648B =4456984576B,
-OVER user shared4294967296B by162017280B. Actual account/source phase running and
-normal MemAvailable26GiB/host-scratch floors passed; NO payloadgrant/Docker/compiler
-was emitted. Scope PARKED awaiting GENUINELY CHANGED aggregate headroom or a
-separately justified/independently reviewed control-resident envelope. Supplier is
-Root HOST-resource/source owner with matching normal custody/accounting evidence;
-not another compiler/SDK/identity check. No unchanged admission/model loops,
-guessed smaller quota, native borrowing, held-family release or account override.
-Current known HOST payload reservations remain ONLY old402653184B/jobs2 plus ALL
-measured controls/owners; native12/source/e01514790/32916/lease/IPC/globalUNKNOWN/
-excluded worker01a1c48d-4d96-7cc3-b733-73a97973152f and turn01a1ce01-20cf-7e03-9442-f6d521fb8b02 stay intact.
-Other current runtime frontier F02 successful load_elf4LOAD/auxv/realGET_CREDV is
-PARKED on ROOT_CURRENT_MATCHED_MCCTRL_DEVICE_PROVIDER_INPUT NOT_SUPPLIED_d91922cb
-(source literal successor7bcd3a60). Root/coherent current IHK-mcctrl owner must
-supply matching device/module/cohort/BUILDID/access/new-ownFD lifetime via separately
-reviewed normal operation; no absent-device inference, repeated lookup/fakeioctl/
-no-device case or invented guestCPU/image/CMake quota. No successcaller issued.
-Preserve actual qualified main-descriptor Q13851/Root0f0c, nonELF Q0a7fe/Root0ef9,
-and vendor192 startup Qe7b84/Root4507. Exact1.92.0/ded5 fullcommit/host/release and
-reportedLLVM21.1.6 remain distinct acquired llvm-libs21.1.8/db74; no repeat/codegen/
-fulltoolchain/native credit. Their actual own newfamilies are scoped retired;
-failed95fea grant/DATA remain immutable after separate no-startQc9/Root98332.
-All canonical Source/ABI/provider/SDK/build/lifecycle green evidence stays reused.
-Current111/156/45open, M14=80.19%/M15=74.59%/NEITHER accepted. No original ID closed
-by source/resource preparation; criteria/weights/156/M14-before-M15 unchanged.
-Latest pushed/fetched0ab10af3f preserves nonELF and compiler identity before this
-source-GO/resource-block increment. SameRoot/finite7c6/52079.8011050000, no reset/
-backup/rejected replay/autorelaunch. Essential custody/controllers/keepers remain;
-this is a precise execution block, not OS completion or a user pause.
-
+Current-only module prestart failure and omitted-askpass cleanup are recorded
+above and in their immutable raw captures. Root owns the normal recovery and
+actual original joins, then one corrected seven-command module batch. Generic's
+independent image binding may progress within genuine aggregate headroom.
+A local branch refusal does not pause independent eligible work. No original
+condition is accepted until all its unchanged literal obligations match.
 
 ## Retained inputs and real holds
 
@@ -208,10 +172,10 @@ functional image. Do not rerun accepted green proof merely to inspect it.
   SDK46d47ba9, 119/124 typed providers and776-byte/alignment8 descriptor.
   Real interpreter publication Q82281842, main descriptor Q13851aa2 and
   non-ELF guard Q0a7fe377 are passing increments; they do not close all F02.
-- Whole-SMP: /home/holden/mckernel-work/m15-f06-affected-smp-crate-20261114/reviewer-as-metadata-correction-1/.
-  Corrected source/operation GO74c72af7, original62-token-Dwarnings command,
-  50-file cohort/17mounts and vendor compiler remain ready source inputs.
-  Vendor startup Qe7b84e96 proves Rust1.92 identity/startup only, not codegen.
+- Whole-SMP: qualified actual object1f3372a5/depfile4e9d2139 and matching family
+  Q/Root retirement are complete. Reuse them in the paired-module batch.
+  Paired-IHK finalobjtool e4d348ac and production guestRust3679 are also qualified;
+  the remaining proof is actual module/image/provider/native integration.
 - F02 actual provider readiness: /home/holden/mckernel-work/m15-f02-load-elf-current-provider-binding-20261114/ROOT-CURRENT-MATCHED-MCCTRL-DEVICE-PROVIDER-READINESS.json.
   The matched provider is NOT_SUPPLIED_d91922cb, not an inferred absent device.
   GET_CREDV is0x30a0290b/32bytes/eight UID-GID ABI integers. The non-ELF literal
