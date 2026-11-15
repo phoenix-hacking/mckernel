@@ -1,0 +1,71 @@
+--- a/capture_root_once.py
++++ b/capture_root_once.py
+@@ -189,6 +189,59 @@
+             record_raw('supplier-query-report', report_error)
+         raise
+ 
++def finish_late_original_capture(context):
++    # Only this original timed-out query and its positive original-Popen wait.
++    # Every fallible completion step is attempted at most once; no FD retry.
++    row=context['record'];process=context['process']
++    if context.get('late_capture_completion_attempted') or process is None:return False
++    primary=context.get('primary_raw')
++    if not isinstance(primary,(TimeoutError,subprocess.TimeoutExpired)) or row.get('direct_wait_joined') is not False:return False
++    if isinstance(primary,TimeoutError) and str(primary) not in ('original supplier child deadline expired: '+row['label'],'original supplier wait deadline expired: '+row['label']):return False
++    late=('late_original_direct_wait_joined','late_original_exit')
++    if row.get(late[0]) is not True:late=('outermost_original_direct_wait_joined','outermost_original_exit')
++    if row.get(late[0]) is not True or type(row.get(late[1])) is not int:return False
++    if process.returncode!=row[late[1]] or DATA_CONTEXTS:return False
++    context['late_capture_completion_attempted']=True
++    try:
++        status=process.wait(timeout=0)
++        assert status==row[late[1]] and process.pid==row['pid']
++        assert pending_calls.get(row['attempt_id'],process) is process
++        children=pathlib.Path('/proc/self/task/%d/children'%os.getpid()).read_text().split()
++        assert not children, 'late original child joined but descendants remain'
++        selector=context['selector'];assert selector is not None
++        while selector.get_map():
++            ready=selector.select(0)
++            assert ready, 'late original pipe EOF remains unconfirmed'
++            for key,_ in ready:
++                name=key.data;remaining=row[name+'_limit_bytes']-row[name+'_bytes']
++                chunk=os.read(key.fileobj.fileno(),min(65536,remaining+1))
++                if not chunk:
++                    selector.unregister(key.fileobj)
++                    key.fileobj.close()
++                    continue
++                assert len(chunk)<=remaining, 'late original capture exceeds original bound'
++                write_exact(context['capture_fds'][name],chunk);row[name+'_bytes']+=len(chunk)
++        assert all(stream.closed for stream in context['pipe_streams'].values())
++        selector.close();row['streams_closed']=True
++        os.close(context['input_fd']);context['input_fd']=None;row['input_FD_closed']=True
++        for name,fd in list(context['capture_fds'].items()):
++            os.fsync(fd);os.close(fd);del context['capture_fds'][name]
++        row.update(capture_FDs_closed=True,captures_fsynced=True)
++        children=pathlib.Path('/proc/self/task/%d/children'%os.getpid()).read_text().split()
++        row['remaining_direct_children']=children
++        assert not children, 'late original descendants remain'
++        row.update(late_original_capture_completed=True,receipt_persisted=True,
++                   lifecycle_UNKNOWN=False,resource_charge_retained=False)
++        save('CLIENTS.json',clients)
++        if pending_calls.get(row['attempt_id']) is process:pending_calls.pop(row['attempt_id'])
++        del ACTIVE_CONTEXTS[next(index for index,value in enumerate(ACTIVE_CONTEXTS) if value is context)]
++        return True
++    except BaseException as error:
++        row.update(late_original_capture_completed=False,receipt_persisted=False,lifecycle_UNKNOWN=True,resource_charge_retained=True)
++        context['secondary_raw'].append((error,BaseException.__dict__['__traceback__'].__get__(error,type(error))))
++        record_raw('late-original-capture-completion',error)
++        return False
++
+ def supplier_entry_once():
+     primary = None
+     primary_tb = None
+@@ -404,6 +457,8 @@
+     try:
+         sys.exit(entry_once_with_original_custody())
+     finally:
++        for context in tuple(ACTIVE_CONTEXTS):
++            finish_late_original_capture(context)
+         # Qualified five original-Popen keeper bodies execute unchanged above.
+         # This additional exact-supplier boundary also retains open capture FDs
+         # and raw owning frames after any late wait/report failure.
