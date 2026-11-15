@@ -145,7 +145,7 @@ class Mailbox:
         self.directory.mkdir(mode=0o700, parents=True, exist_ok=True)
         fd = os.open(self.directory / "mailbox.lock", os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW, 0o600)
         try:
-            fcntl.flock(fd, fcntl.LOCK_EX)
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
             yield
         finally:
             os.close(fd)
@@ -310,6 +310,7 @@ class Mailbox:
             return state["messages"][key]
         url = f"https://github.com/{self.remote}/pull/{self.issue}#issuecomment-{comment_id}"
         message = {"comment_id": comment_id, "comment_url": url, "request_id": request_id,
+                   "source_id": intent.get("source_id"),
                    "source_created_at": intent.get("comment_created_at"),
                    "received_at": intent.get("received_at"),
                    "command_recognized": intent.get("command") in {"/mckernel-instruct", "/mckernel-resume"},
@@ -326,10 +327,54 @@ class Mailbox:
         state["messages"][key] = message
         return message
 
+    def _delivery_scope(self, receipt, message, ident):
+        """Join immutable source, pre-RPC attempt, and the accepting invocation."""
+        version = receipt.get("schema_version")
+        if version is None or type(version) is int and version == 1:
+            return "historical", "Legacy receipt has no versioned source and invocation binding."
+        if type(version) is not int or version != 2:
+            return None, "Unsupported delivery receipt schema version."
+        source_id, digest = receipt.get("source_id"), receipt.get("text_sha256")
+        if (not isinstance(source_id, str) or hashlib.sha256(source_id.encode()).hexdigest() != ident[7:]
+                or not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest)
+                or digest != message.get("instruction_sha256")
+                or message.get("source_id") not in (None, source_id)):
+            return None, "Receipt source or instruction hash does not match the queued message."
+        try:
+            registry = _read(self.directory / "instructions/sources" / (ident[7:] + ".json"))
+            attempt = _read(self.directory / "instructions/attempts" / (ident + ".json"))
+            current = _read(self.directory / "state.json")
+        except (OSError, ValueError):
+            return None, "Versioned delivery source, attempt, or current invocation is unavailable."
+        item = registry.get("item") if isinstance(registry.get("item"), dict) else {}
+        if (item.get("id") != ident or item.get("source_id") != source_id
+                or item.get("text_sha256") != digest or not isinstance(item.get("text"), str)
+                or hashlib.sha256(item["text"].encode()).hexdigest() != digest):
+            return None, "Receipt differs from the durable source instruction."
+        binding = ("id", "source_id", "text_sha256", "thread_id", "log_dir", "invocation_id",
+                   "worker_pid", "worker_start", "server_pid", "server_start", "delivery_method", "expected_turn_id")
+        if (attempt.get("schema_version") != 2 or attempt.get("status") != "sending"
+                or any(attempt.get(key) != receipt.get(key) for key in binding)):
+            return None, "Receipt differs from the original pre-RPC attempt identity."
+        if (receipt.get("delivery_method") not in {"turn/start", "turn/steer"}
+                or receipt.get("delivery_method") == "turn/steer" and receipt.get("expected_turn_id") != receipt.get("turn_id")):
+            return None, "Receipt does not match the original accepting turn operation."
+        if (not all(isinstance(receipt.get(key), str) and receipt[key].strip()
+                    for key in ("log_dir", "invocation_id", "thread_id"))
+                or Path(receipt["log_dir"]).name != receipt["invocation_id"]
+                or any(type(receipt.get(key)) is not int or receipt[key] <= 0
+                       for key in ("worker_pid", "server_pid"))
+                or any(not isinstance(receipt.get(key), str) or not receipt[key].isdigit()
+                       for key in ("worker_start", "server_start"))):
+            return None, "Receipt accepting process and invocation identities are incomplete."
+        current_keys = ("thread_id", "log_dir", "worker_pid", "worker_start", "server_pid", "server_start")
+        return ("current", None) if all(current.get(key) == receipt[key] for key in current_keys) else (
+            "historical", "Accepted by an earlier controller invocation.")
+
     def _inspect_deliveries(self, state):
         for message in state["messages"].values():
             ident = message.get("request_id")
-            if message.get("delivery_status") != "WAITING" or not isinstance(ident, str):
+            if message.get("delivery_status") not in {"WAITING", "ACCEPTED", "HISTORICAL_ACCEPTED"} or not isinstance(ident, str):
                 continue
             if not re.fullmatch(r"source-[0-9a-f]{64}", ident):
                 continue
@@ -347,8 +392,26 @@ class Mailbox:
                     continue
             except ValueError:
                 continue
+            scope, issue = self._delivery_scope(receipt, message, ident)
+            if scope is None:
+                message.update(delivery_status="WAITING", receipt_issue=issue)
+                prior = state["notices"].get(message.get("accepted_event_id"))
+                if prior:
+                    prior["superseded"] = True
+                continue
+            if scope == "historical":
+                message.update(delivery_status="HISTORICAL_ACCEPTED", receipt_issue=issue,
+                               controller_accepted_at=receipt["delivered_at"],
+                               controller_thread_id=receipt["thread_id"], controller_turn_id=receipt["turn_id"])
+                prior = state["notices"].get(message.get("accepted_event_id"))
+                if prior:
+                    prior["superseded"] = True
+                continue
+            if message.get("delivery_status") == "ACCEPTED":
+                continue  # Preserve a newer file-read/transport diagnostic.
             message.update(delivery_status="ACCEPTED", controller_accepted_at=receipt["delivered_at"],
-                           controller_thread_id=receipt["thread_id"], controller_turn_id=receipt["turn_id"])
+                           controller_thread_id=receipt["thread_id"], controller_turn_id=receipt["turn_id"],
+                           controller_invocation_id=receipt["invocation_id"], receipt_issue=None)
             if (message.get("source_kind") == "file"
                     and state.get("file_inbox", {}).get("request_id") == ident):
                 state["file_inbox"].update(status="ACCEPTED", controller_accepted_at=receipt["delivered_at"])
@@ -368,6 +431,7 @@ class Mailbox:
         label = self.config["file_inbox_path"] + " revision " + revision["commit_sha"][:10]
         raw = intent["instruction"].encode("utf-8")
         message = {"source_kind": "file", "source_key": source_key,
+                   "source_id": intent.get("source_id"),
                    "source_label": label, "source_url": revision["source_url"],
                    "source_commit_sha": revision["commit_sha"], "source_blob_sha": revision["blob_sha"],
                    "received_at": intent["received_at"], "request_id": request_id,
@@ -661,9 +725,17 @@ class Mailbox:
         with self._locked():
             state = self._state()
             now = time.time()
-            due = now >= state.get("next_poll_at", 0)
+            observer = context.get("observer") if isinstance(context, dict) else None
+            observer_id = observer.get("monitor_id") if isinstance(observer, dict) else None
+            # A replacement observer needs one successful current-instance poll
+            # even when the previous process left a future cadence deadline.
+            new_observer = (isinstance(observer_id, str) and bool(observer_id)
+                            and observer_id != state.get("last_poll_observer_id", state.get("poll_observer_id")))
+            due = now >= state.get("next_poll_at", 0) or new_observer
             if due:
                 state["last_poll_at"] = now
+                if isinstance(observer_id, str) and observer_id:
+                    state["last_poll_observer_id"] = observer_id
                 _save(self.path, state)
             queued, replied = [], False
             try:
@@ -705,6 +777,8 @@ class Mailbox:
                 dispatched = self._drain_outbox(state, now)
                 if due:
                     state.update(failures=0, last_error=None, last_successful_poll_at=now)
+                    if isinstance(observer, dict):
+                        state["poll_observer_id"] = observer.get("monitor_id")
                 _save(self.path, state)
                 return self._result(state, "POLLED" if due else "BACKOFF", queued_instruction_ids=queued, dispatched_event_id=dispatched)
             except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
@@ -721,4 +795,16 @@ class Mailbox:
             state = self._state()
             state["pending_resumes"] = [item for item in state["pending_resumes"] if item["request_id"] != request_id]
             _save(self.path, state)
+
+    def pending_resume(self):
+        """Guardian's local-only durable resume view; never waits for a poll lock.
+
+        Atomic mailbox snapshots are sufficient for this read. A repeated read
+        carries the same request ID; guardian authorization is already idempotent.
+        """
+        try:
+            state = self._state()
+        except FileNotFoundError:
+            return {"status": "LOCAL", "pending_resume_count": 0}
+        return self._result(state, "LOCAL")
 

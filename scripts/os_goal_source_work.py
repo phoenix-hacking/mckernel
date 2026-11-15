@@ -160,7 +160,7 @@ def _input_ref(row, allowed_roots):
 
 
 @_refuse_incomplete
-def prepare_attachment(spec, *, binding, source_id, text, allowed_roots):
+def prepare_attachment(spec, *, binding, source_id, text, allowed_roots, repo=None, ledger=None):
     """Normalize exact current inputs for the EXISTING queue; write nothing.
 
     Queue publication must include this whole attachment in the existing
@@ -172,7 +172,9 @@ def prepare_attachment(spec, *, binding, source_id, text, allowed_roots):
         "Exact source-work specification is required")
     _require(spec["kind"] in KINDS, "Executable/native/payload work is not a source attachment")
     original = _text(spec["original_check"], "original_check")
-    _require(original.startswith(("M14-", "M15-")), "Source work must advance an original M14/M15 check")
+    from os_goal_progress import original_check_ids
+    _require(original in original_check_ids(repo=repo, ledger=ledger),
+             "Source work must name an exact original M14/M15 check from the canonical ledger")
     blocker = spec["blocker"]
     _require(isinstance(blocker, dict) and set(blocker) == {"task_id", "thread_id", "turn_id", "hold_fields"},
              "Exact blocked model-turn binding is required")
@@ -311,7 +313,7 @@ def validate_registered_source_work(item, *, directory, binding, goal, state, al
                                     terminal_turn_lookup, account_guard, process_roots,
                                     retained_charges, exclusive_scopes, queue_reader, proc_root=Path("/proc"),
                                     scratch_path=Path("/home/holden/mckernel-work/scratch"),
-                                    clock=None, affinity_reader=None, disk_usage=None):
+                                    clock=None, affinity_reader=None, disk_usage=None, repo=None, ledger=None):
     """Revalidate one selected sending item and derive an EPHEMERAL repair view.
 
     The parent must remove any persisted repair_context before calling, own the
@@ -342,7 +344,7 @@ def validate_registered_source_work(item, *, directory, binding, goal, state, al
              "Source attachment belongs to a different Root/invocation")
     spec = {name: body[name] for name in ("task_id", "original_check", "kind", "blocker", "inputs", "write_paths", "limits")}
     _require(prepare_attachment(spec, binding=binding, source_id=source_id, text=text,
-                                allowed_roots=allowed_roots) == attachment,
+                                allowed_roots=allowed_roots, repo=repo, ledger=ledger) == attachment,
              "Current source or instruction bytes differ")
     _require(item.get("text_sha256") == body["text_sha256"], "Instruction text digest differs")
     max_age = body["limits"]["max_age_ns"]

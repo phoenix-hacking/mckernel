@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""User-service adapter: systemd watches the guardian, which watches the engine.
+"""Independent mailbox, guardian, and engine user-service adapters.
 
-The two services have separate cgroups. Restarting this monitor never implicitly
+The three services have separate cgroups. Restarting the mailbox never implicitly
 starts a model, and an engine recovery must carry the guardian's exact proof.
 """
 import argparse
@@ -36,7 +36,8 @@ def runtime_directory(repo):
 def unit_names(directory):
     suffix = hashlib.sha256(str(Path(directory).resolve()).encode()).hexdigest()[:12]
     return {"guardian": "mckernel-guardian-" + suffix + ".service",
-            "engine": "mckernel-engine-" + suffix + ".service"}
+            "engine": "mckernel-engine-" + suffix + ".service",
+            "mailbox": "mckernel-mailbox-" + suffix + ".service"}
 
 
 def _quote(value, *, expand_dollars=True):
@@ -71,8 +72,8 @@ def render_units(repo, directory, *, python=None, path_environment=None):
               "Environment=" + _quote("PATH=" + environment, expand_dollars=False) + "\n"
               "Environment=PYTHONUNBUFFERED=1\nStandardOutput=journal\nStandardError=journal\n")
     names = unit_names(directory)
-    guardian = ("[Unit]\nDescription=McKernel independent supervisor watchdog and mailbox\n"
-                "After=network-online.target\nStartLimitIntervalSec=0\n\n[Service]\n"
+    guardian = ("[Unit]\nDescription=McKernel independent supervisor watchdog\n"
+                "Wants=" + names["mailbox"] + "\nAfter=network-online.target " + names["mailbox"] + "\nStartLimitIntervalSec=0\n\n[Service]\n"
                 "Type=notify\nNotifyAccess=all\nWatchdogSec=90\nRestart=always\nRestartSec=5\n"
                 "TimeoutStartSec=60\nTimeoutStopSec=700\nKillMode=control-group\n" + shared
                 + "ExecStart=" + guardian_command + " guardian\n\n[Install]\nWantedBy=default.target\n")
@@ -80,7 +81,13 @@ def render_units(repo, directory, *, python=None, path_environment=None):
               "StartLimitIntervalSec=0\n\n[Service]\nType=exec\nRestart=no\n"
               "TimeoutStopSec=700\nKillMode=process\n" + shared
               + "ExecStart=" + command + " engine\n")
-    return {names["guardian"]: guardian, names["engine"]: engine}
+    mailbox = ("[Unit]\nDescription=McKernel independent mailbox and status observer\n"
+               "After=network-online.target\nStartLimitIntervalSec=0\n\n[Service]\n"
+               "Type=notify\nNotifyAccess=all\nWatchdogSec=90\nRestart=always\nRestartSec=5\n"
+               "TimeoutStartSec=60\nTimeoutStopSec=80\nKillMode=control-group\n" + shared
+               + "ExecStart=" + guardian_command.replace("McKernel guardian", "McKernel mailbox observer")
+               + " mailbox\n\n[Install]\nWantedBy=default.target\n")
+    return {names["guardian"]: guardian, names["engine"]: engine, names["mailbox"]: mailbox}
 
 
 def _systemctl(*arguments, timeout=50):
@@ -127,14 +134,17 @@ def _legacy_owner(directory):
     return None
 
 
-def install_units(repo, directory):
+def install_units(repo, directory, *, components=None):
     # The explicit start must keep this user's monitor alive after logout.
     # No sudo or interactive privilege fallback; failure remains observable.
     from os_goal_power import ensure_linger
     ensure_linger()
     root = Path(os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config"))) / "systemd/user"
     root.mkdir(mode=0o700, parents=True, exist_ok=True)
+    selected = set(unit_names(directory)[kind] for kind in components) if components is not None else None
     for name, content in render_units(repo, directory).items():
+        if selected is not None and name not in selected:
+            continue
         target = root / name
         if target.is_symlink():
             raise ValueError("Refusing a symlinked service destination")
@@ -203,25 +213,68 @@ def status(repo, directory):
               "status_text_path": str(Path(directory) / "status.txt"),
               "readiness": evaluate_readiness(directory)}
     try:
+        observer = read_json(Path(directory) / "mailbox-monitor.json")
+    except (OSError, ValueError):
+        observer = {}
+    result["mailbox_monitor"] = observer
+    result["mailbox_monitor_live"] = (isinstance(observer.get("start"), str) and observer["start"].isdigit()
+        and process_start(observer.get("pid")) == observer["start"]
+        and not lease_free(directory, "mailbox-monitor.lock"))
+    try:
+        result["mailbox"] = read_mailbox_status(Path(directory) / "mailbox-state.json")
+    except (OSError, ValueError):
+        pass
+    try:
         result["status_text"] = read_json(Path(directory) / "status-text-state.json")
     except FileNotFoundError:
         result["status_text"] = {"status": "NOT_GENERATED"}
+    except (OSError, ValueError):
+        result["status_text"] = {"status": "UNAVAILABLE"}
     try:
         guard = read_json(Path(directory) / "guardian.json")
-    except FileNotFoundError:
-        return dict(result, status="NOT_STARTED")
+    except (OSError, ValueError):
+        engine = result["readiness"].get("work_state", {})
+        return dict(result, status="MANUAL_ACTIVE" if engine.get("engine_live") and engine.get("supervision_mode") == "manual"
+                    else "MONITORING" if result["mailbox_monitor_live"] else "NOT_STARTED", guardian_live=False)
     alive = (isinstance(guard.get("start"), str) and guard["start"].isdigit()
              and process_start(guard.get("pid")) == guard["start"]
              and not lease_free(directory, "guardian.lock"))
-    result.update(status=guard.get("phase", "STARTING") if alive else "GUARDIAN_NOT_LIVE",
+    engine = result["readiness"].get("work_state", {})
+    result.update(status=guard.get("phase", "STARTING") if alive else
+                  "MANUAL_ACTIVE" if engine.get("engine_live") and engine.get("supervision_mode") == "manual" else
+                  "MONITORING" if result["mailbox_monitor_live"] else "GUARDIAN_NOT_LIVE",
                   guardian_live=alive, guardian_pid=guard.get("pid"),
                   heartbeat_at=guard.get("heartbeat_at"), reason=guard.get("reason"),
                   mailbox_error=guard.get("mailbox_error"))
-    try:
-        result["mailbox"] = read_mailbox_status(Path(directory) / "mailbox-state.json")
-    except FileNotFoundError:
-        pass
     return result
+
+
+def start_mailbox(repo, directory):
+    """Start observation for an existing manual or guarded owner, with no intent."""
+    from os_goal_mailbox_monitor import legacy_poller
+    repo, directory = Path(repo).resolve(), Path(directory).resolve()
+    directory.mkdir(mode=0o700, parents=True, exist_ok=True)
+    # A guarded engine may ask while its launcher still owns the short service
+    # submission lock. Reuse the positively identified lifetime owner directly.
+    from os_goal_readiness import evaluate_readiness
+    observed = evaluate_readiness(directory)
+    if (observed.get("monitoring_mode") == "independent"
+            and observed.get("stages", {}).get("monitor", {}).get("ready")):
+        return dict(status(repo, directory), status="MAILBOX_START_REQUESTED", submitted=False,
+                    existing_mailbox_monitor=True)
+    with _service_lock(directory):
+        if legacy_poller(directory):
+            return dict(status(repo, directory), status="LEGACY_MAILBOX_OWNER",
+                        reason="The existing guardian still polls; use its normal explicit transition before the independent observer")
+        names = install_units(repo, directory, components=("mailbox",))
+        _systemctl("enable", "--now", names["mailbox"])
+    return dict(status(repo, directory), status="MAILBOX_START_REQUESTED", submitted=True)
+
+
+def stop_mailbox(repo, directory):
+    """Stop only the observer unit. No stop, launch or resume authority is issued."""
+    _systemctl("disable", "--now", unit_names(directory)["mailbox"], timeout=85)
+    return dict(status(repo, directory), status="MAILBOX_STOPPED")
 
 
 def start(repo, directory, arguments=None):
@@ -334,47 +387,34 @@ def campaign_blocker(repo):
 
 
 def guardian(repo, directory):
-    from os_goal_guardian import Guardian, sd_notify
+    from os_goal_guardian import Guardian
     from os_goal_mailbox import Mailbox
-    from os_goal_status_feed import StatusFeed
     mailbox = Mailbox(repo, directory, Path(repo) / "scripts/os_goal_mailbox.json")
-    feed = StatusFeed(repo, directory)
-    def poll(control_directory, context):
-        state = context.get("engine_state") or {}
-        if (state.get("goal") or {}).get("status") == "blocked":
-            context = dict(context, missing_input=campaign_blocker(repo))
-        try:
-            reply = mailbox.poll(context)
-        except Exception as error:
-            from os_goal_stop_log import _text
-            reply = {"status": "ERROR", "reason": _text(str(error), 500)}
-        # The comment poll and the status upload are separate bounded segments;
-        # a slow GitHub response cannot consume the whole watchdog interval.
-        sd_notify("Mailbox checked; refreshing the generated status view")
-        try:
-            feed.tick(context)
-        except Exception as error:
-            from os_goal_stop_log import _text
-            failure = {"status": "ERROR", "reason": _text(str(error), 500),
-                       "next_refresh_at": time.time() + 600}
-            try:
-                atomic_json(Path(directory) / "status-text-state.json", failure)
-            except (OSError, ValueError):
-                print(json.dumps({"status_text_error": failure}), flush=True)
-        return reply
     monitor = Guardian(repo, directory,
                        launch_engine=lambda proof: _launch_engine(repo, directory, proof),
-                       mailbox_poll=poll, mailbox_ack=mailbox.ack_resume)
+                       mailbox_poll=lambda control_directory, context: mailbox.pending_resume(),
+                       mailbox_ack=mailbox.ack_resume)
     try:
+        monitor._save(mailbox_poll_owner="independent")
         return monitor.run()
     finally:
         monitor.close()
 
 
+def mailbox_monitor(repo, directory):
+    from os_goal_mailbox_monitor import MailboxMonitor
+    observer = MailboxMonitor(repo, directory)
+    try:
+        return observer.run()
+    finally:
+        observer.close()
+
+
 def main(argv=None, *, engine_arguments=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", nargs="?", default="start",
-                        choices=("start", "prepare", "status", "status-text", "stop", "dry-run", "guardian", "engine"))
+                        choices=("start", "prepare", "status", "status-text", "stop", "dry-run", "guardian", "engine",
+                                 "start-mailbox", "stop-mailbox", "status-mailbox", "mailbox"))
     args = parser.parse_args(argv)
     os.umask(0o077)
     directory = None
@@ -384,6 +424,8 @@ def main(argv=None, *, engine_arguments=None):
             return guardian(REPO, directory) or 0
         if args.command == "engine":
             return engine(REPO, directory) or 0
+        if args.command == "mailbox":
+            return mailbox_monitor(REPO, directory) or 0
         if args.command == "start":
             result = start(REPO, directory, engine_arguments)
         elif args.command == "prepare":
@@ -395,8 +437,12 @@ def main(argv=None, *, engine_arguments=None):
             if result["status"] == "GENERATED":
                 print((directory / "status.txt").read_text(encoding="utf-8"), end="")
                 return 0
-        elif args.command == "status":
+        elif args.command in {"status", "status-mailbox"}:
             result = status(REPO, directory)
+        elif args.command == "start-mailbox":
+            result = start_mailbox(REPO, directory)
+        elif args.command == "stop-mailbox":
+            result = stop_mailbox(REPO, directory)
         elif args.command == "stop":
             from os_goal_guardian import request_stop
             if lease_free(directory, "guardian.lock"):

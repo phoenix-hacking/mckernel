@@ -6,11 +6,21 @@ from scripts.tests.test_os_goal_launcher import launcher
 
 
 class ContinuousLaunchTests(unittest.TestCase):
-    def test_continuous_mode_stops_at_original_m14_m15_acceptance(self):
+    def test_continuous_mode_advances_all_milestones_without_implicit_checkpoint(self):
         args = launcher.arguments(['--continuous'])
-        self.assertTrue(args.stop_after_m14_m15)
+        self.assertFalse(args.stop_after_m14_m15)
+        self.assertTrue(args.continuous)
+        self.assertTrue(args.repair_agent_failures)
         self.assertEqual(args.hours, 0)
         self.assertIsNone(args.credit_budget)
+        self.assertTrue(launcher.Campaign.progress_enabled(
+            type("Probe", (), {"args": args})()))
+
+    def test_explicit_two_milestone_checkpoint_remains_supported(self):
+        args = launcher.arguments(['--continuous', '--stop-after-m14-m15'])
+        self.assertTrue(args.stop_after_m14_m15)
+        self.assertTrue(launcher.Campaign.progress_enabled(
+            type("Probe", (), {"args": args})()))
 
     def command(self, cpus, taskset='/usr/bin/taskset', continuous=True):
         args = launcher.arguments(['--continuous'] if continuous else [])

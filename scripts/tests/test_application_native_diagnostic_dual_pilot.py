@@ -210,17 +210,36 @@ class DualPilotTests(unittest.TestCase):
             self.assertIn(pilot.IMAGE, args)
 
     def test_capacity_refuses_overcommit_and_low_disk(self):
-        with patch.object(pilot.os, "sched_getaffinity", return_value={0, 2, 3, 4, 5, 6, 7}), \
-             patch.object(pilot, "mem_available", return_value=17 * pilot.GIB), \
-             patch.object(pilot.shutil, "disk_usage", return_value=SimpleNamespace(free=40 * pilot.GIB)):
-            with self.assertRaisesRegex(pilot.PilotError, "reserve"):
-                pilot.admit(2)
-            self.assertEqual(pilot.admit(1)["cpusets"], ["2,3", "4,5"])
-        with patch.object(pilot.os, "sched_getaffinity", return_value={0, 2, 3, 4, 5, 6, 7}), \
-             patch.object(pilot, "mem_available", return_value=30 * pilot.GIB), \
-             patch.object(pilot.shutil, "disk_usage", return_value=SimpleNamespace(free=11 * pilot.GIB)):
-            with self.assertRaisesRegex(pilot.PilotError, "free-space"):
-                pilot.admit(2)
+        # The test supplies synthetic affinity; supply matching topology and mount
+        # facts too. Runner machines need not expose cpu2..cpu5 or our scratch mount.
+        real_read_text = Path.read_text
+        selected_cores = {
+            str(Path("/sys/devices/system/cpu") / ("cpu%d" % cpu) / "topology" / kind):
+                str(0 if kind == "physical_package_id" else cpu)
+            for cpu in (2, 3, 4, 5)
+            for kind in ("physical_package_id", "core_id")
+        }
+
+        def topology_read_text(path, *args, **kwargs):
+            if str(path) in selected_cores:
+                return selected_cores[str(path)]
+            return real_read_text(path, *args, **kwargs)
+
+        with patch.object(Path, "read_text", autospec=True, side_effect=topology_read_text), \
+             patch.object(Path, "is_mount", return_value=True):
+            with patch.object(pilot.os, "sched_getaffinity", return_value={0, 2, 3, 4, 5, 6, 7}), \
+                 patch.object(pilot, "mem_available", return_value=17 * pilot.GIB), \
+                 patch.object(pilot.shutil, "disk_usage", return_value=SimpleNamespace(free=40 * pilot.GIB)):
+                with self.assertRaisesRegex(pilot.PilotError, "reserve"):
+                    pilot.admit(2)
+                admitted = pilot.admit(1)
+                self.assertEqual(admitted["cpusets"], ["2,3", "4,5"])
+                self.assertEqual(admitted["physical_cores"], [(0, 2), (0, 3), (0, 4), (0, 5)])
+            with patch.object(pilot.os, "sched_getaffinity", return_value={0, 2, 3, 4, 5, 6, 7}), \
+                 patch.object(pilot, "mem_available", return_value=30 * pilot.GIB), \
+                 patch.object(pilot.shutil, "disk_usage", return_value=SimpleNamespace(free=11 * pilot.GIB)):
+                with self.assertRaisesRegex(pilot.PilotError, "free-space"):
+                    pilot.admit(2)
 
     def test_owner_lookup_requires_matching_name_and_label(self):
         cid = "a" * 64

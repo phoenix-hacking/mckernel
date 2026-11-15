@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -49,6 +50,18 @@ class BatchTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
+        # Keep the production workstation command and fixed owner path exact.
+        # Offline fake-Popen tests can read the identical checked-out owner
+        # bytes through a scoped path substitution; no real owner is launched.
+        frozen_owner = "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py"
+        self.assertEqual(batch.OWNER, frozen_owner)
+        self.assertEqual(batch.PREFIX, ["/usr/bin/sudo", "-A",
+                                        "/home/holden/anaconda3/bin/python3", "-B", frozen_owner])
+        local_owner = str((ROOT / "scripts/application-tests/native_diagnostic_container_owner.py").resolve(strict=True))
+        override = patch.multiple(batch, OWNER=local_owner,
+                                  PREFIX=batch.PREFIX[:4] + [local_owner])
+        override.start()
+        self.addCleanup(override.stop)
         self.owner_hash = digest(Path(batch.OWNER).read_bytes())
         self.manifest = self.root / "manifest.json"
         self.manifest.write_bytes(b'{"diagnostic":true}\n')

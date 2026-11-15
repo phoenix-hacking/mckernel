@@ -120,7 +120,7 @@ class BlockedRepairTests(unittest.TestCase):
                          "source-fetch transport", "cyberPolicy", "permission-rejected",
                          "UNKNOWN outcomes", "without an arbitrary time cap", "included usage limit",
                          "may assign another repair owner", "not a terminal stop",
-                         "normal BLOCKED", "do not busy-loop"):
+                         "pause and return", "idle BLOCKED loop"):
             with self.subTest(fragment=fragment):
                 self.assertIn(fragment, prompt)
         self.assertNotIn("schema_version", prompt)

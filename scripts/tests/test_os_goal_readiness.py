@@ -58,6 +58,71 @@ class ReadinessTests(unittest.TestCase):
         return subject.evaluate_readiness(self.directory, now=self.now,
                                           identity_checker=lambda pid, birth: self.births.get(pid) == birth)
 
+    def independent_manual(self):
+        self.data.pop('guardian.json')
+        (self.directory / 'guardian.json').unlink(missing_ok=True)
+        monitor = {'monitor_id': 'b' * 32, 'pid': 104, 'start': '14',
+                   'started_at': 1900, 'heartbeat_at': 1995, 'phase': 'MONITORING',
+                   'poll_error': None, 'publication_error': None}
+        self.data['mailbox-monitor.json'] = monitor
+        self.births[104] = '14'
+        self.data['mailbox-state.json']['poll_observer_id'] = monitor['monitor_id']
+        self.data['status-text-state.json']['observer'] = {
+            key: monitor[key] for key in ('monitor_id', 'pid', 'start', 'started_at')}
+        for name in ('state.json', 'watcher.json'):
+            self.data[name].pop('guardian_run_id')
+            self.data[name].update(supervision_mode='manual', supervision_id='c' * 32,
+                                   log_dir='/saved/manual-invocation', thread_id='saved-root')
+        self.data['watcher.json'].update(worker_start='12', at=1999)
+        self.save()
+
+    def test_independent_monitor_and_manual_owner_need_no_guardian(self):
+        self.independent_manual()
+        result = self.evaluate()
+        self.assertTrue(result['monitoring_ready'])
+        self.assertEqual(result['monitoring_mode'], 'independent')
+        self.assertTrue(result['stages']['monitor']['ready'])
+        self.assertFalse(result['stages']['guardian']['ready'])
+        self.assertTrue(result['stages']['engine']['ready'])
+        self.assertEqual(result['work_state']['supervision_mode'], 'manual')
+        self.assertTrue(result['work_state']['engine_live'])
+
+    def test_manual_label_alone_or_absent_guardian_cannot_prove_engine_lineage(self):
+        self.independent_manual()
+        for changes in ({'supervision_id': 'd' * 32}, {'supervision_mode': 'direct'},
+                        {'worker_start': 'different-birth'}, {'thread_id': 'other-root'},
+                        {'log_dir': '/saved/older-invocation'}, {'at': 1800}):
+            with self.subTest(changes=changes):
+                old = dict(self.data['watcher.json'])
+                self.data['watcher.json'].update(changes)
+                self.save()
+                result = self.evaluate()
+                self.assertFalse(result['work_state']['engine_live'])
+                self.assertTrue(result['monitoring_ready'])
+                self.data['watcher.json'] = old
+
+    def test_monitor_engine_and_publication_health_are_independent(self):
+        self.independent_manual()
+        self.births.pop(104)
+        result = self.evaluate()
+        self.assertEqual(result['missing_stages'], ['monitor'])
+        self.assertTrue(result['work_state']['engine_live'])
+        self.assertTrue(result['stages']['publication']['ready'])
+        self.births[104] = '14'
+        self.data['mailbox-monitor.json']['publication_error'] = {'type': 'NetworkError'}
+        self.save()
+        result = self.evaluate()
+        self.assertEqual(result['missing_stages'], ['publication'])
+        self.assertTrue(result['stages']['monitor']['ready'])
+        self.assertTrue(result['stages']['mailbox']['ready'])
+
+    def test_new_monitor_cannot_reuse_previous_observers_poll_and_publication(self):
+        self.independent_manual()
+        self.data['mailbox-monitor.json']['monitor_id'] = 'e' * 32
+        self.save()
+        result = self.evaluate()
+        self.assertEqual(set(result['missing_stages']), {'mailbox', 'publication'})
+
     def test_current_receipts_make_monitoring_ready_while_model_is_blocked(self):
         result = self.evaluate()
         self.assertTrue(result['monitoring_ready'])

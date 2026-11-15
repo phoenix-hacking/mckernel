@@ -168,6 +168,9 @@ def blocked_repair_key(goal, state):
 def repair_instruction():
     """Prompt addition for an opted-in run; ordinary Root routing remains intact."""
     return (
+        "Keep ready work running. Repair or skip a stuck task; stop dispatch if nothing can proceed. "
+        "A local task block is not a campaign-wide execution stop. Use actual available source "
+        "and build inputs directly; do not invent an extra inventory or review prerequisite. "
         "Ordinary engineering repair is enabled within this same Root. Log why "
         "progress stops: preserve the actual failed command/check and diagnostic, "
         "affected source/input, owner, blocker and next action in existing raw evidence "
@@ -204,8 +207,8 @@ def repair_instruction():
         "M14/M15 closure without an arbitrary time cap, preserving acceptance order. "
         "Continuous operation never overrides completion, a user stop, the included usage limit or "
         "another genuine binding hold. When no eligible work remains, checkpoint "
-        "the precise blocker, owner, missing input and next trigger and use normal "
-        "BLOCKED; do not busy-loop or consume quota artificially."
+        "the precise blocker, owner, missing input and next trigger, pause and return. "
+        "Do not leave the campaign running in an idle BLOCKED loop or consume quota artificially."
     )
 
 

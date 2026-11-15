@@ -19,6 +19,7 @@ import time
 from uuid import uuid4
 
 from os_goal_stop_log import write_stop_record
+from watch_os_goal import pidfd_open, pidfd_send_signal
 
 
 LATEST = "overnight-latest.json"
@@ -256,16 +257,14 @@ def stop(directory):
     result = status(directory)
     if not result.get("watcher_verified"):
         return dict(result, status="REFUSED", reason="No exact live watcher for this detached attempt; no signal sent")
-    if not hasattr(os, "pidfd_open") or not hasattr(signal, "pidfd_send_signal"):
-        return dict(result, status="REFUSED", reason="This host cannot provide identity-safe pidfd stop; no signal sent")
     fd = None
     try:
-        fd = os.pidfd_open(result["watcher_pid"])
+        fd = pidfd_open(result["watcher_pid"])
         identity = process_identity(result["watcher_pid"])
         if (not identity or identity["start"] != result["watcher_start"]
                 or identity["session"] != result["launch_session"]):
             return dict(result, status="REFUSED", reason="Watcher identity changed; no signal sent")
-        signal.pidfd_send_signal(fd, signal.SIGTERM, None, 0)
+        pidfd_send_signal(fd, signal.SIGTERM)
     except OSError as error:
         return dict(result, status="REFUSED", reason="Identity-safe watcher stop failed: " + str(error))
     finally:

@@ -179,6 +179,7 @@ class CampaignOwnerRetentionTests(unittest.TestCase):
             stack.enter_context(patch.object(launcher.time, "monotonic", side_effect=lambda: self.clock[0]))
             stack.enter_context(patch.object(launcher.time, "sleep", side_effect=sleep))
             stack.enter_context(patch.object(launcher, "check_resources", self.resource_admission))
+            stack.enter_context(patch.object(launcher, "check_machine_headroom"))
             stack.enter_context(patch.object(watch_os_goal, "process_start", side_effect=birth))
             stack.enter_context(patch.object(os_goal_guard_protocol, "process_start", side_effect=birth))
             stack.enter_context(patch.object(launcher, "_account_control_owner", side_effect=lambda *args: self.owner()))
@@ -438,6 +439,37 @@ class CampaignOwnerRetentionTests(unittest.TestCase):
         self.campaign.retain_owner("blocked")
         self.campaign.wait_retained_owner("blocked")
         self.returned_from_wait.append(self.campaign.state["phase"])
+
+    def test_old_invocation_receipt_cannot_mask_current_owner_on_stop(self):
+        self.install_original_owner()
+        prior = {"worker_pid": 123, "worker_start": "90", "server_pid": 124,
+                 "server_start": "91", "thread_id": "test-thread", "log_dir": "/prior/run",
+                 "custody": "UNKNOWN", "release_authorized": False}
+        self.campaign.state["owner_retention"] = copy.deepcopy(prior)
+        self.campaign.retain_owner("signal_15")
+        current = self.campaign.state["owner_retention"]
+        self.assertEqual(current["worker_pid"], os.getpid())
+        self.assertEqual(current["log_dir"], str(self.campaign.log_dir))
+        self.assertEqual(current["stop_reason"], "signal_15")
+        self.assertEqual(self.campaign.state["previous_owner_retention"], prior)
+        archived = list((self.directory / "owner-retentions").glob("*.json"))
+        self.assertEqual(len(archived), 1)
+        self.assertEqual(json.loads(archived[0].read_text()), prior)
+        self.assertFalse(current["release_authorized"])
+        self.assertEqual(self.rpc.close_calls, 0)
+
+    def test_machine_stop_tells_active_root_to_stop_dispatch_before_retention(self):
+        self.initial_status, self.initial_active = "active", True
+        self.install_original_owner()
+        self.campaign.stop_reason = "machine_headroom_exhausted"
+        self.assertTrue(self.campaign.request_checkpoint())
+        notices = [params for method, params in self.rpc.calls if method == "turn/steer"]
+        self.assertEqual(len(notices), 1)
+        self.assertIn("Stop new task dispatch now", notices[0]["input"][0]["text"])
+        self.assertEqual(self.campaign.goal["status"], "paused")
+        self.assertEqual(self.campaign.state["automatic_stop_dispatch_notice"]["status"], "accepted_by_server")
+        self.assertEqual(self.rpc.close_calls, 0)
+        self.native.close.assert_not_called()
 
     def test_verified_explicit_control_can_resume_only_continuous_stop_free_owner(self):
         self.args.continuous = True

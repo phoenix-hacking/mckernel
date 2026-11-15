@@ -41,6 +41,10 @@ class SourceWorkTests(unittest.TestCase):
         self.repo, self.control, self.proc = [self.base / name for name in ("repo", "control", "proc")]
         for path in (self.repo, self.control, self.proc, self.control / "log"):
             path.mkdir(mode=0o700, parents=True, exist_ok=True)
+        canonical = Path(__file__).resolve().parents[2] / "docs/verification/m14-m15-closure-progress.json"
+        ledger = self.repo / "docs/verification/m14-m15-closure-progress.json"
+        ledger.parent.mkdir(parents=True)
+        ledger.write_bytes(canonical.read_bytes())
         self.pid, self.child, self.payload = os.getpid(), os.getpid() + 100000, os.getpid() + 200000
         self.binding = {"thread_id": "root", "invocation": "this-invocation", "worker_pid": self.pid,
                         "worker_start": "100", "log_dir": str(self.control / "log"), "credit_run_id": "finite-run"}
@@ -213,6 +217,12 @@ class SourceWorkTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             work.prepare_attachment(dict(self.spec, write_paths=[str(self.control / "state.json")]),
                 binding=self.binding, source_id=self.source_id, text=self.text, allowed_roots=[self.repo])
+
+    def test_source_registration_requires_exact_original_membership_not_a_prefix(self):
+        for original in ("M15-invented-check", "M14-F01-not-the-original", "M15-F05-original-behavior-extra"):
+            with self.subTest(original=original), self.assertRaisesRegex(ValueError, "exact original"):
+                work.prepare_attachment(dict(self.spec, original_check=original), binding=self.binding,
+                    source_id=self.source_id, text=self.text, allowed_roots=[self.repo])
 
     def test_attachment_adds_no_instruction_or_queue_record_size_cap(self):
         self.text = "source-only instruction " + "x" * 100000

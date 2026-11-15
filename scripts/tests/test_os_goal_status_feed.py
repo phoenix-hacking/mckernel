@@ -67,6 +67,18 @@ class StatusFeedTests(unittest.TestCase):
         self.assertEqual(runtime['state'], {})
         self.assertEqual(runtime['guardian'], {'pid': 123, 'start': '45', 'phase': 'HELD'})
 
+    def test_observer_context_is_kept_separate_from_actual_guardian(self):
+        observer = {'monitor_id': 'b' * 32, 'pid': 123, 'start': '45', 'started_at': 900,
+                    'phase': 'MONITORING'}
+        state = {'supervision_mode': 'manual', 'thread_id': 'saved-root'}
+        result = self.feed.tick({'observer': observer, 'engine_state': state, 'guardian': {},
+                                 'status': 'MANUAL', 'reason': None})
+        runtime = self.render.call_args.kwargs['runtime']
+        self.assertEqual(runtime['observer'], observer)
+        self.assertEqual(runtime['guardian'], {})
+        self.assertEqual(runtime['state'], state)
+        self.assertEqual(result['observer']['monitor_id'], observer['monitor_id'])
+
     def test_missing_engine_in_explicit_context_does_not_mix_stale_disk_state(self):
         self.save('state.json', {'worker_pid': 987, 'agents': {'old-agent': {'status': 'inProgress'}}})
         context = {'pid': 123, 'start': '45', 'phase': 'HELD'}
@@ -86,6 +98,47 @@ class StatusFeedTests(unittest.TestCase):
             key: summarize_mailbox_state(values[name]) if key == 'mailbox' else values[name] for key, name in (
                 ('state', 'state.json'), ('guardian', 'guardian.json'), ('watcher', 'watcher.json'),
                 ('mailbox', 'mailbox-state.json'), ('latest_stop', 'latest-stop.json'))})
+
+    def test_detached_observer_uses_saved_root_working_tree_ledger(self):
+        active = self.directory / 'active-worktree'
+        ledger_path = active / 'docs/verification/m14-m15-closure-progress.json'
+        ledger_path.parent.mkdir(parents=True)
+        expected = {'requirements': [{'id': 'ACTIVE-ONLY'}], 'tasks': []}
+        ledger_path.write_text(json.dumps(expected))
+        self.save('state.json', {'repo': str(active), 'thread_id': 'saved-root'})
+        with patch.object(self.feed, '_git_common_dir', return_value=Path('/same-object-store')) as check:
+            result = self.feed.tick()
+        self.assertEqual(result['status'], 'PUBLISHED')
+        self.assertEqual(result['source_repo'], str(active))
+        self.assertEqual(self.render.call_args.args[1], expected)
+        self.feed._revision.assert_called_once_with(active)
+        self.assertEqual(check.call_count, 2)
+
+    def test_detached_observer_refuses_unrelated_checkout_and_retains_prior_report(self):
+        active = self.directory / 'unrelated-repo'
+        active.mkdir()
+        self.save('state.json', {'repo': str(active), 'thread_id': 'saved-root'})
+        prior = self.directory / 'status.txt'
+        prior.write_text('Prior verified report\n')
+        with patch.object(self.feed, '_git_common_dir', side_effect=lambda repo: repo.resolve()):
+            result = self.feed.tick()
+        self.assertEqual(result['status'], 'ERROR')
+        self.assertIn('another Git repository', result['reason'])
+        self.assertEqual(prior.read_text(), 'Prior verified report\n')
+        self.render.assert_not_called()
+        self.publisher.publish.assert_not_called()
+
+    def test_missing_saved_root_checkout_does_not_publish_observer_ledger(self):
+        active = self.directory / 'unavailable-worktree'
+        self.save('state.json', {'repo': str(active), 'thread_id': 'saved-root'})
+        prior = self.directory / 'status.txt'
+        prior.write_text('Prior verified report\n')
+        result = self.feed.tick()
+        self.assertEqual(result['status'], 'ERROR')
+        self.assertEqual(result['error_type'], 'FileNotFoundError')
+        self.assertEqual(prior.read_text(), 'Prior verified report\n')
+        self.render.assert_not_called()
+        self.publisher.publish.assert_not_called()
 
     def test_six_hundred_second_cadence_skips_both_render_and_publication(self):
         first = self.feed.tick()

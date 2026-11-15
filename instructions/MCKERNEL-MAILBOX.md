@@ -80,6 +80,15 @@ assembly can be received without deleting history.
 
 ## Workstation adoption and recovery
 
+The independent observer and closure-control contracts are described in
+[the harness implementation reference](../docs/development/os-goal-reliability.md).
+After adopting that source, `python3 -B scripts/os_goal_service.py start-mailbox`
+starts only the mailbox observer, including for a positively identified manual
+run. `status-mailbox` reports observer, polling, publication and engine evidence
+separately. A submitted service start is not a readiness acknowledgement. Preserve
+the existing poll owner when a legacy guardian is live; the migration must use
+its normal transition. The observer does not activate a paused or held engine.
+
 Root must adopt the reviewed source and `scripts/os_goal_mailbox.json` through
 the normal workstation update path. Creating the files on GitHub alone does not
 activate the reader. Preserve existing mailbox state, queue records and delivery
