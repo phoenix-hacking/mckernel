@@ -1,6 +1,53 @@
 # McKernel: M14 → M15 → complete supported system
 
-## RUNNING — same Root, Sol/MAX, eleven source slots, finite M14 target
+## PAUSED — harness stop closure_decision_unresolved; no automatic resume
+
+Authoritative stop received: closure_decision_unresolved. New dispatch STOPPED.
+Every child model turn is terminal; no new payload or recovery is authorized.
+Do not resume this run. Root is checkpointing the already completed qualifications
+and pausing the saved larger goal; original M14/M15 remain unaccepted.
+
+Final current checkpoint:112/156 accepted,44open; M14=80.19%,M15=76.25%.
+Only new original counted closure this invocation wasM15-I02-ACCEPT (+1 from111).
+No new original closure in the final rolling30minute window. Do not relabel
+source/review/compile/cleanup increments as accepted original checks.
+
+Completed and reusable: corrected whole-SMP vendor192 compilation-Dwarnings EXIT0,
+object+depfile artifactGO086f78cf (28clauses) and ownfamilyQa432a527. Public proof:
+docs/verification/m14-i03-smp-compile-20261115/QUALIFIED-WHOLE-SMP-OBJECT.json.
+Root retires ONLY that successful2147483648B/job1 family; NO passing SMP rerun.
+Copied10metadata=111189474B plus the original8B build-id already inSOURCE50 equals
+original11-input111189482B bundle; rawreports/initialgap preserved, no input missing.
+The qualified process-VM Rust+C repair and focused regression are pushed/fetch
+verified at26deaeb7123e986ddd767773c499afb50a96f10d; do not rerun green cases.
+
+PRESERVED RUNTIME CUSTODY: failedSMP Tool10774/CIDa1fb82a00bd3eb268353653621b621dfffffe9d461a76989b93131cad475ceda
+and Tool42785/CIDf0c62b172b8ab1c2f84ebb3a4a8161046973d180ae89b1bf264a9a38234ecfb4
+remain unjoined/UNKNOWN with2147483648B/job1 EACH. Old14790/32916 families retain
+402653184B/jobs2. Total retainedHOST4697620480B/jobs4, plus ALL actual overhead;
+separate native12GiB and every actual source/account/service/lease/IPC/UNKNOWN/
+excluded-worker-turn hold remain. No signal, cancellation, removal, oldwait or
+physical-release inference is authorized by this checkpoint. Keep original
+Root/server handles and the controlled engine custody; do not restart a keeper.
+
+Next dependency is PREPARED, NOT DISPATCHED under this stop: actual paired IHK-core
+13-source332852B os_runtime.cf1f recipe (NOTmcctrl), exact62-token rustc plus original
+18-token objtool stage/raw-object checkpoint. Private handoff:
+/home/holden/mckernel-work/m14-i03-paired-ihk-object-20261115/HANDOFF.SOURCE-ONLY.json
+SHA9e4dad65d7936b80b242dfd73a8bcfa8039148c94a0848f64bbe9d61f59a1367.
+Objtool96a6212b exists; its needed-loader/provider observation and operation
+binding remain unissued. Then matching finalmodules/image/provider/one-owner
+native/application/restoration proof remains required. F02 GET_CREDV stays parked
+on exact current matched-device/provider input, never fake/no-device substituted.
+Other retained source-only handoffs: affected wholeguestRust proposal+compiler
+rebindea9010d1; corrected vDSOobserver SourceGO7058688a and new fixedcontrols
+b7242bf1/4e9c6254 (unreviewed controls/unrun); perfconsumer07f14f14; ordinaryHOST
+admission adapter grouped correction remains execution-refused/unqualified.
+No extra source/control framework or review should be launched while stopped.
+
+The running-invocation details below are historical evidence, superseded by this
+stop and final completed-result checkpoint. Only a future explicit user resume
+may authorize new engineering; this run must not auto-resume.
 
 Current invocation20261115T063109Z-9a7c2e96 is ACTUALLY running on the same saved
 Root. Worker2995304/b81053533 and server2995306/b81053545 completed normal
