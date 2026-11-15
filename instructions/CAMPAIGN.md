@@ -1,6 +1,52 @@
 # McKernel: M14 → M15 → complete supported system
 
-## READY FOR USER RELAUNCH — saved Root writer released
+## RUNNING — same Root, Sol/MAX, eleven source slots, finite M14 target
+
+Current invocation20261115T063109Z-9a7c2e96 is ACTUALLY running on the same saved
+Root. Worker2995304/b81053533 and server2995306/b81053545 completed normal
+startup/model catalog/config and exact thread model-effort/permission readback:
+GPT-6.1 Sol/MAX,11source slots, depth1, Sol/xhigh children, HOST CPUs0,6,7/jobs5,
+28GiB shared total containing18GiB non-HOST plus10GiB HOST. No further restart.
+Finite original targetM14-I03-E1 is APPLIED through the checked controller,
+receiptfe77de6432f609d5e8ca4cbcfcc07cdacc556f72b1a09ff6b4d716115a1ed81a.
+Its next operation is the reviewed changed whole-SMP dependency with minimal
+current-pool/account-source binding; exact62-token command/50-source/17mounts and
+real1.5GiB container+512MiB control are preserved. Fresh admission still required.
+The original402653184B/jobs2 and all other actual holds remain charged.
+
+NEW ORIGINAL ACCEPTANCE: M15-I02-ACCEPT is explicitly accepted by saved Root on
+the full four already-qualified children and exact099/c964+a2f/f133 delivered
+three-module artifact cohort. Record:
+docs/verification/m15-i02-original-acceptance-20261115/ROOT-ORIGINAL-I02-ACCEPTANCE.json
+SHA b07e10ccd422aff1555b24903eda0531b9bc9b09d085408109574e8d526f8c6a.
+Current112/156 accepted,44open (18M14/26M15), delta+1 from111 baseline;
+M14=80.19%,M15=76.25%, neither milestone accepted. New SMP source, module-load,
+applications/native/restoration/current-free and every actual hold remain separate.
+Current closure lane remainsM14; this completes the retained I02 review explicitly
+requested at startup, and does not dispatch a new M15 runtime lane.
+
+Useful owners: DispatchSource prepares only the current SMP operation binding;
+M14Generic authored one-line process-VM remote-index repair plus two actual-body
+regressions, under FunctionalDelta independent review; M14Arch implements the
+source-defined vDSO observer; CredSource resolves participating perf/reference
+lifetime; DebugContract implements the real ordinary HOST admission-provider
+adapter. All private/disjoint, no payload/compiler/native effects yet.
+The old time/VM whole original functional rows remain OPEN until matching runtime.
+A read-only source observation measured MemTotal33199697920/MemAvailable30307774464,
+all conservative selected controller/workerRSS1657585664 and old384MiB/jobs2;
+this snapshot is not payload admission and will be renewed before execution.
+
+Existing independent observer2985281/b80922657/monitor5337917a6d344274ad79c4ca2f415cb1
+has verified identity+lease, current poll06:39:41Z and verified publication06:39:56Z,
+SHA4debfd9240fa1a556cc0a29ea759d448f65bb7b8ec7286198f2a8e99db88ea8a.
+No second observer or timer was started. Exact PR14 source271e2364 is already an
+ancestor of current source9581b04d; loaded controller advertises closure capability1.
+Read mailboxc2c63fdd/blob4f14124b and adoption01345300 + dispatch271e2364 in full;
+existing receipt/delivery chain is reused. Source/observer/model/target facts do
+not imply a qualified ordinary runner operation or unattended engineering acceptance.
+
+The relaunch/operator-stop details below are historical; this manual invocation
+supersedes the previous waiting-for-launch banner without releasing any hold.
 
 Latest user direction: integrate the current GitHub harness, make it reliable
 without babysitting, use GPT-6.1 Sol/MAX dispatch with Sol/xhigh workers, and let
@@ -49,18 +95,17 @@ run7c6ef3604bfb4008a917bba8cfb6cfaa and ceiling52079.8011050000. Functional OS/R
 and allowed assembly only; NO SECURITY TESTING. After both original milestone
 acceptances checkpoint and pause the larger goal.
 
-## Closure plan: all45 original opens, chained to full M14/M15 acceptance
+## Closure plan: all44 current original opens, chained to full M14/M15 acceptance
 
-The baseline is111/156 accepted,45open:18 M14 and27 M15. M14 is80.19% and
-M15 is74.59% verified weighted completion; neither milestone is accepted.
+The original launch baseline was111/156. Current112/156 accepted,44open:18M14 and26M15.
+M14 is80.19% andM15 is76.25% verified weighted completion; neither milestone is accepted.
 The table below is an execution plan, not new acceptance evidence. All original
 conditions, weights and the156 denominator stay unchanged.
 
-Start with two useful lanes: Root reviews retained full-scope evidence for
-`M15-I02-ACCEPT` (its four counted children are already closed), while the shared
-whole-SMP GO74c72af7 packet proceeds through fresh28GiB shared-pool admission.
-Do not rebuild anything just to review I02. A satisfied original gate may close
-immediately; missing actual proof stays open and becomes a concrete next action.
+The retained full-scope `M15-I02-ACCEPT` review is now explicitly accepted. The shared
+whole-SMP GO74c72af7 dependency proceeds through its current binding and fresh28GiB
+shared-pool admission while independent M14 implementation/affected verification
+continues. Missing actual proof stays open and becomes a concrete next action.
 
 ```mermaid
 flowchart TD
@@ -100,7 +145,7 @@ One Root integrates and executes the separately owned native cohort.
 | 6. Library (3) | `M15-F05-original-behavior`, `M15-F05-deployed-native`, `M15-F05-ACCEPT` | Existing public-ABI/library owner; Root executes device/native scope. Reuse public ABI/environment, ownership-error, parser/IKC/query/create/routing/dump results. | Finish supported function/backend behavior, especially key0 balanced full-success/arithmetic, zero-node and zero-compensation evidence under actual permitted scope. The28 error cases do not prove these regions. Bind installed library/dependencies and restoring lifecycle, then F05 acceptance. Actual excluded bodies require their original supported disposition; no replay. |
 | 7. Real commands (6) | `M15-F06-device-behavior`, `M15-F06-native`, `M15-F07-device-behavior`, `M15-F07-native`, `M15-F06-ACCEPT`, `M15-F07-ACCEPT` | Existing ihkconfig/ihkosctl/provider owners; Root runs real device/native operations. Reuse coherent tools/library, links/preflights and focused/default/unknown-action/intr results. | SMP GO74c72af7 supplies the shared F06 dependency. Qualify remaining supported real-device command observations and error/restoring lifecycles against actual matched providers. Join complete original evidence and accept both file gates. |
 | 8. Installed monitor/service (3) | `M15-F08-installed-service`, `M15-F08-native`, `M15-F08-ACCEPT` | Existing monitor/service owner; Root runs service/device/native work. Reuse help/partial-start/idle-stop/active-worker/monitor/supervisor/no-event results. | Bind installed daemon/service/udev; prove required real IHK event/kmsg/hung-up behavior, startup/stop/error ordering and cleanup/restoration. Reuse the green supervisor unless relevant inputs change; join full evidence before F08 acceptance. |
-| 9. Retained acceptance and M15 cohort integration (8) | `M15-I04-native-admission`, `M15-I04-cohort`, `M15-I04-applications`, `M15-I04-module-MM`, `M15-I04-restoration`, `M15-I04-acceptance`, `M15-I02-ACCEPT`, `M15-I04-ACCEPT` | Root. Reuse module ownership/bindings/ABI/modpost, SDK/provider/build and matching functional evidence. | Review I02 retained evidence immediately. Bind image/three modules/executor/library/tools as one cohort with actual admission, applications, module load/unload/MM and shutdown/error restoration. Share proven scope with earlier batches. Record original I04 integration/final M15 acceptance after M14 acceptance and every original M15 obligation passes. |
+| 9. M15 cohort integration (7) | `M15-I04-native-admission`, `M15-I04-cohort`, `M15-I04-applications`, `M15-I04-module-MM`, `M15-I04-restoration`, `M15-I04-acceptance`, `M15-I04-ACCEPT` | Root. Reuse module ownership/bindings/ABI/modpost, SDK/provider/build and matching functional evidence. | I02 retained artifact gate accepted at its exact scope. Bind image/three modules/executor/library/tools as one cohort with actual admission, applications, module load/unload/MM and shutdown/error restoration. Share proven scope with earlier batches. Record original I04 integration/final M15 acceptance after M14 acceptance and every original M15 obligation passes. |
 
 Actual remaining critical dependencies are native/source/current-free authority,
 real matched mcctrl device/provider evidence, the eligible XPMEM/perf contracts,

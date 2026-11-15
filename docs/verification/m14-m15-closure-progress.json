@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-14T16:28:04.825629+00:00",
+  "updated_at": "2026-11-15T06:45:56.003819+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -54,9 +54,9 @@
         "M15-I03",
         "M15-I04"
       ],
-      "checklist_percent_complete": 74.59,
+      "checklist_percent_complete": 76.25,
       "file_acceptance_percent": 12.5,
-      "integration_acceptance_percent": 50.0,
+      "integration_acceptance_percent": 75.0,
       "milestone_accepted": false,
       "original_file_gate_count": 8,
       "original_integration_gate_count": 4
@@ -1259,21 +1259,22 @@
       "kind": "original_integration_gate",
       "target": "All three delivered Linux-loadable modules",
       "owner": "Saved Root integration owner; original source/SDK/native authorities retain their admissions",
-      "accepted": false,
-      "acceptance_percent": 0,
+      "accepted": true,
+      "acceptance_percent": 100,
       "demonstrated_scopes": {
         "partial": "Current plan instructs reuse of existing Rust IHK, SMP, mcctrl and accepted SDK/library artifacts.",
         "limits": "Technical bindings, ownership and ABI/modpost leaves demonstrated; matched delivered/deployed/native cohort and original ACCEPT still open. No module load, native, all-vmlinux-C or C-retirement waiver.",
         "bindings": "Whole original M15-I02-bindings verified against real three artifacts/source/kernel/Kbuild/config/toolchain and independent e90be144. Ownership, complete ABI/modpost, matched delivered cohort and original acceptance remain separate.",
         "technical_ownership_ABI": "Both whole technical conditions verified on actual unchanged artifacts, exact ASM emission, complete imports/type/provider joins and independently reviewed narrow new Linux platform-adapter C classification; all matched deployed/native cohort and acceptance conditions separate.",
-        "matched_artifacts": "Whole literal M15-I02-matched-artifacts independently GO92b2554c on exact099 threeKOs/config106055/Linux415b/c964+a2f BOTH staged paths/f133/runtime; no load/native/parent acceptance."
+        "matched_artifacts": "Whole literal M15-I02-matched-artifacts independently GO92b2554c on exact099 threeKOs/config106055/Linux415b/c964+a2f BOTH staged paths/f133/runtime; no load/native/parent acceptance.",
+        "current_whole_original_acceptance": {
+          "accepted": true,
+          "Root_record": "docs/verification/m15-i02-original-acceptance-20261115/ROOT-ORIGINAL-I02-ACCEPTANCE.json",
+          "four_original_children_matched": true,
+          "scope": "Exact qualified delivered three-module artifact/kernel/image/runtime cohort. New SMP source, actual module load/native/current-free and final milestone acceptance remain separate."
+        }
       },
-      "remaining_actions": [
-        "Bind each delivered module to exact pinned Linux kernel/Kbuild, configuration, source custody and toolchain.",
-        "Verify Rust/reviewed assembly project ownership for all three delivered module artifacts while preserving legitimate Linux/third-party/generated code.",
-        "Complete matching module ABI/import/modpost and generated-metadata checks using reviewed admission.",
-        "Bind all three delivered/loadable modules to the same admitted image/runtime cohort and review original integration gate."
-      ],
+      "remaining_actions": [],
       "dependencies": [
         "M14_ACCEPTANCE_ORDER",
         "MATCHED_COHORT",
@@ -1290,8 +1291,18 @@
         "M15-I02-matched-artifacts",
         "M15-I02-ACCEPT"
       ],
-      "percent_complete": 80.0,
-      "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
+      "percent_complete": 100.0,
+      "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance",
+      "original_remaining_actions_preserved": [
+        "Bind each delivered module to exact pinned Linux kernel/Kbuild, configuration, source custody and toolchain.",
+        "Verify Rust/reviewed assembly project ownership for all three delivered module artifacts while preserving legitimate Linux/third-party/generated code.",
+        "Complete matching module ABI/import/modpost and generated-metadata checks using reviewed admission.",
+        "Bind all three delivered/loadable modules to the same admitted image/runtime cohort and review original integration gate."
+      ],
+      "accepted_at": "2026-11-15T06:45:56.003819+00:00",
+      "acceptance_evidence": [
+        "docs/verification/m15-i02-original-acceptance-20261115/ROOT-ORIGINAL-I02-ACCEPTANCE.json"
+      ]
     },
     {
       "id": "M15-I03",
@@ -6690,9 +6701,9 @@
       "id": "M15-I02-ACCEPT",
       "parent": "M15-I02",
       "title": "Accept original M15-I02 scope",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "unverified",
+      "status": "verified_root_original_acceptance",
       "owner": "Saved Root integration/review owner",
       "done_when": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
       "verification_method": "Review the accumulated source, build, ABI/provider, behavior, deployment and cleanup evidence against the original gate; record its acceptance without substituting focused HOST results or new quotas.",
@@ -6707,12 +6718,14 @@
         "M15-I02-module-ownership"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m15-i02-original-acceptance-20261115/ROOT-ORIGINAL-I02-ACCEPTANCE.json"
       ],
       "scope_limit": "",
       "definition_status": "completion_condition_defined",
       "execution_profile": "retained_evidence_review",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "accepted_at": "2026-11-15T06:45:56.003819+00:00"
     },
     {
       "id": "M15-I03-ACCEPT",
@@ -17122,6 +17135,18 @@
       "accepted_original_gate": "M14-I01",
       "counted_verified_before": 110,
       "counted_verified_after": 111,
+      "counted_denominator": 156,
+      "criteria_weights_changed": false
+    },
+    {
+      "at": "2026-11-15T06:45:56.003819+00:00",
+      "Root_record": "docs/verification/m15-i02-original-acceptance-20261115/ROOT-ORIGINAL-I02-ACCEPTANCE.json",
+      "task_ids": [
+        "M15-I02-ACCEPT"
+      ],
+      "accepted_original_gate": "M15-I02",
+      "counted_verified_before": 111,
+      "counted_verified_after": 112,
       "counted_denominator": 156,
       "criteria_weights_changed": false
     }

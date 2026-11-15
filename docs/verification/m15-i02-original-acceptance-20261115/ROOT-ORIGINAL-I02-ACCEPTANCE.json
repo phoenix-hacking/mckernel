@@ -1,0 +1,147 @@
+{
+  "schema": "mckernel.root-original-gate-acceptance.v1",
+  "accepted_at": "2026-11-15T06:45:56.003819+00:00",
+  "Root": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "invocation": "20261115T063109Z-9a7c2e96",
+  "original_check": "M15-I02-ACCEPT",
+  "original_gate": "M15-I02",
+  "literal_done_when": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+  "condition_sha256": "1ea4864e0dd9fb8d5072e9e095ba9e8b1bec3278bbb527620ec01d9a9e828a4b",
+  "decision": "ACCEPT_WHOLE_ORIGINAL_M15_I02_AT_MATCHED_DELIVERED_MODULE_ARTIFACT_SCOPE",
+  "accepted": true,
+  "clause_decisions": [
+    {
+      "clause": "Every applicable original child condition is demonstrated on the required matching supported cohort",
+      "satisfied": true,
+      "children": [
+        "M15-I02-bindings",
+        "M15-I02-module-ownership",
+        "M15-I02-ABI-modpost",
+        "M15-I02-matched-artifacts"
+      ],
+      "basis": "Retained independent whole-condition bindings e90be144; module implementation/ASM/platform classification and complete ABI/modpost c95bfdd5; exact matching three-artifact/image/runtime review92b2554c. All four original children are already100 at their stated scope."
+    },
+    {
+      "clause": "the original gate is explicitly accepted",
+      "satisfied": true,
+      "basis": "This saved Root accepts the named original three delivered Linux-loadable module gate on the exact qualified supported cohort. No additional build or runtime quota is added to this retained-evidence gate."
+    },
+    {
+      "clause": "M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+      "satisfied": true,
+      "basis": "Neither milestone is accepted by this record. M14-before-final-M15 remains mandatory; every previous accepted task is preserved."
+    }
+  ],
+  "matched_cohort": {
+    "source": "099 three-module Kbuild provenance",
+    "Linux": "6.12/kernel415b/config106055",
+    "compute_source": "c964be3917c8f4c5031108aa927c84894584b667",
+    "compute_image_sha256": "a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a",
+    "package": "f133 both actual staged image paths and matching runtime",
+    "modules": {
+      "ihk.ko": "04f5d3e0dbf0c70b7ff5aeb281fabda310751bc45c4916cb582575cf3f81155e",
+      "ihk-smp-x86_64.ko": "ae67f463920ae6267710624139c56ef5dcfa8d1c60f4fc1a42f0e52604066696",
+      "mcctrl.ko": "dc46a4f552776d6f9200cbdc8127882ea3f5d69d119f3e5b00672dce234eabcc"
+    }
+  },
+  "retained_evidence": [
+    {
+      "path": "docs/verification/m15-mcctrl-composite-qualification-20261110/RESULT.json",
+      "bytes": 1274,
+      "sha256": "17dd04fb5cf53a1a52f8d025c151fa3175d300b5aa5cab08d52092c81afdb209"
+    },
+    {
+      "path": "docs/verification/m15-mcctrl-composite-qualification-20261110/quote-correction.RESULT.json",
+      "bytes": 364,
+      "sha256": "61dff6c94f7b4b4586edd1fc86d2bf2b4f209ca011b3457b0a8e0669daaf54a7"
+    },
+    {
+      "path": "docs/verification/m15-mcctrl-composite-qualification-20261110/existing-fixture.RESULT.json",
+      "bytes": 696,
+      "sha256": "0c3e507a5b08341e6fedce15bf0f4b028360b38d3c4c64dd451ed30cb4451999"
+    },
+    {
+      "path": "docs/verification/m14-m15-sdk-source-qualification-20261110/extraction/RESULT.json",
+      "bytes": 8425,
+      "sha256": "63800a4886ea6eddc36f24b5c56868acc67a0560ad67a910b5ff54154e010236"
+    },
+    {
+      "path": "docs/verification/m14-m15-sdk-source-qualification-20261110/source-contract/RESULT.json",
+      "bytes": 6483,
+      "sha256": "61df016d535aff33ecbc2406336b05f716818fd3e5c2afc47a8fe04a864375be"
+    },
+    {
+      "path": "docs/verification/m14-m15-matching-kbuild-20261110/kernel-build-pass/RESULT.json",
+      "bytes": 1229,
+      "sha256": "1e8994e6f0c160f81ce7f466e06251d16a8a93bdc2eba0ca497a27c990d67450"
+    },
+    {
+      "path": "docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS.json",
+      "bytes": 30444,
+      "sha256": "0781087478376977da68666ee6ae257846d53dc5501cfa6b9b3ca170597f26be"
+    },
+    {
+      "path": "docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/BINDINGS-REVIEW.json",
+      "bytes": 30590,
+      "sha256": "e90be14460c7d1bf28c7d274138d78ddf646772481da95c01390b789524ad51f"
+    },
+    {
+      "path": "docs/verification/m14-m15-matching-kbuild-20261110/bindings-qualified/reader/actual/RESULT.json",
+      "bytes": 1104,
+      "sha256": "0669dffa78dac9f1963e6a930ace37abc09c6e954ddb75697d66417ca3aec3ca"
+    },
+    {
+      "path": "docs/verification/m14-m15-matching-kbuild-20261110/other-technical-leaves/RESULT.qualified.json",
+      "bytes": 2695,
+      "sha256": "a09560b54cc49d28935387ff19f0217beeb0af0f733608eff844d83541dbd901"
+    },
+    {
+      "path": "docs/verification/m14-m15-matching-kbuild-20261110/other-technical-leaves/OTHER-LEAVES.qualified.json",
+      "bytes": 32572,
+      "sha256": "6bc03a84e61a3941fd2a9c921b4b6b1db9e2bf46bc8a607ef19910abc0743f9d"
+    },
+    {
+      "path": "docs/verification/m14-m15-matching-kbuild-20261110/other-technical-leaves/IMPORT-PROVIDER-ABI.json",
+      "bytes": 333887,
+      "sha256": "c9cbb5349820ff6795c8be22031682daee9d2647bf7eefe13b86d0f7c1d84c41"
+    },
+    {
+      "path": "docs/verification/m14-m15-matching-kbuild-20261110/other-technical-leaves/ASM-QUALIFICATION.json",
+      "bytes": 14184,
+      "sha256": "472b0f8ef5c1ecd1e0ec0f7b2ba45cdb0e810c5ca6ce1071561434c1b16f1cbd"
+    },
+    {
+      "path": "docs/verification/m14-m15-matching-kbuild-20261110/other-technical-leaves/PLATFORM-ADAPTER-CLASSIFICATION.json",
+      "bytes": 4338,
+      "sha256": "e6712fce24bec682f60e5caf374bac4f9abcde0d5cb247ca7fa64263f0424936"
+    },
+    {
+      "path": "docs/verification/m14-m15-matching-kbuild-20261110/other-technical-leaves/REVIEW.json",
+      "bytes": 44000,
+      "sha256": "c95bfdd50d9831c2f9e547c11f2f7993ec89b02dbc837956754a3a6fef86c6e4"
+    },
+    {
+      "path": "docs/verification/m15-i02-matched-artifacts-20261112/INDEPENDENT-REVIEW.json",
+      "bytes": 5215,
+      "sha256": "92b2554c3def756189b9aa0fed5759d4156525fc4bdca648b86df5c2cb36704e"
+    },
+    {
+      "path": "docs/verification/m15-i02-matched-artifacts-20261112/MATCHED-THREE-MODULES.GO-CANDIDATE.json",
+      "bytes": 23320,
+      "sha256": "bef5b30ae58d5b36951c7c01d83ab8d719b744ac4a2f5a03c4e21a46d2e06462"
+    }
+  ],
+  "new_payload_build_test_or_native_operation": false,
+  "separate_unproved_scope": [
+    "Actual module load/run/unload, native applications and restoration remain with their original native/device conditions.",
+    "The new paired MCD/v6 SMP source is not compiled or qualified by this retained-cohort gate.",
+    "Current matching device/source-view/current-free admissions remain independent."
+  ],
+  "counted_verified_before": 111,
+  "counted_verified_after": 112,
+  "denominator": 156,
+  "criteria_weights_changed": false,
+  "all_actual_account_source_native_resource_lease_custody_UNKNOWN_e015_rejected_holds_preserved": true,
+  "resource_release": false,
+  "milestone_acceptance": false
+}
