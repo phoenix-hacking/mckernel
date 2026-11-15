@@ -88,7 +88,19 @@ jobs:
         if: steps.host-scope.outputs.required == 'true'
         run: |
           set -euo pipefail
-          python3 -m unittest discover -s scripts/tests -v --failfast
+          # The frozen native diagnostic owner contract requires real
+          # uid/gid 1000 for its private attempt directory, even in fake-Docker
+          # tests. Exercise it under that actual identity on the isolated CI
+          # runner rather than weakening the owner check or manufacturing stat
+          # identities. Git sees only this exact checked-out workspace as safe.
+          test -x /usr/bin/setpriv
+          test "$(sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups /usr/bin/id -u)" = 1000
+          sudo -n /usr/bin/setpriv --reuid=1000 --regid=1000 --clear-groups \
+            /usr/bin/env PYTHONDONTWRITEBYTECODE=1 \
+            MCKERNEL_IHK_HISTORY="$MCKERNEL_IHK_HISTORY" \
+            GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory \
+            GIT_CONFIG_VALUE_0="$GITHUB_WORKSPACE" \
+            /usr/bin/python3 -m unittest discover -s scripts/tests -v --failfast
           python3 scripts/host_module_inventory.py --check
           python3 scripts/rocky_kernel_source_lock.py --check
           python3 scripts/rocky_kernel_source_review.py --check
