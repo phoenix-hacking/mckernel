@@ -1,0 +1,114 @@
+{
+  "schema": "mckernel.Root-qualified-process-VM-functional-increment.v1",
+  "at": "2026-11-15T08:13:53.680912+00:00",
+  "original_check": "M14-03-03-FUNCTIONAL",
+  "scope": "Only the two new actual Rust/C body multivector cases and21-field fixture ABI; original matching native VM/page/process/XPMEM lifecycle remains open.",
+  "source_repairs": {
+    "kernel/rust/syscall_policy.rs": "d02c7fb6643430ebd4db787b4ce4674a78b1bcc3034a89b9986de6fa77edf7ea",
+    "arch/x86_64/kernel/syscall.c": "160e79f6352272d5b9f4f6106f70fcae00e4850220985444c272a78e1a2b09ca",
+    "kernel/rust/tests/run_equivalence.sh": "c080fa3729e7281214ef8cbd6587a0bb324d7fac626df49044ca585075e55dc0"
+  },
+  "behavior_change": "Validate each remote segment with remote indexri, matching translation/copy; local indexli may differ. Apply to actual Rust body and helpers-disabled C fallback.",
+  "cases": [
+    {
+      "input": "one8-byte local vector/two discontiguous4-byte remote vectors",
+      "result": "8 bytes abcdefgh; both exact remote intervals observed; one hold/release and balanced locks."
+    },
+    {
+      "input": "same vectors, second remote range lacks read permission",
+      "result": "Existing -EFAULT contract; first4bytes abcd retained, second4 untouched, one4-byte copy, one hold/release and balanced locks."
+    }
+  ],
+  "actual_phase_results": [
+    {
+      "label": "generate_exact_patched_source_slices",
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0,
+      "direct_wait_joined": true,
+      "input_FD_closed": true,
+      "capture_FDs_closed": true,
+      "captures_fsynced": true
+    },
+    {
+      "label": "compile_actual_Rust_body_object",
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 383,
+      "direct_wait_joined": true,
+      "input_FD_closed": true,
+      "capture_FDs_closed": true,
+      "captures_fsynced": true
+    },
+    {
+      "label": "link_Rust_actual_fixture",
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0,
+      "direct_wait_joined": true,
+      "input_FD_closed": true,
+      "capture_FDs_closed": true,
+      "captures_fsynced": true
+    },
+    {
+      "label": "compile_link_actual_C_fallback_fixture",
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0,
+      "direct_wait_joined": true,
+      "input_FD_closed": true,
+      "capture_FDs_closed": true,
+      "captures_fsynced": true
+    },
+    {
+      "label": "run_Rust_actual_two_cases",
+      "exit": 0,
+      "stdout_bytes": 33,
+      "stderr_bytes": 0,
+      "direct_wait_joined": true,
+      "input_FD_closed": true,
+      "capture_FDs_closed": true,
+      "captures_fsynced": true
+    },
+    {
+      "label": "run_C_fallback_actual_two_cases",
+      "exit": 0,
+      "stdout_bytes": 33,
+      "stderr_bytes": 0,
+      "direct_wait_joined": true,
+      "input_FD_closed": true,
+      "capture_FDs_closed": true,
+      "captures_fsynced": true
+    }
+  ],
+  "independent_source_GO_sha256": "4842b4ccf5e16b90df860be34492ca759ea7359da0ffc43d893186e8f7949b33",
+  "focused_harness_source_GO_sha256": "728bc899a18b4d9c25272502bacdcbad5b98d08869501b1e1e6fa924ca71a200",
+  "independent_actual_Q_sha256": "c6ad097c2b4fe650b5f9d298552ecf90eca3b2f65613bc912bdab665c1dbcc2e",
+  "original_full_Root_exit": 0,
+  "original_full_Root_sha256": "4a8e32ffd3fb0ab22acfb8d90b58c4cf908896b273546024b30c47308ad63abb",
+  "Root_scoped_retirement_sha256": "30b20ce4391de116a02c36742257fe2a542647e48078248ba948abbb5cf5fe0f",
+  "retired_only_new_family": {
+    "planning_bytes": 2415919104,
+    "jobs": 1,
+    "CPU": [
+      6
+    ]
+  },
+  "recorded_warning": {
+    "path": "ACTUAL-RUST-COMPILER.warning",
+    "bytes": 383,
+    "sha256": "52aa1b68329c0e77b9847f4d1c1d5a4f88f802ffe2e6a69f2dace0fadf9add99",
+    "scope": "Unchanged fixture argv lacks-Dwarnings; whole-SMP production command retains-Dwarnings."
+  },
+  "not_claimed": [
+    "ECHILD",
+    "generated payload/directoryfsync",
+    "native Process/VM or physical-page ABI/lifetime",
+    "XPMEM lock/descriptor closure",
+    "new coherent image/production object",
+    "whole original check or C retirement"
+  ],
+  "all_other_actual_holds_and_failed_families_preserved": true,
+  "accepted_count_unchanged": 112,
+  "denominator": 156
+}

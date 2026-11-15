@@ -1,0 +1,62 @@
+{
+  "schema": "mckernel-closure-evidence-v1",
+  "original_check": "M14-I03-E1",
+  "condition_sha256": "b35b7964c8d199b0dd5a75d3a2bd60afa49f49ad6d7e7de3a24f5cf1873e0ed8",
+  "input_bindings": {
+    "baseline_operation_request": "4ca73acca18bc8ba1205c34f91aa42c98aa6b13da4ed7aed02597d767adbda4d",
+    "corrected_mcd_memory": "e57dd86042230408d14f21372b17cb2e9d2f6fe7510f6276e065c394799f2b16",
+    "vendor_rustc": "38eeb1652fb59753cb7736e354ec1579a543da9a2eb8a68be102a41e88eb5dc6"
+  },
+  "kind": "required_evidence",
+  "status": "qualified",
+  "scope": "partial",
+  "qualified_fact_sha256s": [
+    "fbdf96ef93729bf29d8655e5aedd396ed90464c3c2be82c256ee2368ecf9230d",
+    "e1497db34f239715c43c3b79765ba02c58f3ecbcb7c131a5e3a5d917033d6d0d"
+  ],
+  "actual_operation": "First exact62-token whole-SMP vendor192 -Dwarnings compilation executed; original compiler exit1, streams/input/captures closed. No successful object qualified.",
+  "actual_diagnostic": {
+    "path": "docs/verification/m14-i03-smp-compile-20261115/ACTUAL-COMPILER.stderr",
+    "bytes": 1070,
+    "sha256": "c81324ecfa8ac4d53145af2e3b5c6507b7bb08e6522662500d0bd4a737c0d3aa",
+    "cause": "Two direct vm_start/vm_end accesses do not exist in actual Linux6.12 Rust binding; exact generated anonymous union/struct access is required."
+  },
+  "completed_source_repair": {
+    "source_leaf_bytes": 12282,
+    "source_leaf_sha256": "e57dd86042230408d14f21372b17cb2e9d2f6fe7510f6276e065c394799f2b16",
+    "patch_sha256": "5fe20297295d26d2c14415ecaf6611133b3f2fe133774be543dcaf4bf0c80697",
+    "independent_source_GO_sha256": "e1497db34f239715c43c3b79765ba02c58f3ecbcb7c131a5e3a5d917033d6d0d",
+    "changed_lines": [
+      141,
+      142
+    ],
+    "cohort_files": 50,
+    "cohort_bytes": 1025696,
+    "all_other49_files_unchanged": true,
+    "compile_success": false
+  },
+  "next_finite_action": "Proc changed-only operation review of DispatchSource fresh corrected50-file/output/count/retained-scope packet; Root actual fresh admission then one changed-source whole-SMP compile.",
+  "owners": {
+    "source": "TimeSource; two-line repair frozen and independentlyGO",
+    "operation_binding": "DispatchSource",
+    "operation_reviewer": "Proc",
+    "actual_executor": "saved Root"
+  },
+  "new_failed_scope": {
+    "planning_bytes": 2147483648,
+    "jobs": 1,
+    "status": "HELD_UNKNOWN",
+    "Root_original_session": 10774,
+    "full_Root_terminal_result": "PENDING_UNKNOWN",
+    "container_removed": false
+  },
+  "old_separate_retained_scope": {
+    "planning_bytes": 402653184,
+    "jobs": 2,
+    "status": "UNKNOWN_RETAINED"
+  },
+  "no_original_acceptance_or_hold_release": true,
+  "accepted_count": 112,
+  "denominator": 156,
+  "at": "2026-11-15T07:33:18.312117+00:00"
+}

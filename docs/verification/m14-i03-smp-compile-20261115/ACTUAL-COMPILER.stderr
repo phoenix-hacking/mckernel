@@ -1,0 +1,25 @@
+error[E0609]: no field `vm_start` on type `kernel::bindings::vm_area_struct`
+   --> /source/drivers/misc/mckernel/mcd_memory.rs:141:33
+    |
+141 |     let start = unsafe { (*vma).vm_start };
+    |                                 ^^^^^^^^ unknown field
+    |
+help: one of the expressions' fields has a field of the same name
+    |
+141 |     let start = unsafe { (*vma).__bindgen_anon_1.__bindgen_anon_1.vm_start };
+    |                                 ++++++++++++++++++++++++++++++++++
+
+error[E0609]: no field `vm_end` on type `kernel::bindings::vm_area_struct`
+   --> /source/drivers/misc/mckernel/mcd_memory.rs:142:31
+    |
+142 |     let end = unsafe { (*vma).vm_end };
+    |                               ^^^^^^ unknown field
+    |
+help: one of the expressions' fields has a field of the same name
+    |
+142 |     let end = unsafe { (*vma).__bindgen_anon_1.__bindgen_anon_1.vm_end };
+    |                               ++++++++++++++++++++++++++++++++++
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0609`.

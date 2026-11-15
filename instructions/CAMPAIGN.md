@@ -9,10 +9,42 @@ GPT-6.1 Sol/MAX,11source slots, depth1, Sol/xhigh children, HOST CPUs0,6,7/jobs5
 28GiB shared total containing18GiB non-HOST plus10GiB HOST. No further restart.
 Finite original targetM14-I03-E1 is APPLIED through the checked controller,
 receiptfe77de6432f609d5e8ca4cbcfcc07cdacc556f72b1a09ff6b4d716115a1ed81a.
-Its next operation is the reviewed changed whole-SMP dependency with minimal
-current-pool/account-source binding; exact62-token command/50-source/17mounts and
-real1.5GiB container+512MiB control are preserved. Fresh admission still required.
-The original402653184B/jobs2 and all other actual holds remain charged.
+Actual first exact62-token vendor192 whole-SMP compilation RAN and exited1 on
+mcd_memory.rs141/142 E0609 (direct vm_start/end absent from Linux6.12 bindings).
+Compiler wait/capture/FD closure is qualified FAIL_PARTIAL_HELD fbdf96ef.
+The parent/outer Tool10774 and CIDa1fb82a00bd3eb268353653621b621dfffffe9d461a76989b93131cad475ceda
+remain in original custody; retain its2147483648B/job1 in addition to original
+402653184B/jobs2 and every other hold. No successful object or retirement inferred.
+TimeSource's exact two-line anonymous union/struct projection repair is SOURCE GO
+e1497db3; corrected leaf12282B/e57dd860,50-file cohort1025696B (other49 unchanged).
+DispatchSource owns the fresh isolated operation binding; sameProc reviews only
+changed source/count/output/retained-floor joins. Root then freshly admits ONE
+changed-source compile using the unchanged62tokens/17mounts/vendor/1.5GiB+512MiB.
+No unchanged compiler retry, old-source/output mutation or held-family release.
+Public actual diagnostic/qualified partial source record:
+docs/verification/m14-i03-smp-compile-20261115/QUALIFIED-COMPILER-FAILURE-AND-BINDING-REPAIR.json.
+The next two-case process-VM actual-body regression is separately SOURCE GO728bc899,
+with productionRust+C fallback source GO4842b4cc; Root is preparing its exact tools,
+fresh output/admission and bounded serial execution (no broad equivalence rerun).
+Current rolling30-minute original closure delta is0; invocation delta remains+1
+(M15-I02-ACCEPT).112/156/44open,M14=80.19%,M15=76.25%,both OPEN. Concrete
+critical action: candidate2 actually failed BEFORE compiler creation at actor325,
+because unchanged MANIFEST_SHA256c606 disagreed with exact78607B mountedPACKAGESa842.
+Retain its additional2147483648B/job1/Tool42785/CIDf0c62b172b8ab1c2f84ebb3a4a8161046973d180ae89b1bf264a9a38234ecfb4.
+Total retained HOST now4697620480B/jobs4 (two failedSMP families plus old384MiB/jobs2).
+DispatchSource owns ONLY isolated actor64-char pin+dependent/fresh-output repair;
+sameProc review then actual fresh Root admission for one corrected-source compile.
+No unchanged failed pin, source, output, grant or old-family replay.
+The independent VM regression is ACTUALLY PASS and integrated: both Rust and real
+C fallback pass both split-vector cases; six original waits0,21fixtureABI checks,
+Q c6ad097c / Root30b20ce4 retire ONLY new2.25GiB/job1. Source postimagesd02c/160e/c080;
+public proof docs/verification/m14-process-vm-vectors-20261115/QUALIFIED-RESULTS.json.
+Do not rerun these green cases. Next VM proof is affected whole-production Rust
+object/current coherent provider/lifetime/native qualification; Generic owns
+that source/producer proposal. Corrected vDSO observer SourceGO7058688a is ready
+for separately admitted warning-clean ordinary compile/functional controls.
+TimeSource derives the actual paired IHK-core(notmcctrl)13-source object/objtool
+recipe owning os_runtime.cf1f. No new whole original acceptance or hold release.
 
 NEW ORIGINAL ACCEPTANCE: M15-I02-ACCEPT is explicitly accepted by saved Root on
 the full four already-qualified children and exact099/c964+a2f/f133 delivered

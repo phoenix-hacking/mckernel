@@ -3843,8 +3843,8 @@ pli_out:
 
 			/* Is base valid? */
 			range = lookup_process_memory_range(rvm,
-					(uintptr_t)remote_iov[li].iov_base,
-					(uintptr_t)(remote_iov[li].iov_base + 1));
+					(uintptr_t)remote_iov[ri].iov_base,
+					(uintptr_t)(remote_iov[ri].iov_base + 1));
 
 			if (range == NULL) {
 				ret = -EFAULT;
@@ -3853,8 +3853,8 @@ pli_out:
 
 			/* Is range valid? */
 			range = lookup_process_memory_range(rvm,
-					(uintptr_t)remote_iov[li].iov_base,
-					(uintptr_t)(remote_iov[li].iov_base + remote_iov[li].iov_len));
+					(uintptr_t)remote_iov[ri].iov_base,
+					(uintptr_t)(remote_iov[ri].iov_base + remote_iov[ri].iov_len));
 
 			if (range == NULL) {
 				ret = -EINVAL;

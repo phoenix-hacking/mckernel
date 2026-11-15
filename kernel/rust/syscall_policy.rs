@@ -10702,7 +10702,7 @@ pub unsafe extern "C" fn arch_process_vm_read_writev_body_result(
 
         if pri != ri {
             vm_read_lock(rvm);
-            let remote_check_index = li;
+            let remote_check_index = ri;
             let remote_base = process_vm_iov_base(remote_iov, remote_check_index);
             let remote_len = process_vm_iov_len(remote_iov, remote_check_index);
             range = lookup_range(rvm, remote_base, remote_base.wrapping_add(1));

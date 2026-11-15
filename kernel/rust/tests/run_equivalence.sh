@@ -19351,6 +19351,9 @@ static int fake_arch_pvm_unlock_calls;
 static int fake_arch_pvm_lookup_calls;
 static int fake_arch_pvm_lookup_fail_call;
 static unsigned long fake_arch_pvm_lookup_flags[16];
+static unsigned long fake_arch_pvm_lookup_starts[16];
+static unsigned long fake_arch_pvm_lookup_ends[16];
+static unsigned long fake_arch_pvm_denied_remote_start;
 static int fake_arch_pvm_find_calls;
 static int fake_arch_pvm_find_pid;
 static void *fake_arch_pvm_find_lock;
@@ -24264,6 +24267,9 @@ fake_arch_pvm_reset(struct fake_process_vm_rw_thread *thread,
 {
 	memset(&fake_arch_pvm_range, 0, sizeof(fake_arch_pvm_range));
 	memset(fake_arch_pvm_lookup_flags, 0, sizeof(fake_arch_pvm_lookup_flags));
+	memset(fake_arch_pvm_lookup_starts, 0, sizeof(fake_arch_pvm_lookup_starts));
+	memset(fake_arch_pvm_lookup_ends, 0, sizeof(fake_arch_pvm_lookup_ends));
+	fake_arch_pvm_denied_remote_start = 0;
 	fake_arch_pvm_local_vm = local_vm;
 	fake_arch_pvm_remote_vm = remote_vm;
 	fake_arch_pvm_remote_proc = remote_proc;
@@ -24341,10 +24347,17 @@ fake_arch_pvm_lookup_range(void *vm, unsigned long start, unsigned long end)
 	require(vm == fake_arch_pvm_local_vm || vm == fake_arch_pvm_remote_vm);
 	require(end >= start || end == start);
 	fake_arch_pvm_lookup_calls++;
+	if (fake_arch_pvm_lookup_calls < 16) {
+		fake_arch_pvm_lookup_starts[fake_arch_pvm_lookup_calls] = start;
+		fake_arch_pvm_lookup_ends[fake_arch_pvm_lookup_calls] = end;
+	}
 	if (fake_arch_pvm_lookup_fail_call == fake_arch_pvm_lookup_calls)
 		return NULL;
 
 	flag = fake_arch_pvm_lookup_flags[fake_arch_pvm_lookup_calls];
+	if (vm == fake_arch_pvm_remote_vm && fake_arch_pvm_denied_remote_start &&
+	    start == fake_arch_pvm_denied_remote_start)
+		flag = VR_PROT_WRITE; /* read needs VR_PROT_READ */
 	fake_arch_pvm_range.start = start;
 	fake_arch_pvm_range.end = end;
 	fake_arch_pvm_range.flag = flag ? flag : (VR_PROT_READ | VR_PROT_WRITE);
@@ -24489,6 +24502,7 @@ exercise_arch_process_vm_rw_policy(unsigned long *digest)
 	struct fake_process_vm_rw_address_space remote_as;
 	unsigned char local[32];
 	unsigned char remote[32];
+	static unsigned char remote_aligned[4096] __attribute__((aligned(4096)));
 	struct fake_iovec local_iov[2];
 	struct fake_iovec remote_iov[2];
 	int rc;
@@ -24637,6 +24651,47 @@ exercise_arch_process_vm_rw_policy(unsigned long *digest)
 	mix_signed(digest, rc);
 	mix(digest, fake_arch_pvm_fault_last_reason);
 
+	/* One 8-byte local vector, two non-contiguous 4-byte remote vectors. */
+	memset(local, 0, sizeof(local));
+	memset(remote_aligned, 0, sizeof(remote_aligned));
+	memcpy(remote_aligned + 64, "abcd", 4);
+	memcpy(remote_aligned + 128, "efgh", 4);
+	local_iov[0] = (struct fake_iovec){ .iov_base = local, .iov_len = 8 };
+	remote_iov[0] = (struct fake_iovec){ .iov_base = remote_aligned + 64, .iov_len = 4 };
+	remote_iov[1] = (struct fake_iovec){ .iov_base = remote_aligned + 128, .iov_len = 4 };
+	fake_arch_pvm_reset(&thread, &local_proc, &remote_proc, &local_vm,
+		&remote_vm, &remote_as, remote_aligned);
+	rc = fake_arch_pvm_call(89, local_iov, 1, remote_iov, 2, 0,
+		PROCESS_VM_READ, &thread);
+	require(rc == 8);
+	require(memcmp(local, "abcdefgh", 8) == 0);
+	require(fake_arch_pvm_lookup_calls == 8);
+	require(fake_arch_pvm_lookup_starts[5] == (unsigned long)(uintptr_t)(remote_aligned + 64));
+	require(fake_arch_pvm_lookup_ends[6] == (unsigned long)(uintptr_t)(remote_aligned + 68));
+	require(fake_arch_pvm_lookup_starts[7] == (unsigned long)(uintptr_t)(remote_aligned + 128));
+	require(fake_arch_pvm_lookup_ends[8] == (unsigned long)(uintptr_t)(remote_aligned + 132));
+	require(fake_arch_pvm_hold_calls == 1 && fake_arch_pvm_release_calls == 1);
+	require(fake_arch_pvm_lock_calls == fake_arch_pvm_unlock_calls);
+	mix_signed(digest, rc); mix(digest, local[7]);
+
+	/* A denied second range must be checked, before copying its bytes. */
+	memset(local, 0, sizeof(local));
+	fake_arch_pvm_reset(&thread, &local_proc, &remote_proc, &local_vm,
+		&remote_vm, &remote_as, remote_aligned);
+	fake_arch_pvm_denied_remote_start = (unsigned long)(uintptr_t)(remote_aligned + 128);
+	rc = fake_arch_pvm_call(90, local_iov, 1, remote_iov, 2, 0,
+		PROCESS_VM_READ, &thread);
+	require(rc == -EFAULT);
+	require(memcmp(local, "abcd", 4) == 0);
+	require(local[4] == 0 && local[5] == 0 && local[6] == 0 && local[7] == 0);
+	require(fake_arch_pvm_memcpy_calls == 1 && fake_arch_pvm_memcpy_bytes == 4);
+	require(fake_arch_pvm_hold_calls == 1 && fake_arch_pvm_release_calls == 1);
+	require(fake_arch_pvm_lock_calls == fake_arch_pvm_unlock_calls);
+	mix_signed(digest, rc); mix(digest, local[0]);
+
+	/* Restore the pre-existing test inputs below. */
+	local_iov[0] = (struct fake_iovec){ .iov_base = local, .iov_len = 7 };
+	remote_iov[0] = (struct fake_iovec){ .iov_base = remote, .iov_len = 7 };
 	fake_arch_pvm_reset(&thread, &local_proc, &remote_proc, &local_vm,
 		&remote_vm, &remote_as, remote);
 	fake_arch_pvm_vtop_fail_count = 1;
@@ -26887,7 +26942,7 @@ arg_out:
 		}
 
 		if (pri != ri) {
-			size_t check = li;
+			size_t check = ri;
 			unsigned long base =
 				(unsigned long)(uintptr_t)remote_iov[check].iov_base;
 
