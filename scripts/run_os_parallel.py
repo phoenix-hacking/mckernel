@@ -165,7 +165,7 @@ def launch_command(args, resources):
             '--profile', 'aggressive', '--max-agents', str(resources['max_agents']),
             '--build-jobs', str(resources['build_jobs']),
             '--hours', str(args.hours), '--agent-windows', args.windows,
-            '--stall-seconds', '0', '--startup-instruction-file', str(NOTE),
+            '--stall-seconds', '1800', '--startup-instruction-file', str(NOTE),
             '--startup-instruction-sha256', hashlib.sha256(NOTE.read_bytes()).hexdigest()]
     for binding in instruction_bindings():
         command.extend(['--supersede-instruction', binding['id'] + ':' + binding['sha256']])
