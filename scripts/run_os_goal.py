@@ -80,6 +80,9 @@ OBJECTIVE = (
 TERMINAL_CODES = {"complete": 0, "paused": 10, "blocked": 20,
                   "usageLimited": 21, "budgetLimited": 22}
 LIMIT_ERRORS = {"usageLimitExceeded", "sessionBudgetExceeded"}
+SIMPLE_ROOT_ID = "01a18bc3-e072-7810-9426-75101b0856c0"
+SIMPLE_CREDIT_RUN_ID = "7c6ef3604bfb4008a917bba8cfb6cfaa"
+SIMPLE_CREDIT_BUDGET = "52079.8011050000"
 # The user selected continuous work through the full included allowance.
 # Prepaid credits require --credit-budget; API-key billing is never enabled.
 INCLUDED_USAGE_STOP_PERCENT = 100
@@ -109,6 +112,34 @@ AUTONOMY_REPLY = (
     "does not authorize security testing, replay of a rejected task or clearance "
     "of a service/account hold."
 )
+
+
+def simple_dispatch_instruction():
+    """Current work policy, reusable by the frontdoor without runtime effects."""
+    return (ENGINEERING_SCOPE +
+        "You are the existing saved Root, sole integrator/native executor, using gpt-6.1-sol/MAX. "
+        "Get McKernel booting, running useful applications and restoring resources; finish original M14 then M15. "
+        "Planning context is ONLY instructions/CAMPAIGN.md and docs/verification/M14-M15-OPEN-DELIVERABLES.md, "
+        "then source/logs for the named check. This replaces old GOAL/START/CURRENT/archive reading lists and "
+        "remembered publication/review/catalogue chains; preserve actual evidence and holds. "
+        "Pick the next ready original check. Every assignment names its exact original check ID, smallest concrete "
+        "repair or functional result, and reusable source/SDK/build/evidence inputs. Reuse passing work. "
+        "Use followup_task with disjoint existing owners, at most11 direct children, depth1; explicitly select "
+        "gpt-6.1-sol/xhigh for every new worker/reviewer. Implement, run affected functional checks, record the "
+        "evidenced increment once in the tracker inputs, render the tracked MD, and immediately feed successors. "
+        "On assignment set that check's owner/status/next increment in the small engineering sidecar; "
+        "on results update only evidenced checkpoints and fully proved original acceptance. "
+        "Diagnose failed workers from actual errors and make bounded repairs. Park a genuinely blocked lane "
+        "while independent ready work continues. Do not repeat inventories or passing work. When nothing can "
+        "proceed, checkpoint, pause and return. M14 final acceptance precedes M15 final acceptance; after both, "
+        "checkpoint and pause the larger goal. Preserve all156 original criteria/weights; activity and repeated "
+        "reviews earn no acceptance or percentage. Aim for90% engineering and at most10% bookkeeping, advisory. "
+        "Routine authorized engineering needs no new registry, capture registration, review catalogue, capability "
+        "generation, mailbox or reporting owner. Actual account/service/budget/user stops, aggregate resource "
+        "limits/reserves, native ownership/leases, UNKNOWN charges, rejected-task exclusions and uncertain "
+        "mutations remain binding. Never replay held/rejected/uncertain work or infer resource release. "
+        "Keep the same Root, finite credit-run/ceiling, SDK and artifacts; no new thread, accounting reset or "
+        "automatic relaunch. Use the authorized sudo route without exposing credentials. ")
 
 
 def unattended_input(params):
@@ -369,13 +400,16 @@ def _source_work_binding(owner):
 
 
 def queue_instruction(directory, instruction, capture_progress_directory=None, *, source_id=None,
-                      resume_same_owner=False, source_work=None, resume_active_primary=False):
+                      resume_same_owner=False, source_work=None, resume_active_primary=False,
+                      simple_m14_m15=False):
     """Queue an owner's instruction without touching the running server lease."""
     if not (directory / "state.json").is_file():
         raise RuntimeError("No saved OS campaign exists; start the runner first.")
     _validate_instruction(instruction)
     if type(resume_active_primary) is not bool or resume_active_primary and not resume_same_owner:
         raise ValueError("Active-primary opt-in requires an explicit same-owner resume")
+    if type(simple_m14_m15) is not bool or simple_m14_m15 and not resume_same_owner:
+        raise ValueError("Simple policy adoption requires an explicit same-owner resume")
     item = {"submitted_at": utc(), "text": instruction}
     if source_work is not None:
         if source_id is None or resume_same_owner or capture_progress_directory is not None:
@@ -389,6 +423,8 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
         item["capture_progress"] = dict(SAME_OWNER_CONTROL_LEGACY_BARRIER)
         if resume_active_primary:
             item["resume_active_primary"] = True
+        if simple_m14_m15:
+            item["simple_m14_m15"] = True
     if capture_progress_directory is not None:
         path = validate_capture_progress_directory(capture_progress_directory)
         state = json.loads((directory / 'state.json').read_text())
@@ -429,6 +465,7 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
                         or prior_item.get("source_id") != source_id
                         or prior_item.get("source_work_spec_sha256") != item.get("source_work_spec_sha256")
                         or bool(prior_item.get("resume_active_primary")) != resume_active_primary
+                        or bool(prior_item.get("simple_m14_m15")) != simple_m14_m15
                         or bool(prior_item.get("control")) != resume_same_owner
                         or resume_same_owner and (prior_item.get("control") or {}).get("kind") != "resume_same_owner"):
                     raise ValueError("Source instruction content changed; refusing replay")
@@ -448,7 +485,8 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
             if resume_same_owner and prior is None:
                 # Only the first publication binds a source. A repeated source
                 # returns its original command, even after the goal changes.
-                item["control"] = same_owner_resume_binding(directory, allow_active_primary=resume_active_primary)
+                item["control"] = same_owner_resume_binding(directory, allow_active_primary=resume_active_primary,
+                                                           simple_m14_m15=simple_m14_m15)
             atomic_json(registry, {"status": "intent", "item": item})
             atomic_json(inbox / (ident + ".json"), item)
             atomic_json(registry, {"status": "queued", "item": item})
@@ -460,10 +498,12 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
     return ident
 
 
-def queue_same_owner_resume(directory, instruction, *, source_id, allow_active_primary=False):
+def queue_same_owner_resume(directory, instruction, *, source_id, allow_active_primary=False,
+                            simple_m14_m15=False):
     """Queue one explicit control command; never create a server or admit work."""
     return queue_instruction(directory, instruction, source_id=source_id,
-                             resume_same_owner=True, resume_active_primary=allow_active_primary)
+                             resume_same_owner=True, resume_active_primary=allow_active_primary,
+                             simple_m14_m15=simple_m14_m15)
 
 
 def queue_closure_target(directory, repo, path):
@@ -700,7 +740,7 @@ def accepted_account_observation(state, ledger, owner, now_utc_ns, now_mono_ns,
 
 TECHNICAL_CONTROL_STOPS = frozenset({"watchdog_recovery", "guardian_recovery",
                                      "active_goal_did_not_continue", "closure_decision_unresolved",
-                                     "blocked_no_ready_work", "account_read_recovered"})
+                                     "blocked_no_ready_work", "account_read_recovered", "user_stop"})
 _CONTROL_HOLD_FLAGS = ("service_hold", "policy_hold", "auth_hold", "billing_hold",
                        "budget_hold", "permission_hold", "account_hold",
                        "accounting_unknown", "budget_unknown", "auth_unknown",
@@ -761,7 +801,7 @@ def account_read_retry_eligible(state):
     The stopped flags and original custody remain intact, including while an
     existing turn drains. Any real hold or unclassified accounting error vetoes.
     """
-    if (not isinstance(state, dict) or state.get("stop_reason") not in {"credit_budget_unknown", "account_read_recovered"}
+    if (not isinstance(state, dict) or state.get("stop_reason") not in {"credit_budget_unknown", "account_read_recovered", "user_stop"}
             or classify_usage_failure(state.get("credit_budget_error")) is None
             or not _paused_retained_control(state)
             or (state.get("goal") or {}).get("status") not in {"paused", "blocked"}
@@ -943,7 +983,7 @@ def observed_account_control(state, ledger, owner, now_utc_ns, now_mono_ns,
     return dict(observed)
 
 
-def same_owner_resume_binding(directory, *, allow_active_primary=False):
+def same_owner_resume_binding(directory, *, allow_active_primary=False, simple_m14_m15=False):
     """Bind explicit user control to a fresh observation of the original owner."""
     from os_goal_guard_protocol import read_json
     state = read_json(Path(directory) / "state.json")
@@ -981,9 +1021,20 @@ def same_owner_resume_binding(directory, *, allow_active_primary=False):
                "execution_admission": False, "hold_release": False}
     if active_primary is not None:
         binding["active_primary_turn_id"] = active_primary
+    if simple_m14_m15:
+        if (state.get("thread_id") != SIMPLE_ROOT_ID or owner["credit_run_id"] != SIMPLE_CREDIT_RUN_ID
+                or amount(owner["credit_budget"]) != amount(SIMPLE_CREDIT_BUDGET)):
+            raise ValueError("Simple mode requires the original Root and finite credit identity")
+        binding["simple_m14_m15"] = True
     if technical:
         binding["technical_checkpoint"] = {key: state[key] for key in
             ("stop_reason", "stop_now", "checkpoint_requested")}
+    if state.get("stop_reason") == "user_stop":
+        stopped = state.get("user_stop") or {}
+        if (stopped.get("status") != "consumed" or stopped.get("errors")
+                or not isinstance(stopped.get("id"), str) or not stopped["id"]):
+            raise ValueError("User STOP must be confirmed before explicit same-owner resume")
+        binding["user_stop_request_id"] = stopped["id"]
     return binding
 
 
@@ -1370,6 +1421,15 @@ class Campaign:
             "schema_version": 1, "repo": str(repo), "thread_id": None, "created_at": utc()}
         if self.state.get("schema_version") != 1 or self.state.get("repo") != str(repo):
             raise RuntimeError("State belongs to a different repository or unsupported schema.")
+        if getattr(args, "simple_m14_m15", False):
+            credit = self.state.get("credit_budget") or {}
+            if (self.state.get("thread_id") != SIMPLE_ROOT_ID
+                    or not isinstance(credit, dict) or not isinstance(self.state.get("goal"), dict)
+                    or (self.state.get("goal") or {}).get("objective") != OBJECTIVE
+                    or credit.get("id") != SIMPLE_CREDIT_RUN_ID
+                    or amount(credit.get("budget"), positive=True) != amount(SIMPLE_CREDIT_BUDGET)
+                    or not (directory / "credit-runs" / (SIMPLE_CREDIT_RUN_ID + ".json")).is_file()):
+                raise RuntimeError("Simple M14/M15 mode requires the existing saved Root and finite credit ledger; no new goal or budget")
         self.prior_policy_failure = (dict(failure_location(self.state))
                                      if is_policy_stop(self.state) else None)
         self.log_dir = directory / "runs" / (datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8])
@@ -1378,9 +1438,11 @@ class Campaign:
         self.active = {}
         # Normal production wiring. The adapter reads original Root records at
         # use time and names missing suppliers; saved state cannot grant coverage.
-        from os_goal_source_registry import SourceWorkRegistry
-        self.source_work_registry = SourceWorkRegistry(
-            self, getattr(args, "source_work_registry_file", None))
+        self.source_work_registry = None
+        if not getattr(args, "simple_m14_m15", False):
+            from os_goal_source_registry import SourceWorkRegistry
+            self.source_work_registry = SourceWorkRegistry(
+                self, getattr(args, "source_work_registry_file", None))
         self.source_work_registry_provider = self.source_work_registry
         self.capacity_children = {}
         self.child_capacity_failures = []
@@ -1419,14 +1481,15 @@ class Campaign:
         # Saved hints belong to the preceding launcher instance, never this monitor.
         previous = {key: self.state[key] for key in
                     ('capture_progress_registration', 'capture_progress') if key in self.state}
-        if previous:
+        if previous and not getattr(args, "simple_m14_m15", False):
             atomic_json(self.log_dir / 'prior-capture-progress.json', dict(
                 classification='historical_inactive_instance_hints', recorded_at=utc(),
                 previous_thread_id=self.state.get('thread_id'),
                 previous_worker_pid=self.state.get('worker_pid'),
                 previous_log_dir=self.state.get('log_dir'), hints=previous))
-        self.state.pop('capture_progress_registration', None)
-        self.state['capture_progress'] = []
+        if not getattr(args, "simple_m14_m15", False):
+            self.state.pop('capture_progress_registration', None)
+            self.state['capture_progress'] = []
         # Explicit future-capture registration; no path discovery or data execution.
         self.capture_progress_directory = getattr(args, 'capture_progress_directory', None)
         self.capture_progress_accepted = {}
@@ -1540,7 +1603,8 @@ class Campaign:
 
     def save(self, **fields):
         self.state.update(fields)
-        self.state['capture_progress_capability'] = CAPTURE_PROGRESS_CAPABILITY
+        if not getattr(self.args, "simple_m14_m15", False):
+            self.state['capture_progress_capability'] = CAPTURE_PROGRESS_CAPABILITY
         if self.progress_enabled():
             self.state['closure_progress_capability'] = 1
         if getattr(self.args, "same_owner_control", False):
@@ -1555,9 +1619,40 @@ class Campaign:
         atomic_json(self.state_path, self.state)
 
     def progress_enabled(self):
-        return bool(getattr(self.args, "progress_control", False)
+        return not getattr(self.args, "simple_m14_m15", False) and bool(getattr(self.args, "progress_control", False)
                     or getattr(self.args, "stop_after_m14_m15", False)
                     or getattr(self.args, "continuous", False))
+
+    def consume_user_stop(self):
+        from m14_m15_control import consume_stop
+        return consume_stop(self)
+
+    def render_simple_progress(self):
+        if not getattr(self.args, "simple_m14_m15", False):
+            return
+        try:
+            from m14_m15_progress import render_progress
+            running = (self.goal and self.goal.get("status") == "active"
+                       and not self.stop_reason and not self.stop_now and not self.checkpoint_requested)
+            render_progress(self.repo, campaign_state="RUNNING" if running else "STOPPED",
+                runtime_state=dict(self.state, goal=self.goal, stop_reason=self.stop_reason,
+                                   stop_now=self.stop_now, checkpoint_requested=self.checkpoint_requested))
+        except (ImportError, OSError, ValueError, TypeError, KeyError) as error:
+            self.output.notice("Progress display unavailable: " + str(error))
+
+    def adopt_simple_policy(self):
+        self.args.simple_m14_m15 = True
+        self.args.model, self.args.effort = "gpt-6.1-sol", "max"
+        self.args.dispatcher_pinned = True
+        self.args.startup_instruction = None
+        self.args.continuous = self.args.same_owner_control = self.args.retain_owner_on_stop = True
+        self.args.repair_agent_failures = self.args.stop_after_m14_m15 = True
+        self.args.progress_control = self.args.stop_on_closure_stall = False
+        self.args.max_restarts = self.args.watchdog_seconds = self.args.stall_seconds = 0
+        self.args.agent_windows = self.args.mailbox_monitor = "off"
+        self.source_work_registry = self.source_work_registry_provider = None
+        self.capture_progress_directory = None
+        self.state["simple_m14_m15"] = True
 
     def poll_closure_targets(self):
         """Adopt the newest same-invocation plan; explicitly supersede older plans."""
@@ -1869,7 +1964,7 @@ class Campaign:
                 or not self.goal or self.goal.get("status") != "blocked"):
             self.blocked_idle_since = None
             return
-        snapshot = self.state.get("progress_snapshot") or {}
+        snapshot = {} if getattr(self.args, "simple_m14_m15", False) else self.state.get("progress_snapshot") or {}
         if snapshot.get("operation", {}).get("status") == "HEALTHY_BOUNDED_OPERATION":
             from os_goal_progress import _epoch
             if _epoch(snapshot["operation"]["deadline_at"]) > time.time():
@@ -2017,6 +2112,8 @@ class Campaign:
         control = item.get("control")
         technical = control.get("technical_checkpoint") if isinstance(control, dict) else None
         active_primary = control.get("active_primary_turn_id") if isinstance(control, dict) else None
+        simple = control.get("simple_m14_m15") if isinstance(control, dict) else None
+        stop_request = control.get("user_stop_request_id") if isinstance(control, dict) else None
         expected_active = {self.state.get("thread_id"): active_primary} if active_primary is not None else {}
         receipt.update(control_kind="resume_same_owner", execution_admission=False, hold_release=False)
 
@@ -2048,6 +2145,10 @@ class Campaign:
                 raise
 
         def ready():
+            if stop_request is not None:
+                stopped = self.state.get("user_stop") or {}
+                if (stopped.get("id") != stop_request or stopped.get("status") != "consumed" or stopped.get("errors")):
+                    raise ValueError("User STOP changed or remains uncertain")
             if (not getattr(self.args, "same_owner_control", False)
                     or self.state.get("same_owner_control_capability") != SAME_OWNER_CONTROL_CAPABILITY
                     or not self.controlled or self.active != expected_active or stops_changed()
@@ -2078,6 +2179,20 @@ class Campaign:
                         "primary_stop_generation", "execution_admission", "hold_release"}
             if technical is not None:
                 required.add("technical_checkpoint")
+                if technical.get("stop_reason") == "user_stop":
+                    required.add("user_stop_request_id")
+                    if not isinstance(stop_request, str) or not stop_request:
+                        raise ValueError("Explicit resume must acknowledge the exact user STOP")
+                    receipt["user_stop_request_id"] = stop_request
+            if simple is not None:
+                required.add("simple_m14_m15")
+                if (simple is not True or item.get("simple_m14_m15") is not True
+                        or self.state.get("thread_id") != SIMPLE_ROOT_ID
+                        or self.credit_guard.identifier != SIMPLE_CREDIT_RUN_ID
+                        or self.credit_guard.budget != amount(SIMPLE_CREDIT_BUDGET)):
+                    raise ValueError("Simple resume policy requires the original Root and finite ledger")
+            elif item.get("simple_m14_m15"):
+                raise ValueError("Simple policy has no source-bound control opt-in")
             if isinstance(control, dict) and "active_primary_turn_id" in control:
                 required.add("active_primary_turn_id")
                 if (not isinstance(active_primary, str) or not 0 < len(active_primary) <= 128
@@ -2177,6 +2292,13 @@ class Campaign:
                             raise ValueError("Technical checkpoint changed before acknowledgement")
                         receipt["acknowledged_checkpoint"] = dict(technical)
                         self.rearm_progress_decision(receipt)
+                        if simple:
+                            self.adopt_simple_policy()
+                        if stop_request is not None:
+                            self.stopping = False
+                            self.state["acknowledged_user_stop"] = {"request_id": stop_request,
+                                "resume": {key: receipt[key] for key in
+                                           ("id", "status", "control_kind", "user_stop_request_id", "owner")}}
                         self.stop_reason, self.stop_now, self.checkpoint_requested = None, False, False
                         self.save(stop_reason=None, last_instruction=receipt,
                                   acknowledged_technical_checkpoint={
@@ -2189,6 +2311,8 @@ class Campaign:
                         confirm_stopped_goal()
                         receipt.update(status="cancelled_after_stop")
                         self.save(stop_reason=self.stop_reason)
+                elif simple:
+                    self.adopt_simple_policy()
             self.finish_control_instruction(sending, receipt)
         except Exception as error:
             if attempted:
@@ -2356,6 +2480,7 @@ class Campaign:
             return  # Only the retained loop's account refresh may proceed during this transport stop.
         self.state.pop("repair_context", None)
         if (self.controlled and getattr(self.args, "same_owner_control", False)
+                and not getattr(self.args, "simple_m14_m15", False)
                 and getattr(self.args, "repair_agent_failures", False)
                 and (type(self.state.get("source_work_capability")) is not int
                      or self.state.get("source_work_capability") != SOURCE_WORK_CAPABILITY)):
@@ -2718,6 +2843,7 @@ class Campaign:
         if recovering:
             from os_goal_guard_protocol import read_json
             original_error = self.state["credit_budget_error"]
+            original_reason = self.stop_reason
             original_flags = (self.stop_now, self.checkpoint_requested, self.primary_stop_generation)
             if (not isinstance(context, dict) or context.get("response_error", False) is not False
                     or not notification and "response_error" not in context
@@ -2758,14 +2884,15 @@ class Campaign:
             mask = signal.pthread_sigmask(signal.SIG_BLOCK,
                 {signal.SIGINT, signal.SIGTERM, signal.SIGHUP, signal.SIGUSR1})
             try:
-                view = dict(self.state, goal=self.goal, stop_reason="account_read_recovered",
+                recovered_reason = "user_stop" if original_reason == "user_stop" else "account_read_recovered"
+                view = dict(self.state, goal=self.goal, stop_reason=recovered_reason,
                             stop_now=self.stop_now, checkpoint_requested=self.checkpoint_requested)
-                if (self.stop_reason in {"credit_budget_unknown", "account_read_recovered"} and self.state.get("credit_budget_error") is None
+                if (self.stop_reason == original_reason and self.state.get("credit_budget_error") is None
                         and (self.stop_now, self.checkpoint_requested, self.primary_stop_generation) == original_flags
                         and control_context_eligible(view)
                         and _account_control_owner(self.state, self.directory, self.repo) == owner
                         and read_json(self.credit_guard.path) == self.state.get("credit_budget")):
-                    self.stop_reason = "account_read_recovered"
+                    self.stop_reason = recovered_reason
                     self.save(stop_reason=self.stop_reason, account_read_recovery={"at": utc(),
                         "prior_error": original_error, "owner": owner, "receive": context,
                         "execution_admission": False, "hold_release": False})
@@ -2941,6 +3068,8 @@ class Campaign:
                 return
             except Exception as error:
                 completion = getattr(self.rpc, "last_account_read_completion", None)
+                if self.preserve_validated_notification(error, completion):
+                    return
                 if isinstance(completion, dict) and completion.get("response_error"):
                     previous = self.state.get("last_account_observation")
                     order = lambda item: (item["received_mono_ns"], item["sequence"])
@@ -2964,6 +3093,10 @@ class Campaign:
                         and observed[0] is self.rpc and age is not None
                         and 0 <= age <= CREDIT_NOTIFICATION_MAX_AGE_SECONDS
                         and may_read()
+                        and not (isinstance(completion, dict) and completion.get("response_error"))
+                        and (not getattr(self.args, "simple_m14_m15", False)
+                             or (self.state.get("last_account_observation") or {}).get("status") == "ACCEPTED"
+                             and (self.state.get("last_account_observation") or {}).get("source") == "notification")
                         and self.state.get("credit_budget_error") is None):
                     self.save(last_usage_read_notification_fallback={
                         "at": utc(), "age_seconds": age, "error": str(error),
@@ -3010,10 +3143,47 @@ class Campaign:
                         "error": str(error), "method": "account/rateLimits/read"})
                 self.save(credit_budget_error=str(error))
                 self.stop_reason = ("credit_budget_unknown" if control_only
-                    and self.stop_reason in TECHNICAL_CONTROL_STOPS else
+                    and self.stop_reason in TECHNICAL_CONTROL_STOPS and self.stop_reason != "user_stop" else
                     self.stop_reason or "credit_budget_unknown")
                 self.stop_now = True
                 return
+
+    def preserve_validated_notification(self, error, completion):
+        """A classified empty transport error is diagnostics, not financial data."""
+        failure = classify_usage_failure(str(error)) if isinstance(error, RuntimeError) else None
+        observed = self.last_credit_notification
+        if (failure is None or getattr(error, "rpc_mutating", False)
+                or _same_owner_control_blocker(dict(self.state, goal=self.goal,
+                    stop_reason=self.stop_reason, stop_now=self.stop_now,
+                    checkpoint_requested=self.checkpoint_requested), allow_technical=True)
+                or self.credit_guard is None or observed is None or observed[0] is not self.rpc
+                or not 0 <= time.monotonic() - observed[1] <= CREDIT_NOTIFICATION_MAX_AGE_SECONDS
+                or not isinstance(completion, dict) or completion.get("response_error") is not True
+                or completion.get("method") != "account/rateLimits/read"
+                or completion.get("rate_limits_sha256") != _account_value_sha256(None)):
+            return False
+        try:
+            from os_goal_guard_protocol import read_json
+            owner = _account_control_owner(self.state, self.directory, self.repo)
+            if (self.rpc.proc.pid != owner["server_pid"] or os.getpid() != owner["worker_pid"]
+                    or owner["credit_run_id"] != self.credit_guard.identifier
+                    or amount(owner["credit_budget"]) != self.credit_guard.budget):
+                return False
+            accepted = accepted_account_observation(self.state, read_json(self.credit_guard.path), owner,
+                                                    time.time_ns(), time.monotonic_ns())
+            notification = getattr(self.rpc, "last_account_notification", None)
+            if (accepted.get("source") != "notification" or not isinstance(notification, dict)
+                    or any(accepted.get(key) != notification.get(key) for key in
+                           ("received_mono_ns", "received_utc_ns", "sequence", "server_pid", "rate_limits_sha256"))):
+                return False
+        except (OSError, ValueError, TypeError, KeyError, AttributeError, InvalidOperation):
+            return False
+        self.save(last_usage_read_error_context={"error": str(error), "failure_class": failure,
+                  "receive": completion, "at": utc()}, last_usage_read_notification_fallback={
+                  "at": utc(), "error": str(error), "failure_class": failure,
+                  "source": "unchanged_fresh_validated_notification", "notification": accepted})
+        self.output.notice("Usage transport error retained separately; the original fresh validated notification remains authoritative.")
+        return True
 
     def event(self, message):
         method, data = message.get("method"), message.get("params", {})
@@ -3067,6 +3237,8 @@ class Campaign:
             if data["turn"]["status"] == "failed" and not isolated:
                 self.record_failure(data["turn"].get("error"), "turn_failed",
                                     thread_id=thread, turn_id=data["turn"]["id"])
+            elif primary and data["turn"]["status"] == "completed":
+                self.render_simple_progress()
         elif method == "error":
             turn = data.get("turnId")
             if not self.record_child_capacity(data["error"], "server_error", thread, turn):
@@ -3087,6 +3259,9 @@ class Campaign:
         prefix = (("Current user instruction for this invocation, loaded before session activation:\n"
                    + self.args.startup_instruction + "\nEnd current invocation instruction.\n")
                   if getattr(self.args, "startup_instruction", None) else "")
+        if getattr(self.args, "simple_m14_m15", False):
+            return (simple_dispatch_instruction()
+                + resource_instructions(launch_resources(self.args, self.repo)))
         usage = (
             "This invocation uses up to " + self.args.credit_budget +
             " existing prepaid credits under its explicit guard. Never change "
@@ -3783,6 +3958,7 @@ class Campaign:
         next_refresh = time.monotonic()
         while True:
             try:
+                self.consume_user_stop()
                 if self.retained_resume_ready():
                     self.retained_for_stop = False
                     self.retention_pause_attempted = False
@@ -3854,6 +4030,7 @@ class Campaign:
             if begin:
                 self.begin()
             while True:
+                self.consume_user_stop()
                 now = time.monotonic()
                 status = self.goal["status"] if self.goal else None
                 blocked_wait = (status == "blocked" and
@@ -3923,6 +4100,9 @@ class Campaign:
                     self.output.heartbeat(self.goal, self.active, now - started,
                                           os.getpid(), self.state.get("server_pid"))
                     self.save(heartbeat_at=utc(), uptime_seconds=round(now - started, 1))
+                    if now >= getattr(self, "next_simple_progress", 0):
+                        self.render_simple_progress()
+                        self.next_simple_progress = now + max(60, getattr(self.args, "progress_checkpoint_seconds", 1200))
                     next_heartbeat = now + self.args.heartbeat_seconds
                 if now >= next_refresh:
                     if self.credit_guard is not None:
@@ -4056,6 +4236,8 @@ def arguments(argv=None):
                         help="Keep the original server and channels on stop; never infer child closure")
     parser.add_argument("--continuous", action="store_true",
                         help="Opt in to owner retention, guarded control and eligible repairs; preserves finite budgets and work windows")
+    parser.add_argument("--simple-m14-m15", action="store_true",
+                        help="Continue only the saved M14/M15 Root with direct engineering and no optional coordination scaffolding")
     parser.add_argument('--capture-progress-directory', type=Path,
                         help='Explicit fresh capture directory; with --instruct register it before steering, otherwise at startup')
     parser.add_argument("--hours", type=float, default=0, help="Optional work window in hours; 0 means no time limit (default: 0)")
@@ -4133,6 +4315,25 @@ def arguments(argv=None):
     parser.add_argument("--allow-dispatcher-fallback", action="store_true",
                         help="Explicitly allow advertised model fallback for unpinned defaults; otherwise Sol/max stays pinned")
     args = parser.parse_args(argv)
+    if args.simple_m14_m15:
+        if (args.fresh_session or args.fresh_recovery_proof or args.recovered or args.guardian_run_id
+                or args.supervision_mode == "guardian" or args.source_work_file or args.source_work_registry_file
+                or args.capture_progress_directory):
+            parser.error("Simple M14/M15 mode continues the saved Root; no fresh/recovered/guardian/source-registry/capture mode")
+        if (args.model not in (None, "gpt-6.1-sol") or args.effort not in (None, "max")
+                or args.max_agents is not None and args.max_agents > 11):
+            parser.error("Simple M14/M15 uses Sol/MAX dispatch and at most11 direct owners")
+        if (args.credit_run_id not in (None, SIMPLE_CREDIT_RUN_ID)
+                or args.credit_budget is not None and amount(args.credit_budget, positive=True) != amount(SIMPLE_CREDIT_BUDGET)):
+            parser.error("Simple M14/M15 preserves the original finite credit run and ceiling")
+        args.credit_run_id, args.credit_budget = SIMPLE_CREDIT_RUN_ID, SIMPLE_CREDIT_BUDGET
+        args.model, args.effort = "gpt-6.1-sol", "max"
+        args.max_agents = 11 if args.max_agents is None else args.max_agents
+        args.continuous = args.stop_after_m14_m15 = True
+        args.max_restarts = 0
+        args.watchdog_seconds = args.stall_seconds = 0
+        args.agent_windows, args.mailbox_monitor = "off", "off"
+        args.allow_dispatcher_fallback = args.progress_control = args.stop_on_closure_stall = False
     if not math.isfinite(args.blocked_idle_seconds) or args.blocked_idle_seconds <= 0:
         parser.error("blocked-idle-seconds must be finite and positive")
     if (not math.isfinite(args.progress_checkpoint_seconds) or args.progress_checkpoint_seconds <= 0
@@ -4268,7 +4469,8 @@ def main(argv=None):
     if args.resume_same_owner is not None:
         ident = queue_same_owner_resume(directory, args.resume_same_owner,
                                         source_id=args.instruction_source_id,
-                                        allow_active_primary=args.resume_active_primary)
+                                        allow_active_primary=args.resume_active_primary,
+                                        simple_m14_m15=args.simple_m14_m15)
         print("Queued explicit same-owner control " + ident + "; this admits no jobs and releases no holds.")
         return 0
     if args.dry_run:
