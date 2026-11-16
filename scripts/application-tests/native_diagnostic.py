@@ -34,7 +34,8 @@ PROFILE_DUAL = "native-diagnostic-4vcpu-6144mib"
 # deliberately bounded rather than frozen so the same manifest validator can
 # describe startup and the four core-mode payloads.
 PAYLOAD_ARGV_PREFIX = ("/bin/mcexec", "-t", "1", "0")
-PAYLOAD_PATHS = ("app", "/apps/app", "/apps/signal.alternate-repeat")
+PAYLOAD_PATHS = ("app", "/apps/app", "/apps/signal.alternate-repeat",
+                 "/apps/time.monotonic-libc")
 PAYLOAD_ARGC_MAX = 32
 PAYLOAD_ARG_BYTES_MAX = 256
 PAYLOAD_ARGV_BYTES_MAX = 2048
@@ -117,6 +118,8 @@ def _validate_payload_argv(argv):
           "payload argv prefix/path")
     if argv[len(PAYLOAD_ARGV_PREFIX)] == "/apps/signal.alternate-repeat":
         _need(len(argv) == len(PAYLOAD_ARGV_PREFIX) + 1, "signal alternate-repeat argv")
+    if argv[len(PAYLOAD_ARGV_PREFIX)] == "/apps/time.monotonic-libc":
+        _need(len(argv) == len(PAYLOAD_ARGV_PREFIX) + 1, "time monotonic-libc argv")
     encoded = 0
     for item in argv:
         _need(type(item) is str and "\0" not in item, "payload argv item")
@@ -136,7 +139,8 @@ def _identity(path):
 
 
 def _staging(obj, artifacts, modules, *, payload_member="apps/app"):
-    _need(payload_member in ("apps/app", "apps/signal.alternate-repeat"), "unsupported payload member")
+    _need(payload_member in ("apps/app", "apps/signal.alternate-repeat",
+                             "apps/time.monotonic-libc"), "unsupported payload member")
     _keys(obj, ("base_initramfs", "derived_initramfs", "collector", "overlay_source", "overlay_manifest"))
     refs = {name: _ref(obj[name], name) for name in obj}
     _need(refs["base_initramfs"] == artifacts["initramfs"], "base initramfs join")
@@ -241,11 +245,15 @@ def _validate_manifest(obj):
     if payload["argv"][len(PAYLOAD_ARGV_PREFIX)] == "/apps/signal.alternate-repeat":
         environment.update({"LANG": "C", "LC_ALL": "C", "TZ": "UTC"})
         payload_member = "apps/signal.alternate-repeat"
+    elif payload["argv"][len(PAYLOAD_ARGV_PREFIX)] == "/apps/time.monotonic-libc":
+        environment.update({"LANG": "C", "LC_ALL": "C", "TZ": "UTC"})
+        payload_member = "apps/time.monotonic-libc"
     _need(payload["env"] == environment, "frozen environment")
     staging = _staging(obj["staging"], bound, modules, payload_member=payload_member)
     oracle = payload["oracle"]
     _need(set(oracle) in ({"stdout_hex", "stderr_hex", "exit_code"},
-                          {"stdout_hex", "stderr_hex", "exit_code", "stderr_typed"}),
+                          {"stdout_hex", "stderr_hex", "exit_code", "stderr_typed"},
+                          {"stdout_hex", "stderr_hex", "exit_code", "stdout_typed"}),
           "manifest keys differ")
     _need(type(oracle["stdout_hex"]) is str and re.fullmatch(r"(?:[0-9a-fA-F]{2})*", oracle["stdout_hex"]), "oracle stdout")
     _need(type(oracle["stderr_hex"]) is str and re.fullmatch(r"(?:[0-9a-fA-F]{2})*", oracle["stderr_hex"]), "oracle stderr")
@@ -253,6 +261,13 @@ def _validate_manifest(obj):
     if "stderr_typed" in oracle:
         _validate_typed_stderr_oracle(oracle["stderr_typed"])
         _need(oracle["stderr_hex"] == "", "typed stderr cannot also freeze bytes")
+    if "stdout_typed" in oracle:
+        _need(payload_member == "apps/time.monotonic-libc", "typed time stdout case")
+        _validate_monotonic_libc_oracle(oracle["stdout_typed"])
+        _need(oracle["stdout_hex"] == "", "typed time stdout cannot also freeze bytes")
+    if payload_member == "apps/time.monotonic-libc":
+        _need("stdout_typed" in oracle and oracle["exit_code"] == 0 and
+              oracle["stderr_hex"] == "", "time monotonic-libc oracle")
     for stream_name in ("stdout", "stderr"):
         limit = payload[stream_name + "_limit_bytes"]
         _need(type(limit) is int and 0 <= limit <= MAX_JSON and len(bytes.fromhex(oracle[stream_name + "_hex"])) <= limit, "stream limit")
@@ -261,6 +276,26 @@ def _validate_manifest(obj):
             "profile": {"name": name, "memory_mib": expected[0], "vcpus": expected[1],
                         "numa_nodes": expected[2], "append": append},
             "payload": dict(payload)}
+
+
+def _validate_monotonic_libc_oracle(oracle):
+    """The existing time.monotonic-libc case has one fixed relational record."""
+    _keys(oracle, ("kind", "samples"))
+    _need(oracle["kind"] == "time.monotonic-libc" and
+          type(oracle["samples"]) is int and oracle["samples"] == 1024,
+          "time monotonic-libc oracle fields")
+
+
+def _check_monotonic_libc_stdout(data, oracle):
+    _validate_monotonic_libc_oracle(oracle)
+    match = re.fullmatch(
+        rb"count=1024 bad_index=1024 order_bad=0 last_sec=(-?(?:0|[1-9][0-9]{0,18})) "
+        rb"last_nsec=(0|[1-9][0-9]{0,8})\n", data)
+    _need(match is not None, "time monotonic-libc stdout record")
+    seconds, nanoseconds = (int(value) for value in match.groups())
+    _need(-(1 << 63) <= seconds < (1 << 63) and
+          str(seconds).encode("ascii") == match.group(1) and
+          0 <= nanoseconds < 1000000000, "time monotonic-libc timestamp")
 
 
 _FUTEX_CASES = (
@@ -456,7 +491,9 @@ def build_command(manifest, attempt):
                "boot_contract": "native-boot-v1", "guest_destinations": {"/images/mckernel.img": a["mckernel_image"]["path"],
                "/bin/mcexec": a["mcexec"]["path"],
                ("/apps/signal.alternate-repeat" if manifest["payload"]["argv"][len(PAYLOAD_ARGV_PREFIX)] ==
-                "/apps/signal.alternate-repeat" else "/apps/app"): a["payload"]["path"]},
+                "/apps/signal.alternate-repeat" else
+                "/apps/time.monotonic-libc" if manifest["payload"]["argv"][len(PAYLOAD_ARGV_PREFIX)] ==
+                "/apps/time.monotonic-libc" else "/apps/app"): a["payload"]["path"]},
                "init_sequence": ["insmod /modules/ihk.ko", "insmod /modules/ihk-smp-x86_64.ko ihk_trampoline=524288",
                                  "insmod /modules/mcctrl.ko", "/bin/native-boot", "cd /case/work"],
                "transport": "guest collector framed serial report; never QEMU stdout"}
@@ -572,7 +609,10 @@ def evaluate(manifest, observation):
               and stream["discarded"] == 0, "stream accounting")
         _need(report["started_ns"] <= stream["eof_ns"] <= report["finished_ns"], "EOF timestamp")
         typed = manifest["payload"]["oracle"].get("stderr_typed") if name == "stderr" else None
-        if typed is not None:
+        typed_time = manifest["payload"]["oracle"].get("stdout_typed") if name == "stdout" else None
+        if typed_time is not None:
+            _check_monotonic_libc_stdout(data, typed_time)
+        elif typed is not None:
             _check_typed_futex_stderr(data, typed)
         else:
             _need(data == bytes.fromhex(manifest["payload"]["oracle"][name + "_hex"]), "wrong payload bytes")

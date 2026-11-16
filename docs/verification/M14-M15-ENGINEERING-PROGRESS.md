@@ -7,7 +7,7 @@ One goal: a working OS, completed through the unchanged original M14/M15 checks.
 **112/156 original checks accepted; 44 open.**
 Tracker update: `2026-11-15T06:45:56.003819+00:00`. [Original criteria, statuses and full evidence](m14-m15-closure-progress.json) remain the source of truth.
 
-Runtime state update: `2026-11-16T05:33:41.273585+00:00`. Only explicit original-ID assignments can label a row working; unrelated agent activity cannot.
+Runtime state update: `2026-11-16T05:47:07.864458+00:00`. Only explicit original-ID assignments can label a row working; unrelated agent activity cannot.
 
 **Every percentage below estimates engineering work remaining. Lower is better.** Ranges are judgments about implementation, integration, functional tests and cleanup still needed. They are not acceptance percentages or a countdown to a completion date. Unknown stays unknown; new failures can increase an estimate.
 
@@ -33,10 +33,10 @@ Source, test and runtime increments below show progress between acceptances. A c
 | M14-F03 — Generic compute syscalls | 35–65% remaining (low confidence) | open | 7 | Default generic source/link and focused supported slices passed; image built. **Next:** Finish eligible lifetime/ownership repairs and run required matching generic functional/cleanup cases. |
 | M14-F04 — Primitives, startup/interrupts, context/TLS, FPU/xstate, diagnostics | 0% — accepted | accepted | 0 | Original scope accepted. **Next:** Preserve passing scope. |
 | M14-F05 — Mappings, PTEs, walkers, TLB, usercopy/process-VM supported scope | 0% — accepted | accepted | 0 | Original scope accepted. **Next:** Preserve passing scope. |
-| M14-F06 — x86_64 architecture compute syscalls | 30–60% remaining (low confidence) | open | 7 | Qualified image and process-VM repair retained; real own-child Rust consumer now compiled with matched passive provider facts. **Next:** Compile/run the ready process-VM consumer and required architecture cases on an admitted cohort. |
+| M14-F06 — x86_64 architecture compute syscalls | 30–60% remaining (low confidence) | open | 7 | Qualified image and process-VM repair retained; real own-child Rust consumer now compiled with matched passive provider facts. **Next:** Run the compiled process-VM consumer and remaining architecture cases on an admitted matching cohort, preserving the existing passing controls. |
 | M14-I01 — Account for all emitted supported compute code, including headers, macros/callbacks and… | 0% — accepted | accepted | 0 | Original scope accepted. **Next:** Preserve passing scope. |
 | M14-I02 — Reproducible default source/config/toolchain and matched image/modules | 0% — accepted | accepted | 0 | Original scope accepted. **Next:** Preserve passing scope. |
-| M14-I03 — Matching useful applications, process/memory/thread/signal behavior and native… | 35–65% remaining (low confidence) | open | 4 | Matched image/modules and affected account-consumer tests pass. Corrected source publication completed; original installer/keeper/sudo exited zero and its lease is closed. **Next:** Connect the completed published source to the existing native launcher, obtain actual matching one-owner native admission, then run the prepared TIME/application and cleanup cases. |
+| M14-I03 — Matching useful applications, process/memory/thread/signal behavior and native… | 35–65% remaining (low confidence) | open | 4 | Matched image/modules and affected account-consumer tests pass. Corrected source publication completed; original installer/keeper/sudo exited zero and its lease is closed. **Next:** Use the actual published source and adopted TIME scripts to materialize genuine native admission, run matching applications and prove owned restoration. |
 
 ### Every open original check
 

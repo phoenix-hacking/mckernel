@@ -1,0 +1,127 @@
+{
+  "Root_only_test_family_retirement": {
+    "bytes": 2416,
+    "path": "/home/holden/mckernel-work/m14-i03-final-account-consumer-repair-20261116-1/ROOT-ACTUAL-CONSUMER-INTEGRATION-TEST-2/ROOT-CURRENT-RETIREMENT.ONLY-PASSING-CONSUMER-TEST-FAMILY.json",
+    "sha256": "d312b564114b71ab01da6bba25e39b35438597dbb65fa58a732c31e421cea36c"
+  },
+  "actual_original_tool": "89549",
+  "actual_output": "test_each_check_uses_completed_coherent_pair_and_postcompletion_clocks (__main__.ControllerAccountIntegration) ... ok\ntest_helper_rejection_hold_and_timeout_keep_exact_refusal_and_owned_fd_closure (__main__.ControllerAccountIntegration) ... ok\ntest_original_caps_expiring_during_completion_refuse_in_each_clock_domain (__main__.ControllerAccountIntegration) ... ok\ntest_real_current_validator_refuses_newest_or_financial_owner_age_and_stop (__main__.ControllerAccountIntegration) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.627s\n\nOK\n",
+  "all_other_holds_preserved": true,
+  "controller_sha256": "f86668eaa5ca0c3510b12b076ff8cc5a0b8af6f2a43f564d563ed90f3a40bfe2",
+  "elapsed_seconds": 0.627,
+  "errors": 0,
+  "failures": 0,
+  "fixture_sha256": "6f4577649eeed7f09cf52cd40af2826b5aaebb87b5e3fa3574942e21ed74aa83",
+  "full_Root_original": {
+    "bytes": 10993,
+    "path": "/home/holden/mckernel-work/m14-i03-final-account-consumer-repair-20261116-1/ROOT-ACTUAL-CONSUMER-INTEGRATION-TEST-2/ROOT-TOOL-ORIGINAL.COMPLETED.json",
+    "sha256": "8353ea7e5be07e01371bbeecb5dd816162b0ce9ea0c6d66cba0d7def31c6ba19"
+  },
+  "helper_sha256": "0156f4bc7195d48e109951a8a7243e0859f7317e1ab9427a8ac23042271d6b3c",
+  "original_acceptance": false,
+  "original_check": "M14-I03-E1",
+  "original_child_lifecycle": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=268435456",
+      "--cpu=30",
+      "--fsize=1048576",
+      "--nofile=128",
+      "--",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/m14-i03-final-account-consumer-repair-20261116-1/focused-controller-integration-tests-1/test_controller_account_integration.py"
+    ],
+    "attempt_id": 0,
+    "birth": "88864631",
+    "capture_FDs_closed": true,
+    "captures_fsynced": true,
+    "creation_attempted": true,
+    "direct_wait_joined": true,
+    "exit": 0,
+    "input_FD_closed": true,
+    "label": "controller-consumer-integration",
+    "lifecycle_UNKNOWN": false,
+    "pid": 3418831,
+    "popen_returned": true,
+    "primary_error": null,
+    "receipt_persisted": true,
+    "remaining_direct_children": [],
+    "resource_charge_retained": false,
+    "secondary_errors": [],
+    "stderr_bytes": 585,
+    "stderr_limit_bytes": 2097152,
+    "stdout_bytes": 0,
+    "stdout_limit_bytes": 2097152,
+    "streams_closed": true
+  },
+  "scope": "Four affected controller-consumer integration methods on actual Python3.8 only; no original-check acceptance or native proof",
+  "skips": 0,
+  "status": "PASS",
+  "tests": 4,
+  "issued_current_limit_compatibility": {
+    "status": "PASS_AFFECTED_METHODS_ACROSS_3_PLUS_1_ACTUAL_TRANCHES",
+    "source": {
+      "path": "/home/holden/mckernel-work/m14-i03-final-account-consumer-repair-20261116-1/issued-current-limit-compatibility-correction-1/canonical-value-comparison-correction-1/preliminary-current.py",
+      "bytes": 51337,
+      "sha256": "ea0564f0d8512b3fd457fd9b8f5bba9c3692b2e526a424f91b709b060b04e659"
+    },
+    "independent_changed_source_review": {
+      "path": "/home/holden/mckernel-work/m14-i03-final-account-consumer-repair-20261116-1/focused-controller-integration-tests-1/issued-current-limit-regression-1/HANDOFF.SOURCE-ONLY.json",
+      "bytes": 9793,
+      "sha256": "0cb1d8db60440241f3c4111b57d3367bdf1c6fde0797d6552edde7b2da4946b0"
+    },
+    "observed_differences_only": [
+      "primary.resetsAt1795223237->1795223252",
+      "spendControlReached false->null"
+    ],
+    "actual_three_methods_pass_overall_failed_tranche": {
+      "path": "/home/holden/mckernel-work/m14-i03-final-account-consumer-repair-20261116-1/ROOT-ACTUAL-ISSUED-CURRENT-LIMIT-REGRESSION-1/RESULT.json",
+      "bytes": 1841,
+      "sha256": "e73bea86c7fdf06c62de0b70a7a76e8bcd538b427ebd50fd895d1958421cd2c9"
+    },
+    "preserved_failure": "Two issued hash negative subcases initially changed in-memory receipt after serialized bytes were saved; fixture DATA corrected without production/assertion change. Original failed result retained.",
+    "actual_corrected_method_PASS": {
+      "path": "/home/holden/mckernel-work/m14-i03-final-account-consumer-repair-20261116-1/ROOT-ACTUAL-ISSUED-CURRENT-LIMIT-REGRESSION-3/RESULT.json",
+      "bytes": 1981,
+      "sha256": "f5292157abafd8042cae4e84c3775a439d47abc7f4387d89303554cc5b18eb09"
+    },
+    "corrected_method_count": 1,
+    "corrected_method_subcases": 13,
+    "corrected_method_seconds": 0.712,
+    "original_green_four_methods_rerun": false,
+    "native_or_original_acceptance": false
+  },
+  "actual_source_publication": {
+    "status": "COMPLETE_OWN_FAMILY_CLOSED",
+    "original_Tool": "26873",
+    "original_root": {
+      "path": "/home/holden/mckernel-work/m14-i03-final-account-consumer-repair-20261116-1/root-working-inputs-2/ROOT-ACTUAL-PUBLICATION-499-SUCCESS-1/ROOT-TOOL-ORIGINAL.COMPLETED.json",
+      "bytes": 6157,
+      "sha256": "0d0ef3c547afe7d3f643ad81d1162dcfe17baba38bc52ed2fcde73411ed1818d"
+    },
+    "qualification": {
+      "path": "/home/holden/mckernel-work/m14-i03-final-account-consumer-repair-20261116-1/root-working-inputs-2/ROOT-ACTUAL-PUBLICATION-499-SUCCESS-1/independent-actual-publication-and-family-qualification-1/QUALIFICATION.json",
+      "bytes": 4035,
+      "sha256": "1bbcb69c20ebbfc4b6a6e4cc4bafd4bbbc839c31a51ddb2815ddab6db0430dc5"
+    },
+    "Root_only_new2GiB_retirement": {
+      "path": "/home/holden/mckernel-work/m14-i03-final-account-consumer-repair-20261116-1/root-working-inputs-2/ROOT-ACTUAL-PUBLICATION-499-SUCCESS-1/ROOT-CURRENT-RETIREMENT.ONLY-499-PUBLICATION-FAMILY.json",
+      "bytes": 1271,
+      "sha256": "390fee6f5e48128ac5275fc927efd4339d9d29eac7f90994d35110f2d4e4234b"
+    },
+    "native_release": false,
+    "native_currentfree": null,
+    "all_intermediate_records_and_holds_preserved": true
+  },
+  "actual_project_application_adoption": {
+    "path": "/home/holden/mckernel-work/m14-i03-matched-cohort-native-binding-20261115/ROOT-ACTUAL-PROJECT-APPLICATION-ADOPTION-1/RESULT.json",
+    "bytes": 2638,
+    "sha256": "776d3910ba5510ca1f2c1602d45908082e9e09b3b9d2020f65f8eb0996f2dda8"
+  },
+  "next": "Actual normal same-Root native request/loader materialization and one-owner source/SDK/lease/account/current-free admission, then original ac76 TIME/workload/restoration. Source publication/adoption is not original E1 acceptance."
+}

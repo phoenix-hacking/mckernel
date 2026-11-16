@@ -24,6 +24,7 @@ import uuid
 IMAGE = "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94"
 REPO = "/home/holden/mckernel"
 SCRATCH = "/home/holden/mckernel-work/scratch"
+STAGE_SOURCE_ROOT = '/home/holden/mckernel-work/m14-i03-matched-cohort-native-binding-20261115/execution-1/stage'
 IMAGE_RECORD = "/home/holden/mckernel-work/logs/image-native.json"
 IMAGE_RECORD_SHA256 = "c881faf78539b1698aa9cfe24e0b82562442a58de18666bf59a447b72607e95a"
 RUNNER = REPO + "/scripts/application-tests/native_diagnostic_runner.py"
@@ -40,7 +41,7 @@ QEMU_VERSION_STDOUT = (
 )
 SOURCE_HASHES = {
     RUNNER: "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
-    REPO + "/scripts/application-tests/native_diagnostic.py": "7e4256eee51f7d50ef758c55579801d691d4ee2cee9155a60680701dba5c540b",
+    REPO + "/scripts/application-tests/native_diagnostic.py": "214dff0b0e8006b57e9d5fae6a4d8b59837a2c49009f22f0779fd3dc11c6ca20",
     REPO + "/scripts/application-tests/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
     REPO + "/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
 }
@@ -804,6 +805,7 @@ class DiagnosticOwner:
                 "--tmpfs", "/tmp:rw,nodev,nosuid,size=256m",
                 "--mount", "type=bind,src=" + REPO + ",dst=" + REPO + ",readonly",
                 "--mount", "type=bind,src=" + SCRATCH + ",dst=" + SCRATCH + ",readonly",
+                "--mount", "type=bind,src=" + STAGE_SOURCE_ROOT + ",dst=" + STAGE_SOURCE_ROOT + ",readonly",
                 "--mount", "type=bind,src=" + str(self.parent) + ",dst=" + str(self.parent),
                 "--env", "HOME=/tmp", "--env", "TMPDIR=/tmp", "--env", "PYTHONDONTWRITEBYTECODE=1",
                 "--workdir=" + str(self.parent), "--entrypoint=/usr/bin/python3", IMAGE, *self._inside_args()]
@@ -886,7 +888,8 @@ class DiagnosticOwner:
                  mount.get("BindOptions") in (None, {}, {"Propagation": "rprivate"}) and
                  type(mount.get("ReadOnly", False)) is bool, "requested mount options")
             requested.append((mount.get("Source"), mount.get("Target"), mount.get("ReadOnly", False)))
-        expected_mounts = [(REPO, REPO, True), (SCRATCH, SCRATCH, True), (str(self.parent), str(self.parent), False)]
+        expected_mounts = [(REPO, REPO, True), (SCRATCH, SCRATCH, True),
+                           (STAGE_SOURCE_ROOT, STAGE_SOURCE_ROOT, True), (str(self.parent), str(self.parent), False)]
         package = getattr(self, "source_package", None)
         if package is not None:
             expected_mounts.append((package, package, True))

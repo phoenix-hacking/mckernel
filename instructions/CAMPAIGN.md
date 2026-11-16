@@ -109,7 +109,7 @@ its `ARTIFACTS.json`. Image34478838, modulesff9c6239/08c1f2fc and F05DSObb29f28b
 are passing build increments. The authenticated43-file cohort stage is qualified.
 Do not recompile these or regenerate ABI witnesses to rediscover their status.
 
-The next useful result is the actual matched native run and its cleanup proof.
+Current completed increment: actual current source publication and original own-family closure pass; the reviewed TIME project scripts are adopted. The own-child process-VM consumer is compiled and cached, with runtime proof pending. The next useful result is the actual matched native run and its cleanup proof.
 Reuse its results across eligible integration, perf, executor, library, tool and
 monitor obligations. XPMEM production lifetime/termination wiring remains
 incomplete and unselected; its real held-provider boundary is not resolved by a
