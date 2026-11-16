@@ -45,6 +45,93 @@ class RetainedAccountReadRecoveryTests(unittest.TestCase):
             "Resume this same Root turn; preserve all held scopes.", source_id=source,
             allow_active_primary=True)
 
+    def repeated_timeout_scenario(self):
+        fixture, retention = self.scenario()
+        fixture.campaign.refresh_credit_budget(control_only=True)
+        self.assertEqual(fixture.campaign.stop_reason, "account_read_recovered")
+        self.assertIsNone(fixture.campaign.state["credit_budget_error"])
+        # Reproduce the observed resident latch: a second real fake-RPC read
+        # fails while the recovered technical stop and paused flags remain.
+        fixture.rpc.usage_error = fixtures.launcher.RecoverableFailure(TIMEOUT)
+        with self.assertRaises(fixtures.launcher.RecoverableFailure) as caught:
+            fixture.rpc.call("account/rateLimits/read", {})
+        fixture.campaign.save(credit_budget_error=str(caught.exception),
+            last_account_observation=dict(fixture.rpc.last_account_read_completion, status="REJECTED"))
+        fixture.rpc.usage_error = None
+        return fixture, retention
+
+    def test_second_transport_timeout_recovers_again_without_automatic_resume(self):
+        fixture, retention = self.repeated_timeout_scenario()
+        campaign = fixture.campaign
+        ledger = fixture.ledger()
+        generation = campaign.primary_stop_generation
+        failed_sequence = campaign.state["last_account_observation"]["sequence"]
+        self.assertTrue(fixtures.launcher.account_read_retry_eligible(campaign.state))
+        with self.assertRaisesRegex(ValueError, "fresh successful account observation"):
+            fixture.queue(source="second-timeout-still-needs-fresh-account")
+        campaign.refresh_credit_budget(control_only=True)
+        self.assertEqual(campaign.stop_reason, "account_read_recovered")
+        self.assertIsNone(campaign.state["credit_budget_error"])
+        self.assertGreater(campaign.state["account_read_recovery"]["receive"]["sequence"], failed_sequence)
+        self.assertEqual(campaign.state["last_account_control_observation"]["status"], "OBSERVED")
+        self.assertTrue(campaign.stop_now and campaign.checkpoint_requested)
+        self.assertEqual(campaign.primary_stop_generation, generation)
+        self.assertEqual(campaign.goal["status"], "paused")
+        self.assertEqual(campaign.state["owner_retention"], retention)
+        for key in ("id", "budget", "spent", "minimum_balance", "remaining"):
+            self.assertEqual(fixture.ledger()[key], ledger[key])
+        self.assertEqual(fixture.mutations(), [])
+        fixture.assert_holds_retained()
+
+    def test_repeat_recovery_still_rejects_stale_foreign_and_failed_observations(self):
+        for changed in ({"received_utc_ns": 1, "received_mono_ns": 1},
+                        {"server_pid": 987654321}, {"response_error": True}):
+            with self.subTest(changed=changed):
+                fixture, retention = self.repeated_timeout_scenario()
+                campaign = fixture.campaign
+                ledger = campaign.credit_guard.path.read_bytes()
+                prior_recovery = deepcopy(campaign.state["account_read_recovery"])
+                context = self.fresh_context(fixture, **changed)
+                with self.assertRaises(ValueError):
+                    campaign.record_rate_limits(fixture.rpc.limits, read_completion=context)
+                self.assertEqual(campaign.stop_reason, "account_read_recovered")
+                self.assertEqual(campaign.state["credit_budget_error"], TIMEOUT)
+                self.assertEqual(campaign.credit_guard.path.read_bytes(), ledger)
+                self.assertEqual(campaign.state["account_read_recovery"], prior_recovery)
+                self.assertTrue(campaign.stop_now and campaign.checkpoint_requested)
+                self.assertEqual(campaign.goal["status"], "paused")
+                self.assertEqual(campaign.state["owner_retention"], retention)
+                self.assertEqual(fixture.mutations(), [])
+
+    def test_repeat_timeout_does_not_relax_real_holds_or_malformed_accounting(self):
+        fixture, _ = self.repeated_timeout_scenario()
+        campaign = fixture.campaign
+        ledger = campaign.credit_guard.path.read_bytes()
+        for field in ("service_hold", "policy_hold", "auth_hold", "billing_hold", "accounting_unknown", "user_pause"):
+            with self.subTest(field=field):
+                campaign.save(**{field: True})
+                before = list(fixture.rpc.calls)
+                self.assertFalse(fixtures.launcher.account_read_retry_eligible(campaign.state))
+                campaign.refresh_credit_budget(control_only=True)
+                self.assertEqual(fixture.rpc.calls, before)
+                self.assertEqual(campaign.state["credit_budget_error"], TIMEOUT)
+                self.assertEqual(campaign.credit_guard.path.read_bytes(), ledger)
+                campaign.state.pop(field)
+                campaign.save()
+        for reason in ("credit_budget_exhausted", "chatgpt_auth_changed", "signal_15", "work_window"):
+            with self.subTest(reason=reason):
+                self.assertFalse(fixtures.launcher.account_read_retry_eligible(dict(campaign.state, stop_reason=reason)))
+        fixture.rpc.limits["credits"].pop("balance")
+        campaign.refresh_credit_budget(control_only=True)
+        self.assertEqual(campaign.stop_reason, "credit_budget_unknown")
+        self.assertNotEqual(campaign.state["credit_budget_error"], TIMEOUT)
+        self.assertFalse(fixtures.launcher.account_read_retry_eligible(campaign.state))
+        self.assertEqual(campaign.credit_guard.path.read_bytes(), ledger)
+        self.assertTrue(campaign.stop_now and campaign.checkpoint_requested)
+        self.assertEqual(campaign.goal["status"], "paused")
+        self.assertEqual(fixture.mutations(), [])
+        fixture.assert_holds_retained()
+
     def test_transport_context_allows_only_reads_until_fresh_data_and_idle_explicit_resume(self):
         fixture, retention = self.scenario()
         campaign = fixture.campaign

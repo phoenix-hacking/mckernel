@@ -761,7 +761,7 @@ def account_read_retry_eligible(state):
     The stopped flags and original custody remain intact, including while an
     existing turn drains. Any real hold or unclassified accounting error vetoes.
     """
-    if (not isinstance(state, dict) or state.get("stop_reason") != "credit_budget_unknown"
+    if (not isinstance(state, dict) or state.get("stop_reason") not in {"credit_budget_unknown", "account_read_recovered"}
             or classify_usage_failure(state.get("credit_budget_error")) is None
             or not _paused_retained_control(state)
             or (state.get("goal") or {}).get("status") not in {"paused", "blocked"}
@@ -2760,7 +2760,7 @@ class Campaign:
             try:
                 view = dict(self.state, goal=self.goal, stop_reason="account_read_recovered",
                             stop_now=self.stop_now, checkpoint_requested=self.checkpoint_requested)
-                if (self.stop_reason == "credit_budget_unknown" and self.state.get("credit_budget_error") is None
+                if (self.stop_reason in {"credit_budget_unknown", "account_read_recovered"} and self.state.get("credit_budget_error") is None
                         and (self.stop_now, self.checkpoint_requested, self.primary_stop_generation) == original_flags
                         and control_context_eligible(view)
                         and _account_control_owner(self.state, self.directory, self.repo) == owner
