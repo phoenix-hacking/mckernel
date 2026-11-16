@@ -174,6 +174,9 @@ pub unsafe extern "C" fn ihk_reserve_mem(index: c_int, chunks: *mut IhkMemChunk,
             if config.balanced_best_effort != 0 { total_requested = total_avail; }
             else { return -12; }
         }
+        // An empty capacity set has no balanced average. Return through the
+        // existing one-shot reset and owned reservation rollback path.
+        if nodes == 0 { return -12; }
         const ALIGN: usize = 1 << 20;
         if config.balanced_best_effort != 0 { total_requested = (total_requested / (nodes * ALIGN)) * (nodes * ALIGN); }
         let average = ((total_requested / nodes).wrapping_add(ALIGN - 1) / ALIGN).wrapping_mul(ALIGN);
@@ -192,7 +195,10 @@ pub unsafe extern "C" fn ihk_reserve_mem(index: c_int, chunks: *mut IhkMemChunk,
         original_numa_ids = req.numa_ids;
         req.numa_ids = unsafe { calloc(1024, core::mem::size_of::<c_int>()).cast() };
         if req.numa_ids.is_null() { return -12; }
-        let compensation = ((missing / compensate_nodes).wrapping_add(ALIGN - 1) / ALIGN).wrapping_mul(ALIGN);
+        // An already balanced set needs no compensating donor.
+        let compensation = if compensate_nodes == 0 { 0 } else {
+            ((missing / compensate_nodes).wrapping_add(ALIGN - 1) / ALIGN).wrapping_mul(ALIGN)
+        };
         let mut release_nodes = 0usize; let mut missing2 = 0usize;
         // C accumulates total_excess2 only for diagnostics; DEBUG is off in selected profile.
         for i in 0..1024 {
@@ -202,7 +208,11 @@ pub unsafe extern "C" fn ihk_reserve_mem(index: c_int, chunks: *mut IhkMemChunk,
             if amount > cap { release_nodes += 1; }
             else { missing2 = missing2.wrapping_add(cap - amount); }
         }
-        let compensation2 = ((missing2 / release_nodes).wrapping_add(ALIGN - 1) / ALIGN).wrapping_mul(ALIGN);
+        // With no node above the first cap there is no excess left to trim,
+        // even when rounding leaves a positive second-stage deficit.
+        let compensation2 = if release_nodes == 0 { 0 } else {
+            ((missing2 / release_nodes).wrapping_add(ALIGN - 1) / ALIGN).wrapping_mul(ALIGN)
+        };
         let cap = average.wrapping_add(compensation).wrapping_add(compensation2);
         let mut min = usize::MAX; let mut max = 0usize;
         for i in 0..1024 {

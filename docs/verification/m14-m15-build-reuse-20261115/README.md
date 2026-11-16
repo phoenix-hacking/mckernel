@@ -14,7 +14,9 @@ image link command and retained input identities.
 | Whole SMP Rust object and dependency file | Compiler passed; object and family qualified | Reuse in module linkage |
 | Paired IHK raw object/checkpoint, dependency file and objtool-finalized object | Both stages passed; object and family qualified | Reuse in module linkage |
 | Whole-production guest Rust object and dependency file | Compiler passed; 35-word ABI matched; object and family qualified | Original 204 warnings remain recorded |
-| Matched C4 kernel image, link map and link dependency file | Actual image link PASS; no named undefined symbols; 35-word ABI matched | Independent result/family qualification and native execution remain pending |
+| Matched C4 kernel image, link map and link dependency file | Actual image link PASS; no named undefined symbols; 35-word ABI matched | Artifact/family qualification PASS; actual native admission, applications and restoration remain |
+| Paired IHK and SMP modules plus Module.symvers | Seven module-link/modpost commands passed;229 imports/24 exports matched; artifact/family qualified | Actual matching module load/device/application/restoration remain |
+| Changed F05 archive, native link response, DSO and map | Strict same-compile diagnostics/76 roots/providers and family qualification PASS | Real balanced/zero/backend/restoration remain |
 | Retained image-input archive and matching changed C object | Exact retained hashes verified during preservation | Reuse with the passed Rust object |
 | Component and actual image/lifecycle result records | Exact copies preserved | Their original scopes remain unchanged |
 
@@ -85,11 +87,7 @@ Reproduction through the saved Root uses a fresh output namespace and current
 admission. Historical operation grants belong to their original operations.
 
 The active dependency chain remains in
-[CAMPAIGN.md](../../../instructions/CAMPAIGN.md): finish current failed-module
-family cleanup; run the corrected seven-command module batch; qualify and bind
-the matching modules/image/providers; obtain actual native ownership/admission;
-then run the original functional/application and restoration checks. Preserve
-the successful module outputs here as soon as they exist.
+[CAMPAIGN.md](../../../instructions/CAMPAIGN.md): reuse qualified image34478838 and modulesff9c6239/08c1f2fc; finish the exact staged-source readonly visibility binding; obtain actual native ownership/admission; then run the original functional/application and restoration checks. The matching modules and changed F05 archive/DSO are already preserved in this manifest. Their actual qualification and scoped retirement do not close whole original conditions.
 
 At creation this checkpoint adds **zero original acceptances**: 112/156 accepted,
 44 open. Neither milestone is accepted. Source/build/link progress, qualified
