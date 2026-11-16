@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-engineering-work-remaining-v1",
-  "updated_at": "2026-11-16T04:42:13.538030+00:00",
+  "updated_at": "2026-11-16T05:33:41.293415+00:00",
   "methodology": "Coarse subjective estimates of the share of total engineering work still remaining in each original scope. Basis: implemented source, scoped passing functional/build results, known missing behavior and integration uncertainty. Not a conversion of checklist percentages, LOC, activity or equally weighted steps. Shared blockers are counted once in milestone judgments. New failures may increase estimates; original acceptance stays in the canonical tracker.",
   "estimates": {
     "M14-03-01": {
@@ -236,9 +236,9 @@
         "docs/verification/m14-m15-closure-progress.json",
         "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
       ],
-      "completed": "Architecture source/default slices and matched image built; own-child Rust consumer source prepared.",
+      "completed": "Qualified image and process-VM repair retained; real own-child Rust consumer now compiled with matched passive provider facts.",
       "next": "Compile/run the ready process-VM consumer and required architecture cases on an admitted cohort.",
-      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+      "updated_at": "2026-11-16T05:31:17.506088+00:00"
     },
     "M14-I01": {
       "remaining_range": [
@@ -270,19 +270,20 @@
     },
     "M14-I03": {
       "remaining_range": [
-        40,
-        70
+        35,
+        65
       ],
       "confidence": "low",
-      "rationale": "The image/modules and four account-consumer integration tests pass. Native launch still stops on account-snapshot mismatch; first native boot, applications and full restoration remain unproved.",
+      "rationale": "Engineering judgment revised after the actual publication barrier completed successfully, removing that known launch repair and installation work. Native source-cut/current-free admission, first workload and full lifecycle/restoration are still unobserved; uncertainty remains broad. This is not original acceptance or a resource release.",
       "evidence": [
         "docs/verification/m14-m15-closure-progress.json",
         "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
-        "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json"
+        "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json",
+        "/home/holden/mckernel-work/m14-i03-final-account-consumer-repair-20261116-1/root-working-inputs-2/ROOT-ACTUAL-PUBLICATION-499-SUCCESS-1/independent-actual-publication-and-family-qualification-1/QUALIFICATION.json"
       ],
-      "completed": "Matched image/modules built; Python3.8 account-consumer fix passes all four focused integration methods.",
-      "next": "Resolve the issued/current account mismatch on a fresh operation, then native admission, applications and cleanup.",
-      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+      "completed": "Matched image/modules and affected account-consumer tests pass. Corrected source publication completed; original installer/keeper/sudo exited zero and its lease is closed.",
+      "next": "Connect the completed published source to the existing native launcher, obtain actual matching one-owner native admission, then run the prepared TIME/application and cleanup cases.",
+      "updated_at": "2026-11-16T05:33:41.293415+00:00"
     },
     "M15-F01": {
       "remaining_range": [
@@ -634,15 +635,16 @@
         55
       ],
       "confidence": "low",
-      "rationale": "Selected process-VM repair and a real own-child Rust consumer are prepared. Consumer compilation/execution and full concurrent target-reference/NUMA callback lifetime proof remain.",
+      "rationale": "Selected process-VM repair and actual compiled Rust consumer/providers are available. Typed application oracle, native observations and full concurrent target-reference/NUMA callback lifetime/restoration remain.",
       "evidence": [
         "docs/verification/m14-m15-closure-progress.json",
         "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
-        "/home/holden/mckernel-work/m14-06-05-own-process-consumer-20261116/main.rs"
+        "/home/holden/mckernel-work/m14-06-05-own-process-consumer-20261116/main.rs",
+        "docs/verification/m14-06-05-own-process-consumer-20261116/RESULT.json"
       ],
-      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
-      "next": "Cross-process memory/move-pages preserve required data/error results, target references and NUMA callback lifetimes through completion and cleanup on the matching image.",
-      "updated_at": "2026-11-16T04:42:13.538030+00:00",
+      "completed": "Own-child consumer compiled once and qualified with full own-family closure; exact binary252ba and source/recipe preserved in persistent cache.",
+      "next": "Validate only new strict stdout oracle, then stage exact compiled consumer with retained matching providers and run actual admitted process-VM/move-pages cases plus full reference/callback restoration.",
+      "updated_at": "2026-11-16T05:31:17.506088+00:00",
       "increments": [
         {
           "description": "Prepare the real own-child process-VM/move-pages Rust consumer; source only.",
@@ -652,9 +654,11 @@
           ]
         },
         {
-          "description": "Compile the consumer against the selected matching ABI.",
-          "done": false,
-          "evidence": []
+          "description": "Compile and qualify the actual userspace consumer and own lifecycle; runtime ABI remains separately unproved.",
+          "done": true,
+          "evidence": [
+            "docs/verification/m14-06-05-own-process-consumer-20261116/RESULT.json"
+          ]
         },
         {
           "description": "Run the original read/write/error/target-exit observations.",
@@ -700,19 +704,20 @@
     },
     "M14-I03-E1": {
       "remaining_range": [
-        35,
-        65
+        25,
+        55
       ],
       "confidence": "low",
-      "rationale": "The image/modules and four account-consumer integration tests pass. Native launch still stops on account-snapshot mismatch; first native boot, applications and full restoration remain unproved.",
+      "rationale": "Engineering judgment revised after the actual publication barrier completed successfully, removing that known launch repair and installation work. Native source-cut/current-free admission, first workload and full lifecycle/restoration are still unobserved; uncertainty remains broad. This is not original acceptance or a resource release.",
       "evidence": [
         "docs/verification/m14-m15-closure-progress.json",
         "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
-        "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json"
+        "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json",
+        "/home/holden/mckernel-work/m14-i03-final-account-consumer-repair-20261116-1/root-working-inputs-2/ROOT-ACTUAL-PUBLICATION-499-SUCCESS-1/independent-actual-publication-and-family-qualification-1/QUALIFICATION.json"
       ],
-      "completed": "Matched image/modules built; Python3.8 account-consumer fix passes all four focused integration methods.",
-      "next": "Obtain exact one-owner native/source-view/current-free admission for the coherent matched image/modules; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation. Workload results, descriptor/reference/callback ownership, assigned CPUs/RAM and all resource restoration observations refer to that same coherent image/module cohort; no additional S01-S06 quotas are introduced.",
-      "updated_at": "2026-11-16T04:42:13.538030+00:00",
+      "completed": "Matched image/modules and affected account-consumer tests pass. Corrected source publication completed; original installer/keeper/sudo exited zero and its lease is closed.",
+      "next": "Connect the completed published source to the existing native launcher, obtain actual matching one-owner native admission, then run the prepared TIME/application and cleanup cases.",
+      "updated_at": "2026-11-16T05:33:41.293415+00:00",
       "increments": [
         {
           "description": "Produce and qualify the coherent image and paired modules.",
@@ -743,7 +748,14 @@
           ]
         },
         {
-          "description": "Complete the normal native handoff; latest attempt stopped on issued/current full account limits mismatch.",
+          "description": "Complete the corrected source publication/install: original installer, keeper and sudo exit zero; own publication lease closed. No native authority inferred.",
+          "done": true,
+          "evidence": [
+            "/home/holden/mckernel-work/m14-i03-final-account-consumer-repair-20261116-1/root-working-inputs-2/ROOT-ACTUAL-PUBLICATION-499-SUCCESS-1/independent-actual-publication-and-family-qualification-1/QUALIFICATION.json"
+          ]
+        },
+        {
+          "description": "Connect published source and its source-cut commitments to the existing same-Root native launcher.",
           "done": false,
           "evidence": []
         },
@@ -1167,19 +1179,20 @@
     },
     "M14-I03-ACCEPT": {
       "remaining_range": [
-        40,
-        70
+        35,
+        65
       ],
       "confidence": "low",
-      "rationale": "The image/modules and four account-consumer integration tests pass. Native launch still stops on account-snapshot mismatch; first native boot, applications and full restoration remain unproved. This estimate includes the unresolved prerequisite work needed for acceptance; it is not just time to record the decision.",
+      "rationale": "Engineering judgment revised after the actual publication barrier completed successfully, removing that known launch repair and installation work. Native source-cut/current-free admission, first workload and full lifecycle/restoration are still unobserved; uncertainty remains broad. This is not original acceptance or a resource release.",
       "evidence": [
         "docs/verification/m14-m15-closure-progress.json",
         "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
-        "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json"
+        "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json",
+        "/home/holden/mckernel-work/m14-i03-final-account-consumer-repair-20261116-1/root-working-inputs-2/ROOT-ACTUAL-PUBLICATION-499-SUCCESS-1/independent-actual-publication-and-family-qualification-1/QUALIFICATION.json"
       ],
-      "completed": "Matched image/modules built; Python3.8 account-consumer fix passes all four focused integration methods.",
-      "next": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
-      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+      "completed": "Matched image/modules and affected account-consumer tests pass. Corrected source publication completed; original installer/keeper/sudo exited zero and its lease is closed.",
+      "next": "Connect the completed published source to the existing native launcher, obtain actual matching one-owner native admission, then run the prepared TIME/application and cleanup cases.",
+      "updated_at": "2026-11-16T05:33:41.293415+00:00"
     },
     "M15-F02-ACCEPT": {
       "remaining_range": [
