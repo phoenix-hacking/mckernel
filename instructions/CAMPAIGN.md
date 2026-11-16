@@ -4,6 +4,12 @@ The user stopped the previous work loop to simplify its harness. The live state
 is shown in the tracker below. Do not restart automatically. The explicit run
 command continues the existing saved Root; it does not create a replacement.
 
+Current run is **STOPPED** after the dispatcher service returned `Bad Request`
+at `2026-11-16T07:10:17Z`; no model turns are active. The subsequent `user_stop`
+label came from a stale consumed STOP being reapplied after its explicit resume.
+See [the failure checkpoint](../docs/verification/M14-M15-RUN-STOP-20261116.md).
+The source fix is tested; no controller restart or automatic resume was performed.
+
 ## One goal
 
 Get the supported OS booting, running useful applications and shutting down with

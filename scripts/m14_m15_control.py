@@ -43,8 +43,10 @@ def _owner(state):
 
 
 def _resumed(request, owner, state):
-    if (request.get("status") != "consumed" or request.get("errors") != [] or not request.get("id")
-            or state.get("stop_now") is not False or state.get("stop_reason")):
+    # A successful explicit resume permanently supersedes that exact old STOP.
+    # Later error/stop flags still halt dispatch, but must not resurrect the old
+    # request or replace their actual cause. A new user STOP gets a fresh ID.
+    if request.get("status") != "consumed" or request.get("errors") != [] or not request.get("id"):
         return False
     receipts = [state.get("last_instruction")]
     acknowledged = state.get("acknowledged_user_stop") or {}

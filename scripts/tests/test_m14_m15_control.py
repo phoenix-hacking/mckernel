@@ -236,6 +236,41 @@ class UserStopTests(unittest.TestCase):
             with self.subTest(request=request):
                 self.assertFalse(control._resumed(request, owner, state))
 
+    def test_resumed_old_stop_never_replaces_a_later_technical_failure(self):
+        control.request_stop(self.repo)
+        control.consume_stop(self.campaign)
+        prior = read_json(self.directory / control.REQUEST)
+        self.state["acknowledged_user_stop"] = {"request_id": prior["id"], "resume": {
+            "status": "accepted_by_server", "control_kind": "resume_same_owner",
+            "user_stop_request_id": prior["id"], "owner": prior["owner"]}}
+        self.state["last_instruction"] = {"id": "ordinary-instruction"}
+        for reason in ("turn_failed", "server_error", "quota_exhausted", "user_stop"):
+            with self.subTest(reason=reason):
+                self.campaign.stop_reason, self.campaign.stop_now = reason, True
+                self.campaign.save(stop_reason=reason, stop_now=True, controller_dispatch_enabled=False)
+                calls = copy.deepcopy(self.rpc.calls)
+                self.assertFalse(control.consume_stop(self.campaign))
+                self.assertEqual((self.campaign.stop_reason, self.campaign.stop_now), (reason, True))
+                self.assertFalse(self.state["controller_dispatch_enabled"])
+                self.assertEqual(self.rpc.calls, calls)
+                self.assertEqual({key: self.state[key] for key in self.preserved}, self.preserved)
+
+    def test_fresh_stop_after_resumed_technical_failure_is_a_new_request(self):
+        control.request_stop(self.repo)
+        control.consume_stop(self.campaign)
+        prior = read_json(self.directory / control.REQUEST)
+        self.state["acknowledged_user_stop"] = {"request_id": prior["id"], "resume": {
+            "status": "accepted_by_server", "control_kind": "resume_same_owner",
+            "user_stop_request_id": prior["id"], "owner": prior["owner"]}}
+        self.campaign.stop_reason, self.campaign.stop_now = "turn_failed", True
+        self.campaign.save(stop_reason="turn_failed", stop_now=True, controller_dispatch_enabled=False)
+        self.campaign.active = self.rpc.turns = {"root": "remaining-turn"}
+        report = control.request_stop(self.repo)
+        self.assertNotEqual(report["stop_request"]["id"], prior["id"])
+        self.assertEqual(report["stop_request"]["status"], "pending")
+        self.assertTrue(control.consume_stop(self.campaign))
+        self.assertIn(("turn/interrupt", {"threadId": "root", "turnId": "remaining-turn"}), self.rpc.calls)
+
     def test_known_unavailable_channel_does_not_claim_interruption_or_release(self):
         control.request_stop(self.repo)
         self.state["transport_failure"] = {"channel_unusable": True}

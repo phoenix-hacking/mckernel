@@ -379,7 +379,7 @@ def _markdown(progress, campaign_state, runtime_updated_at="unknown", active_wor
     lines = ["# M14/M15 remaining original deliverables", "",
              "One goal: a working OS, completed through the unchanged original M14/M15 checks.", "",
              "**Campaign: " + campaign_state + ".** " +
-             ("Stopped by the current user; no new OS campaign or child dispatch is authorized."
+             ("Dispatch is stopped; no new OS campaign or child dispatch is authorized."
               if campaign_state == "STOPPED" else
               "Stop requested; an existing turn is still recorded. No new campaign/child dispatch is authorized."
               if campaign_state == "STOPPING" else
