@@ -80,6 +80,37 @@ def watch(repo, *, interval=2.0, stream=None, once=False):
         time.sleep(interval)
 
 
+def watch_agents(repo, *, stream=None, once=False, lines=80):
+    """Show the existing roster/log and refresh the milestone file read-only."""
+    from watch_os_agents import Follower
+    stream = stream or sys.stdout
+    repo = Path(repo).resolve()
+    follower = Follower(Path(runtime_directory(repo)) / "state.json", stream, lines=lines)
+    stream.write("Live agents and logs. Milestone progress: " +
+                 str(repo / "docs/verification/M14-M15-OPEN-DELIVERABLES.md") + "\n")
+    stream.write("Stop campaign: python3 -B " + str(repo / "scripts/m14_m15.py") + " stop\n")
+    stream.flush()
+    last_error = None
+    try:
+        while True:
+            state = follower.step()
+            if state is not None:
+                try:
+                    render_progress(repo, runtime_state=state)
+                    last_error = None
+                except (OSError, ValueError, KeyError) as error:
+                    message = "Progress refresh: " + str(error)
+                    if message != last_error:
+                        stream.write(message + "\n")
+                        stream.flush()
+                        last_error = message
+            if once:
+                return
+            time.sleep(1)
+    finally:
+        follower.close()
+
+
 def main(argv=None, *, repo=REPO):
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command")
@@ -88,16 +119,23 @@ def main(argv=None, *, repo=REPO):
     viewer = sub.add_parser("watch", help="Continuously show all checks; no model calls")
     viewer.add_argument("--interval", type=float, default=2.0)
     viewer.add_argument("--once", action="store_true")
+    agents = sub.add_parser("agents", help="Follow the live agent roster and logs; no new work")
+    agents.add_argument("--once", action="store_true")
+    agents.add_argument("--lines", type=int, default=80)
     sub.add_parser("stop", help="Stop dispatch and interrupt this campaign's active workers")
     run = sub.add_parser("run", help="Explicitly resume the same Root in the simple loop")
     run.add_argument("--no-watch", action="store_true")
     args = parser.parse_args(argv)
     if args.command == "watch" and not 0.2 <= args.interval <= 60:
         parser.error("interval must be between0.2 and60 seconds")
+    if args.command == "agents" and not 1 <= args.lines <= 10000:
+        parser.error("lines must be between1and10000")
     if args.command == "status":
         print(render_progress(repo, runtime_state=read_state(repo)), end="")
     elif args.command == "watch":
         watch(repo, interval=args.interval, once=args.once)
+    elif args.command == "agents":
+        watch_agents(repo, once=args.once, lines=args.lines)
     elif args.command == "stop":
         result = request_stop(repo)
         summary = {key: result.get(key) for key in
@@ -108,7 +146,7 @@ def main(argv=None, *, repo=REPO):
     else:
         print(json.dumps(start_existing(repo), indent=2), flush=True)
         if not args.no_watch:
-            watch(repo)
+            watch_agents(repo)
     return 0
 
 

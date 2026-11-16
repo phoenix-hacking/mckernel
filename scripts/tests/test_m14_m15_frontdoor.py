@@ -95,6 +95,36 @@ class FrontdoorTests(unittest.TestCase):
                 cli.watch(Path("/repo"), stream=out)
         self.assertEqual(out.getvalue(), "ALL44\n")
 
+    def test_run_opens_agents_by_default_and_no_watch_skips_viewer(self):
+        with patch.object(cli, "start_existing", return_value={"status": "already_running"}) as run, \
+                patch.object(cli, "watch_agents") as agents, \
+                patch.object(cli, "watch") as progress, \
+                contextlib.redirect_stdout(io.StringIO()):
+            cli.main(["run"], repo=Path("/repo"))
+            agents.assert_called_once_with(Path("/repo"))
+            agents.reset_mock()
+            cli.main(["run", "--no-watch"], repo=Path("/repo"))
+            agents.assert_not_called()
+            progress.assert_not_called()
+            self.assertEqual(run.call_count, 2)
+
+    def test_agents_view_never_starts_or_stops_work_and_updates_progress(self):
+        out = io.StringIO()
+        with patch.object(cli, "runtime_directory", return_value="/repo/.git/os-autopilot"), \
+                patch("watch_os_agents.Follower") as follow, \
+                patch.object(cli, "render_progress") as progress, \
+                patch.object(cli, "request_stop") as stop, \
+                patch.object(cli, "start_existing") as run, \
+                contextlib.redirect_stdout(out):
+            follow.return_value.step.return_value = {"phase": "running"}
+            cli.main(["agents", "--once", "--lines", "10"], repo=Path("/repo"))
+            follow.assert_called_once_with(Path("/repo/.git/os-autopilot/state.json"), out, lines=10)
+            progress.assert_called_once_with(Path("/repo"), runtime_state={"phase": "running"})
+            follow.return_value.close.assert_called_once_with()
+            stop.assert_not_called()
+            run.assert_not_called()
+        self.assertIn("M14-M15-OPEN-DELIVERABLES.md", out.getvalue())
+
     def test_simple_resume_discards_old_startup_instructions_and_pins_dispatcher(self):
         import run_os_goal
         owner = run_os_goal.Campaign.__new__(run_os_goal.Campaign)

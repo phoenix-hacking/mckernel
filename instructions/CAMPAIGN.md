@@ -59,19 +59,23 @@ From `/home/holden/mckernel`:
 ```sh
 python3 -B scripts/m14_m15.py status
 python3 -B scripts/m14_m15.py watch
+python3 -B scripts/m14_m15.py agents
 python3 -B scripts/m14_m15.py run
 python3 -B scripts/m14_m15.py stop
 ```
 
-`run` is the explicit user start and opens the progress watch. `run --no-watch`
-only submits that start. `watch` is read-only and updates the Markdown on changes;
-Ctrl-C closes the viewer. `stop` stops new dispatch, pauses the saved goal and
+`run` is the explicit user start and opens the live agent roster and combined
+agent log, while updating the milestone Markdown. `run --no-watch` only submits
+that start. `agents` opens the same read-only live agent view without starting
+work. `watch` displays every open check and updates the Markdown on changes;
+Ctrl-C closes either viewer. `stop` stops new dispatch, pauses the saved goal and
 interrupts the campaign's active model turns through their existing owner.
 It preserves files, builds, credit accounting and runtime ownership. A retained
 controller can remain alive to preserve custody; that is not ongoing dispatch or
 proof of guest/container cleanup. Inspect `status` for incomplete interruption.
 
-For the existing detailed agent log, use `python3 -B scripts/watch_os_agents.py`.
+The standalone detailed agent log also remains available with
+`python3 -B scripts/watch_os_agents.py`.
 
 ## Start from the work already done
 
