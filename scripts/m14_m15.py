@@ -10,7 +10,7 @@ import sys
 import time
 
 from m14_m15_control import request_stop, status as control_status
-from m14_m15_progress import render_progress
+from m14_m15_progress import ENGINEERING_MARKDOWN, render_progress
 from os_goal_service import runtime_directory
 
 
@@ -87,7 +87,7 @@ def watch_agents(repo, *, stream=None, once=False, lines=80):
     repo = Path(repo).resolve()
     follower = Follower(Path(runtime_directory(repo)) / "state.json", stream, lines=lines)
     stream.write("Live agents and logs. Milestone progress: " +
-                 str(repo / "docs/verification/M14-M15-OPEN-DELIVERABLES.md") + "\n")
+                 str(repo / ENGINEERING_MARKDOWN) + "\n")
     stream.write("Stop campaign: python3 -B " + str(repo / "scripts/m14_m15.py") + " stop\n")
     stream.flush()
     last_error = None

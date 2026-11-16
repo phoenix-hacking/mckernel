@@ -123,7 +123,7 @@ class FrontdoorTests(unittest.TestCase):
             follow.return_value.close.assert_called_once_with()
             stop.assert_not_called()
             run.assert_not_called()
-        self.assertIn("M14-M15-OPEN-DELIVERABLES.md", out.getvalue())
+        self.assertIn("M14-M15-ENGINEERING-PROGRESS.md", out.getvalue())
 
     def test_simple_resume_discards_old_startup_instructions_and_pins_dispatcher(self):
         import run_os_goal

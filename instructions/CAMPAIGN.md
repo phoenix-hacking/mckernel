@@ -11,8 +11,12 @@ its resources restored. Complete every original M14 and M15 requirement using
 that functional evidence. M14 final acceptance precedes M15 final acceptance.
 After both acceptances, checkpoint and pause the larger saved goal.
 Functional OS/apps and Rust/allowed assembly only; **NO SECURITY TESTING**.
+Work on McKernel, its IHK host modules and its applications. Do not edit Rocky
+Linux's core kernel source, rebuild/replace the host kernel or change its SDK
+sources to get around a project build failure. Use the existing kernel/SDK as
+build inputs and fix the project's own source, ABI or module integration.
 
-Use this file and [the live open-deliverable tracker](../docs/verification/M14-M15-OPEN-DELIVERABLES.md)
+Use this file and [the live engineering tracker](../docs/verification/M14-M15-ENGINEERING-PROGRESS.md)
 as planning context. Read source/captures for the named deliverable as necessary.
 Historical conversations, old plans and private publication/review/catalogue
 chains are not the default work plan. Preserve their actual evidence and holds.
@@ -30,6 +34,12 @@ chains are not the default work plan. Preserve their actual evidence and holds.
 5. Record evidence once, update that check's engineering progress and any fully
    satisfied original acceptance, then immediately feed ready successors.
 
+Keep the loop crisp: implement the missing behavior, run its affected functional
+test, repair real failures and continue. Reuse passing checks and recorded
+artifact identities. Repeat a hash/check only for changed inputs, an actual
+identity problem or the immediate execution boundary; do not create repeated
+catalogue, review or publication work without a concrete functional need.
+
 The dispatcher is **GPT-6.1 Sol/MAX** and actively helps failing workers. Every
 new worker/reviewer is explicitly **GPT-6.1 Sol/xhigh**. Target at least90% agent
 work on implementation and affected functional verification, at most10% on
@@ -39,18 +49,31 @@ input, checkpoint and report the exact blocker instead of spinning.
 
 ## Progress that stays visible
 
-[**M14-M15-OPEN-DELIVERABLES.md**](../docs/verification/M14-M15-OPEN-DELIVERABLES.md)
+[**M14-M15-ENGINEERING-PROGRESS.md**](../docs/verification/M14-M15-ENGINEERING-PROGRESS.md)
 lists **every remaining original check** with its own verified acceptance,
-parent checklist percentage, evidenced engineering checkpoints or unknown,
-owner/status, passing scope and next missing original proof.
+**estimated engineering work remaining**, owner/status, last completed increment
+and next operation. It also lists all21 original parent subgoals, including the
+accepted ones, and smaller engineering steps for the large native-gated scopes.
+
+All displayed progress percentages now mean **estimated work remaining**; lower
+is better. Use coarse ranges with confidence, actual evidence and reasoning from
+`docs/verification/m14-m15-work-remaining-estimates.json`. Accepted scopes have
+no remaining work. Do not subtract the original checklist percentage from100
+or convert activity/step counts into effort. Unknown remains unknown. Update a
+range when the assessed engineering work changes; new failures can increase it.
+Always record the actual completed increment and next operation even when the
+range or original acceptance has not moved. The engineering baseline is
+`docs/verification/M14-M15-ENGINEERING-BASELINE.md`; the older fixed snapshot
+preserves its original verified-checklist metric for historical comparison.
 
 The original source of truth remains
 `docs/verification/m14-m15-closure-progress.json`:156 original checks, original
 criteria/weights unchanged. The small engineering sidecar is separate. Activity,
 line count, repeated reviews and build success alone do not grant acceptance.
-Every assignment must advance a named deliverable; percentage increases require
-completed, evidenced increments. Status/watch render all open rows without model
-calls. Current baseline:112/156 accepted,44open; M14=80.19%,M15=76.25% verified.
+Every assignment must advance a named deliverable. Preserve verified acceptance
+as accepted/open decisions and exact counts alongside estimates. Status/watch
+render all open rows without model calls. Current accepted baseline:112/156,
+44open. Neither milestone is finally accepted.
 
 ## Commands
 

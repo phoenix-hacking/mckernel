@@ -163,7 +163,9 @@ class ProgressTests(unittest.TestCase):
                 self.assertEqual(stdout.getvalue(), expected)
             with patch.object(progress.os, "replace", wraps=progress.os.replace) as replace:
                 progress.render_progress(repo, campaign_state="RUNNING")
-                replace.assert_called_once()
+                self.assertEqual(replace.call_count, 2)
+                self.assertEqual({call.args[1] for call in replace.call_args_list},
+                                 {repo / progress.MARKDOWN, repo / progress.ENGINEERING_MARKDOWN})
             self.assertFalse(list(target.parent.glob(".M14-M15-OPEN-DELIVERABLES.md.*")))
 
     def test_invalid_optional_sidecar_does_not_hide_any_original_open_row(self):
@@ -208,6 +210,50 @@ class ProgressTests(unittest.TestCase):
             state.write_text(json.dumps(dict(phase="running", goal={"status": "active"},
                                              stop_now=True, active_turns={}, updated_at="state-time")))
             self.assertEqual(progress._runtime(repo), ("STOPPED", "state-time", {}))
+
+    def test_remaining_estimates_are_explicit_and_acceptance_is_independent(self):
+        document = dict(schema="mckernel-engineering-work-remaining-v1", estimates={
+            "M14-F01-b": dict(remaining_range=[25, 55], confidence="low",
+                rationale="Source exists; actual matching behavior remains unobserved.",
+                evidence=["actual-source.rs"])})
+        entries = progress.parse_remaining(document, {"M14-F01-b"})
+        report = dict(remaining=entries)
+        self.assertEqual(progress._remaining_text(report, "M14-F01-b"),
+                         "25–55% remaining (low confidence)")
+        self.assertEqual(progress._remaining_text(report, "M14-F01-b", accepted=True),
+                         "0% — accepted")
+        self.assertEqual(progress._remaining_text(report, "unassessed"), "unknown")
+        for bad in ([55, 25], [0, 101], [False, 50]):
+            document["estimates"]["M14-F01-b"]["remaining_range"] = bad
+            with self.assertRaises(ValueError):
+                progress.parse_remaining(document, {"M14-F01-b"})
+
+    def test_display_shows_all_parent_scopes_and_only_remaining_work_percentages(self):
+        report = progress.load_progress(REPO)
+        rendered = progress._markdown(report, "RUNNING")
+        parents = [r for r in report["requirements"].values() if r.get("parent") is None]
+        for row in parents:
+            self.assertIn("| " + row["id"] + " —", rendered)
+        self.assertIn("Every percentage below estimates engineering work remaining", rendered)
+        self.assertNotIn("80.19%", rendered)
+        self.assertNotIn("76.25%", rendered)
+        self.assertNotIn("% checkpoints", rendered)
+        self.assertIn("Smaller engineering increments", rendered)
+        self.assertIn("four affected controller-consumer integration methods", rendered)
+        self.assertEqual(sum(line.startswith("| `M") for line in rendered.splitlines()), report["open"])
+
+    def test_invalid_remaining_estimates_never_hide_original_checks(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary)
+            path = repo / progress.TRACKER
+            path.parent.mkdir(parents=True)
+            path.write_bytes((REPO / progress.TRACKER).read_bytes())
+            (repo / progress.ESTIMATES).write_text('{"schema":"invalid"}')
+            report = progress.load_progress(repo)
+            self.assertTrue(report["engineering_warning"])
+            self.assertFalse(report["remaining"])
+            self.assertEqual(len(report["open_rows"]), report["open"])
+            self.assertIn("unknown", progress._markdown(report, "STOPPED"))
 
 
 if __name__ == "__main__":

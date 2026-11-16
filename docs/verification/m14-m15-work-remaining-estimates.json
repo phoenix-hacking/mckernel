@@ -1,0 +1,1306 @@
+{
+  "schema": "mckernel-engineering-work-remaining-v1",
+  "updated_at": "2026-11-16T04:42:13.538030+00:00",
+  "methodology": "Coarse subjective estimates of the share of total engineering work still remaining in each original scope. Basis: implemented source, scoped passing functional/build results, known missing behavior and integration uncertainty. Not a conversion of checklist percentages, LOC, activity or equally weighted steps. Shared blockers are counted once in milestone judgments. New failures may increase estimates; original acceptance stays in the canonical tracker.",
+  "estimates": {
+    "M14-03-01": {
+      "remaining_range": [
+        20,
+        45
+      ],
+      "confidence": "low",
+      "rationale": "Dispatch/offload source and default proof exist; real request ABI, initialized buffers, exactly-once completion and terminal borrows need matching runtime results.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Run the remaining supported functional and lifecycle cases; repair actual failures.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-03-02": {
+      "remaining_range": [
+        25,
+        55
+      ],
+      "confidence": "low",
+      "rationale": "Process default source and focused ownership work exist; required fork/exec/wait/exit/ptrace and full reference cleanup still need matching runtime proof. Held exec work remains excluded.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Run the remaining supported functional and lifecycle cases; repair actual failures.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-03-03": {
+      "remaining_range": [
+        40,
+        75
+      ],
+      "confidence": "low",
+      "rationale": "Memory source and process-VM repair exist, but XPMEM weak-VM/descriptor/termination wiring is incomplete and its lock provider is unresolved. Full range/callback lifetime proof remains.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Run the remaining supported functional and lifecycle cases; repair actual failures.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-03-04": {
+      "remaining_range": [
+        25,
+        55
+      ],
+      "confidence": "low",
+      "rationale": "Default signal/wait code and focused results exist; supported signal, futex/robust, restart and terminal lifecycle behavior still need matching runtime results.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Run the remaining supported functional and lifecycle cases; repair actual failures.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-03-05": {
+      "remaining_range": [
+        25,
+        50
+      ],
+      "confidence": "low",
+      "rationale": "Credential/perf/default source investigations are complete. Real error-aware getter, consumer behavior and host FD/resource restoration remain to be demonstrated.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Run the remaining supported functional and lifecycle cases; repair actual failures.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-06-01": {
+      "remaining_range": [
+        20,
+        45
+      ],
+      "confidence": "low",
+      "rationale": "Selected architecture wrappers and ABI/source checks exist; supported TLS/arch_prctl and clone/mmap/SHM translation still need matching runtime results.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Run the remaining supported functional and lifecycle cases; repair actual failures.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-06-02": {
+      "remaining_range": [
+        30,
+        60
+      ],
+      "confidence": "low",
+      "rationale": "Selected signal/context source and default proof exist; genuine frame, alternate stack and configured xstate restoration remain unproved. Excluded collector work is not an available test path.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Run the remaining supported functional and lifecycle cases; repair actual failures.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-06-03": {
+      "remaining_range": [
+        25,
+        50
+      ],
+      "confidence": "low",
+      "rationale": "Ptrace default/regset source proof exists; actual supported register/debug-state and stop/wakeup/event ordering remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Run the remaining supported functional and lifecycle cases; repair actual failures.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-06-04": {
+      "remaining_range": [
+        20,
+        45
+      ],
+      "confidence": "low",
+      "rationale": "Selected time/vDSO providers, image and focused controls exist; matching process mappings and real time-page/TSC publication remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Run the remaining supported functional and lifecycle cases; repair actual failures.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-06-05": {
+      "remaining_range": [
+        25,
+        55
+      ],
+      "confidence": "low",
+      "rationale": "Selected process-VM repair and a real own-child Rust consumer are prepared. Consumer compilation/execution and full concurrent target-reference/NUMA callback lifetime proof remain.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
+        "/home/holden/mckernel-work/m14-06-05-own-process-consumer-20261116/main.rs"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Run the remaining supported functional and lifecycle cases; repair actual failures.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-F01": {
+      "remaining_range": [
+        0,
+        0
+      ],
+      "confidence": "high",
+      "rationale": "Original scope is already accepted; preserve its passing evidence.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json"
+      ],
+      "completed": "Original scope accepted.",
+      "next": "Preserve passing scope.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-F02": {
+      "remaining_range": [
+        0,
+        0
+      ],
+      "confidence": "high",
+      "rationale": "Original scope is already accepted; preserve its passing evidence.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json"
+      ],
+      "completed": "Original scope accepted.",
+      "next": "Preserve passing scope.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-F03": {
+      "remaining_range": [
+        35,
+        65
+      ],
+      "confidence": "low",
+      "rationale": "Default generic source/link work exists. Coupled XPMEM lock/lifetime/termination wiring is incomplete or unselected; generic functional and cleanup behavior still needs matching runtime evidence.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Default generic source/link and focused supported slices passed; image built.",
+      "next": "Finish eligible lifetime/ownership repairs and run required matching generic functional/cleanup cases.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-F04": {
+      "remaining_range": [
+        0,
+        0
+      ],
+      "confidence": "high",
+      "rationale": "Original scope is already accepted; preserve its passing evidence.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json"
+      ],
+      "completed": "Original scope accepted.",
+      "next": "Preserve passing scope.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-F05": {
+      "remaining_range": [
+        0,
+        0
+      ],
+      "confidence": "high",
+      "rationale": "Original scope is already accepted; preserve its passing evidence.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json"
+      ],
+      "completed": "Original scope accepted.",
+      "next": "Preserve passing scope.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-F06": {
+      "remaining_range": [
+        30,
+        60
+      ],
+      "confidence": "low",
+      "rationale": "Architecture Rust providers and matched image exist. Signal/context, ptrace, time and cross-process target/callback lifetimes still need supported runtime results and any resulting repairs.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Architecture source/default slices and matched image built; own-child Rust consumer source prepared.",
+      "next": "Compile/run the ready process-VM consumer and required architecture cases on an admitted cohort.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-I01": {
+      "remaining_range": [
+        0,
+        0
+      ],
+      "confidence": "high",
+      "rationale": "Original scope is already accepted; preserve its passing evidence.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json"
+      ],
+      "completed": "Original scope accepted.",
+      "next": "Preserve passing scope.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-I02": {
+      "remaining_range": [
+        0,
+        0
+      ],
+      "confidence": "high",
+      "rationale": "Original scope is already accepted; preserve its passing evidence.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json"
+      ],
+      "completed": "Original scope accepted.",
+      "next": "Preserve passing scope.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-I03": {
+      "remaining_range": [
+        40,
+        70
+      ],
+      "confidence": "low",
+      "rationale": "The image/modules and four account-consumer integration tests pass. Native launch still stops on account-snapshot mismatch; first native boot, applications and full restoration remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
+        "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json"
+      ],
+      "completed": "Matched image/modules built; Python3.8 account-consumer fix passes all four focused integration methods.",
+      "next": "Resolve the issued/current account mismatch on a fresh operation, then native admission, applications and cleanup.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F01": {
+      "remaining_range": [
+        0,
+        0
+      ],
+      "confidence": "high",
+      "rationale": "Original scope is already accepted; preserve its passing evidence.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json"
+      ],
+      "completed": "Original scope accepted.",
+      "next": "Preserve passing scope.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F02": {
+      "remaining_range": [
+        25,
+        55
+      ],
+      "confidence": "low",
+      "rationale": "Executor source, deployed artifacts and the 78-word ABI have passing scope. The successful real GET_CREDV loader path, application/offload behavior and native cleanup remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected/deployed executor and 78-word ABI qualified; existing non-ELF loader proof preserved.",
+      "next": "Supply real matching GET_CREDV/device input and run the successful loader/application lifecycle.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F03": {
+      "remaining_range": [
+        15,
+        35
+      ],
+      "confidence": "low",
+      "rationale": "mcinspect source, link, ABI and focused/default behavior are qualified. Matching installed runtime-consumer behavior and final acceptance remain.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "mcinspect source, host link, ABI and focused/default behavior passed.",
+      "next": "Run the installed mcinspect consumer on the matching admitted runtime.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F04": {
+      "remaining_range": [
+        15,
+        35
+      ],
+      "confidence": "low",
+      "rationale": "eclair source, link, ABI and focused/default behavior are qualified. Matching installed runtime-consumer behavior and final acceptance remain.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "eclair source, host link, ABI and focused/default behavior passed.",
+      "next": "Run the installed eclair consumer on the matching admitted runtime.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F05": {
+      "remaining_range": [
+        25,
+        55
+      ],
+      "confidence": "low",
+      "rationale": "Changed archive/DSO and public providers pass, including the implemented divisor fixes. Real balanced-success, zero-node/compensation, backend, installed ABI and restoration still need results.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Changed IHK archive/DSO built; public providers and focused behavior qualified.",
+      "next": "Run original balanced/zero/backend behavior and prove installed dependencies plus restoration.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F06": {
+      "remaining_range": [
+        20,
+        45
+      ],
+      "confidence": "low",
+      "rationale": "ihkconfig source, installed artifact and focused behavior exist. Complete original real-device command/error behavior and restoring lifecycle remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "ihkconfig source, installed artifact and focused behavior qualified.",
+      "next": "Run required real-device ihkconfig commands and restoring lifecycle.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F07": {
+      "remaining_range": [
+        20,
+        45
+      ],
+      "confidence": "low",
+      "rationale": "ihkosctl source, changed/installed artifact and focused behavior exist. Complete original real-device command/error behavior and restoring lifecycle remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "ihkosctl changed/installed artifact and focused behavior qualified.",
+      "next": "Run required real-device ihkosctl commands and restoring lifecycle.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F08": {
+      "remaining_range": [
+        25,
+        50
+      ],
+      "confidence": "low",
+      "rationale": "Changed monitor emission, passive behavior and private stage are qualified. Real installed-service events/kmsg/hung-up and stop/error/restoration remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
+        "docs/verification/m15-f08-changed-monitor-build-20261114/QUALIFIED-INCREMENT.json"
+      ],
+      "completed": "Changed monitor built; passive checks/private stage qualified.",
+      "next": "Run the installed monitor against genuine events/service and verify error/stop restoration.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-I01": {
+      "remaining_range": [
+        0,
+        0
+      ],
+      "confidence": "high",
+      "rationale": "Original scope is already accepted; preserve its passing evidence.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json"
+      ],
+      "completed": "Original scope accepted.",
+      "next": "Preserve passing scope.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-I02": {
+      "remaining_range": [
+        0,
+        0
+      ],
+      "confidence": "high",
+      "rationale": "Original scope is already accepted; preserve its passing evidence.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json"
+      ],
+      "completed": "Original scope accepted.",
+      "next": "Preserve passing scope.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-I03": {
+      "remaining_range": [
+        0,
+        0
+      ],
+      "confidence": "high",
+      "rationale": "Original scope is already accepted; preserve its passing evidence.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json"
+      ],
+      "completed": "Original scope accepted.",
+      "next": "Preserve passing scope.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-I04": {
+      "remaining_range": [
+        40,
+        70
+      ],
+      "confidence": "low",
+      "rationale": "Matched artifacts, source/dependency ownership and useful consumer source exist. Actual native admission, complete applications/module-MM behavior, restoration and final integration remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Matched artifacts and project ownership/dependency prerequisites qualified.",
+      "next": "Reuse the matched native cohort for full applications, module/MM and restoration, after M14 acceptance.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14": {
+      "remaining_range": [
+        25,
+        50
+      ],
+      "confidence": "low",
+      "rationale": "Much of the selected Rust implementation and the matched build exist. Generic/XPMEM lifetime work, architecture behavior and the first matched native applications/restoration can still expose substantial integration repairs.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
+        "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json"
+      ],
+      "completed": "",
+      "next": "",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15": {
+      "remaining_range": [
+        25,
+        55
+      ],
+      "confidence": "low",
+      "rationale": "Selected tools, modules and library artifacts exist with focused tests. Real device, backend, installed-service and restoring application behavior remain largely unobserved; the native prerequisite is shared.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
+        "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json"
+      ],
+      "completed": "",
+      "next": "",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-03-01-FUNCTIONAL": {
+      "remaining_range": [
+        20,
+        45
+      ],
+      "confidence": "low",
+      "rationale": "Dispatch/offload source and default proof exist; real request ABI, initialized buffers, exactly-once completion and terminal borrows need matching runtime results.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "The matched guest/host agree on request layouts and initialized arguments; every admitted request has exactly one terminal completion, and buffers/providers remain live through their final borrow. Required universal dispatch and UTI/drain behavior is covered without substituting a partial-exec-excluding provider.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-03-02-FUNCTIONAL": {
+      "remaining_range": [
+        25,
+        55
+      ],
+      "confidence": "low",
+      "rationale": "Process default source and focused ownership work exist; required fork/exec/wait/exit/ptrace and full reference cleanup still need matching runtime proof. Held exec work remains excluded.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "The matching image preserves required fork/exec/wait/exit results, initialized child state, ptrace stop/wakeup ordering and exactly-once host/process/reference cleanup on defined success and error paths. Held exec/ACK/TID behavior requires its original authoritative disposition before any execution.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-03-03-FUNCTIONAL": {
+      "remaining_range": [
+        40,
+        75
+      ],
+      "confidence": "low",
+      "rationale": "Memory source and process-VM repair exist, but XPMEM weak-VM/descriptor/termination wiring is incomplete and its lock provider is unresolved. Full range/callback lifetime proof remains.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "The selected mmap/munmap/mprotect/brk/remap and NUMA/process-VM implementations preserve required range/error results, real writer lock/unlock/mutator ordering, mappings and callback/reference lifetimes. The XPMEM lock-order/descriptor-lifetime NO-GO is resolved through actual eligible participating contracts before its caller can be selected.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-03-04-FUNCTIONAL": {
+      "remaining_range": [
+        25,
+        55
+      ],
+      "confidence": "low",
+      "rationale": "Default signal/wait code and focused results exist; supported signal, futex/robust, restart and terminal lifecycle behavior still need matching runtime results.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Matching-image signal masks/actions and altstack updates preserve requests and aliases; futex/robust cleanup, waits, wakes, interruption/restart and time behavior meet their existing defined contracts with no lost completion, stale callback or leaked owner.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-03-05-FUNCTIONAL": {
+      "remaining_range": [
+        25,
+        50
+      ],
+      "confidence": "low",
+      "rationale": "Credential/perf/default source investigations are complete. Real error-aware getter, consumer behavior and host FD/resource restoration remain to be demonstrated.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Credential refresh failures publish no partial fields and bind the real error-aware host getter; required limits/scheduling/SHM/file forwarding preserves existing results and ownership. Perf lookup/group/read/copy/close/free uses an actual reviewed live-reference contract, including teardown and fork, rather than counter values or callback identity as a lifetime pin.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-06-01-FUNCTIONAL": {
+      "remaining_range": [
+        20,
+        45
+      ],
+      "confidence": "low",
+      "rationale": "Selected architecture wrappers and ABI/source checks exist; supported TLS/arch_prctl and clone/mmap/SHM translation still need matching runtime results.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "The supported x86_64 TLS/arch_prctl and clone/mmap/SHM wrappers agree with the selected real ABI and preserve values, results and required context behavior in the matching image.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-06-02-FUNCTIONAL": {
+      "remaining_range": [
+        30,
+        60
+      ],
+      "confidence": "low",
+      "rationale": "Selected signal/context source and default proof exist; genuine frame, alternate stack and configured xstate restoration remain unproved. Excluded collector work is not an available test path.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Signal/rt_sigreturn paths restore the selected signal frame, alternate stack, register context and configured xstate with the required normal/error behavior and genuine providers on the matching image.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-06-03-FUNCTIONAL": {
+      "remaining_range": [
+        25,
+        50
+      ],
+      "confidence": "low",
+      "rationale": "Ptrace default/regset source proof exists; actual supported register/debug-state and stop/wakeup/event ordering remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Both supported regsets and directions retain whole-eight-byte length validation, configured xstate/copy results, and required register/debug-state plus stop/wakeup/event ordering on the matching image; unavailable HOST ptrace control is not counted as passed.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-06-04-FUNCTIONAL": {
+      "remaining_range": [
+        20,
+        45
+      ],
+      "confidence": "low",
+      "rationale": "Selected time/vDSO providers, image and focused controls exist; matching process mappings and real time-page/TSC publication remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "The selected vDSO/process mappings and time-page/TSC publication have genuine provider ownership and preserve required mapping/publication/time behavior on the matching image.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-06-05-FUNCTIONAL": {
+      "remaining_range": [
+        25,
+        55
+      ],
+      "confidence": "low",
+      "rationale": "Selected process-VM repair and a real own-child Rust consumer are prepared. Consumer compilation/execution and full concurrent target-reference/NUMA callback lifetime proof remain.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
+        "/home/holden/mckernel-work/m14-06-05-own-process-consumer-20261116/main.rs"
+      ],
+      "completed": "Selected source/default proof exists; required full functional behavior remains open.",
+      "next": "Cross-process memory/move-pages preserve required data/error results, target references and NUMA callback lifetimes through completion and cleanup on the matching image.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00",
+      "increments": [
+        {
+          "description": "Prepare the real own-child process-VM/move-pages Rust consumer; source only.",
+          "done": true,
+          "evidence": [
+            "/home/holden/mckernel-work/m14-06-05-own-process-consumer-20261116/main.rs"
+          ]
+        },
+        {
+          "description": "Compile the consumer against the selected matching ABI.",
+          "done": false,
+          "evidence": []
+        },
+        {
+          "description": "Run the original read/write/error/target-exit observations.",
+          "done": false,
+          "evidence": []
+        },
+        {
+          "description": "Complete required concurrent target-reference and NUMA callback lifetime/restoration proof.",
+          "done": false,
+          "evidence": []
+        }
+      ]
+    },
+    "M14-F03-FUNCTIONAL": {
+      "remaining_range": [
+        35,
+        65
+      ],
+      "confidence": "low",
+      "rationale": "Default generic source/link work exists. Coupled XPMEM lock/lifetime/termination wiring is incomplete or unselected; generic functional and cleanup behavior still needs matching runtime evidence.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Default generic source/link and focused supported slices passed; image built.",
+      "next": "Qualify generic dispatch/process/MM/signal/credential/file syscall behavior and lifetime on the matching admissible coherent image; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-F06-FUNCTIONAL": {
+      "remaining_range": [
+        30,
+        60
+      ],
+      "confidence": "low",
+      "rationale": "Architecture Rust providers and matched image exist. Signal/context, ptrace, time and cross-process target/callback lifetimes still need supported runtime results and any resulting repairs.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Architecture source/default slices and matched image built; own-child Rust consumer source prepared.",
+      "next": "Qualify architecture ABI, signal/context/xstate, ptrace, mappings/time and cross-process-memory behavior on the matching admissible coherent image; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-I03-E1": {
+      "remaining_range": [
+        35,
+        65
+      ],
+      "confidence": "low",
+      "rationale": "The image/modules and four account-consumer integration tests pass. Native launch still stops on account-snapshot mismatch; first native boot, applications and full restoration remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
+        "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json"
+      ],
+      "completed": "Matched image/modules built; Python3.8 account-consumer fix passes all four focused integration methods.",
+      "next": "Obtain exact one-owner native/source-view/current-free admission for the coherent matched image/modules; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation. Workload results, descriptor/reference/callback ownership, assigned CPUs/RAM and all resource restoration observations refer to that same coherent image/module cohort; no additional S01-S06 quotas are introduced.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00",
+      "increments": [
+        {
+          "description": "Produce and qualify the coherent image and paired modules.",
+          "done": true,
+          "evidence": [
+            "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+          ]
+        },
+        {
+          "description": "Implement bounded account-consumer completion and refusal handling.",
+          "done": true,
+          "evidence": [
+            "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json"
+          ]
+        },
+        {
+          "description": "Correct the actual Python3.8 interpreter binding.",
+          "done": true,
+          "evidence": [
+            "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json"
+          ]
+        },
+        {
+          "description": "Run the four affected controller-consumer integration methods: PASS, 0.627 seconds.",
+          "done": true,
+          "evidence": [
+            "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json"
+          ]
+        },
+        {
+          "description": "Complete the normal native handoff; latest attempt stopped on issued/current full account limits mismatch.",
+          "done": false,
+          "evidence": []
+        },
+        {
+          "description": "Obtain actual one-owner source/SDK/lease/current-free native admission.",
+          "done": false,
+          "evidence": []
+        }
+      ]
+    },
+    "M14-I03-E2": {
+      "remaining_range": [
+        40,
+        70
+      ],
+      "confidence": "low",
+      "rationale": "The image/modules and four account-consumer integration tests pass. Native launch still stops on account-snapshot mismatch; first native boot, applications and full restoration remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
+        "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json"
+      ],
+      "completed": "Matched image/modules built; Python3.8 account-consumer fix passes all four focused integration methods.",
+      "next": "Run matching useful applications and required process/memory/thread/signal behavior on that cohort; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation. Workload results, descriptor/reference/callback ownership, assigned CPUs/RAM and all resource restoration observations refer to that same coherent image/module cohort; no additional S01-S06 quotas are introduced.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00",
+      "increments": [
+        {
+          "description": "Run useful applications on the exact admitted image/module cohort.",
+          "done": false,
+          "evidence": []
+        },
+        {
+          "description": "Demonstrate required process/thread and signal behavior.",
+          "done": false,
+          "evidence": []
+        },
+        {
+          "description": "Demonstrate required memory/NUMA behavior and match each required observation.",
+          "done": false,
+          "evidence": []
+        }
+      ]
+    },
+    "M14-I03-E3": {
+      "remaining_range": [
+        40,
+        70
+      ],
+      "confidence": "low",
+      "rationale": "The image/modules and four account-consumer integration tests pass. Native launch still stops on account-snapshot mismatch; first native boot, applications and full restoration remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
+        "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json"
+      ],
+      "completed": "Matched image/modules built; Python3.8 account-consumer fix passes all four focused integration methods.",
+      "next": "Prove native lifecycle and resource restoration with exact live/retained owners and outcomes; preserve all historical UNKNOWNs and then accept M14 only when original file/integration requirements pass; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation. Workload results, descriptor/reference/callback ownership, assigned CPUs/RAM and all resource restoration observations refer to that same coherent image/module cohort; no additional S01-S06 quotas are introduced.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00",
+      "increments": [
+        {
+          "description": "Observe matching native shutdown/error and terminal lifecycle.",
+          "done": false,
+          "evidence": []
+        },
+        {
+          "description": "Prove CPU/RAM and descriptor/reference/callback restoration with positive own-family evidence.",
+          "done": false,
+          "evidence": []
+        },
+        {
+          "description": "Join the required original functional results and explicitly accept the matching scope.",
+          "done": false,
+          "evidence": []
+        }
+      ]
+    },
+    "M15-F02-complete-ABI-behavior": {
+      "remaining_range": [
+        25,
+        50
+      ],
+      "confidence": "low",
+      "rationale": "Executor source, deployed artifacts and the 78-word ABI have passing scope. The successful real GET_CREDV loader path, application/offload behavior and native cleanup remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected/deployed executor and 78-word ABI qualified; existing non-ELF loader proof preserved.",
+      "next": "Derive the complete supported executor entry/provider/behavior obligations from the existing implementation, public contracts and selected build; map every obligation to matching passing source/artifact/behavior evidence and resolve every unknown. This enumeration is campaign engineering, not a required externally authored inventory.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F02-native": {
+      "remaining_range": [
+        35,
+        65
+      ],
+      "confidence": "low",
+      "rationale": "Executor source, deployed artifacts and the 78-word ABI have passing scope. The successful real GET_CREDV loader path, application/offload behavior and native cleanup remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected/deployed executor and 78-word ABI qualified; existing non-ELF loader proof preserved.",
+      "next": "Reviewed original application/offload/process/lifecycle scenario inventory has matching admitted native results and observed cleanup/resource restoration; exact scenario/entrypoint bindings remain absent.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F03-deployed": {
+      "remaining_range": [
+        15,
+        35
+      ],
+      "confidence": "low",
+      "rationale": "mcinspect source, link, ABI and focused/default behavior are qualified. Matching installed runtime-consumer behavior and final acceptance remain.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "mcinspect source, host link, ABI and focused/default behavior passed.",
+      "next": "Installed mcinspect artifact/providers match the admitted image/runtime, and every required source-derived runtime-consumer obligation has matching passing evidence.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F04-deployed": {
+      "remaining_range": [
+        15,
+        35
+      ],
+      "confidence": "low",
+      "rationale": "eclair source, link, ABI and focused/default behavior are qualified. Matching installed runtime-consumer behavior and final acceptance remain.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "eclair source, host link, ABI and focused/default behavior passed.",
+      "next": "Installed eclair artifact/providers match the admitted image/runtime, and every required source-derived runtime-consumer obligation has matching passing evidence.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F05-original-behavior": {
+      "remaining_range": [
+        30,
+        55
+      ],
+      "confidence": "low",
+      "rationale": "Changed archive/DSO and public providers pass, including the implemented divisor fixes. Real balanced-success, zero-node/compensation, backend, installed ABI and restoration still need results.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Changed IHK archive/DSO built; public providers and focused behavior qualified.",
+      "next": "Derive the complete required supported library public-function/backend behavior obligations from the actual public headers, selected source and callers, then join every obligation to matching passing results. Existing focused slices remain credited only at their proven scope. This still includes admissible runtime key0 balanced full-success/arithmetic behavior, including zero-node/zero-compensation conditions currently excluded; the28 ownership-error cases do not prove those regions. Deriving the obligations grants no execution/redesign authority for excluded bodies.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00",
+      "increments": [
+        {
+          "description": "Build and qualify the changed archive/DSO and public providers.",
+          "done": true,
+          "evidence": [
+            "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+          ]
+        },
+        {
+          "description": "Run real balanced full-success and arithmetic behavior.",
+          "done": false,
+          "evidence": []
+        },
+        {
+          "description": "Run required zero-node/zero-compensation and backend behavior.",
+          "done": false,
+          "evidence": []
+        },
+        {
+          "description": "Demonstrate original ownership and resource restoration across required cases.",
+          "done": false,
+          "evidence": []
+        }
+      ]
+    },
+    "M15-F05-deployed-native": {
+      "remaining_range": [
+        25,
+        50
+      ],
+      "confidence": "low",
+      "rationale": "Changed archive/DSO and public providers pass, including the implemented divisor fixes. Real balanced-success, zero-node/compensation, backend, installed ABI and restoration still need results.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Changed IHK archive/DSO built; public providers and focused behavior qualified.",
+      "next": "Actual installed library/public ABI/dependency identities match the admitted cohort and required original resource-restoring native scenarios pass; exact full scenario/operation bindings remain unestablished.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F06-device-behavior": {
+      "remaining_range": [
+        20,
+        45
+      ],
+      "confidence": "low",
+      "rationale": "ihkconfig source, installed artifact and focused behavior exist. Complete original real-device command/error behavior and restoring lifecycle remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "ihkconfig source, installed artifact and focused behavior qualified.",
+      "next": "Derive the complete required supported/default ihkconfig real-device command behavior obligations from its selected source and public contracts, then qualify every required observation using exact admitted provider/operation bindings.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F06-native": {
+      "remaining_range": [
+        25,
+        50
+      ],
+      "confidence": "low",
+      "rationale": "ihkconfig source, installed artifact and focused behavior exist. Complete original real-device command/error behavior and restoring lifecycle remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "ihkconfig source, installed artifact and focused behavior qualified.",
+      "next": "Original required ihkconfig native command/error/resource-restoring lifecycle scenario inventory has matching passing admitted results and restored ownership.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F07-device-behavior": {
+      "remaining_range": [
+        20,
+        45
+      ],
+      "confidence": "low",
+      "rationale": "ihkosctl source, changed/installed artifact and focused behavior exist. Complete original real-device command/error behavior and restoring lifecycle remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "ihkosctl changed/installed artifact and focused behavior qualified.",
+      "next": "Derive the complete required supported/default ihkosctl real-device command behavior obligations from its selected source and public contracts, then qualify every required observation using exact admitted provider/operation bindings.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F07-native": {
+      "remaining_range": [
+        25,
+        50
+      ],
+      "confidence": "low",
+      "rationale": "ihkosctl source, changed/installed artifact and focused behavior exist. Complete original real-device command/error behavior and restoring lifecycle remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "ihkosctl changed/installed artifact and focused behavior qualified.",
+      "next": "Original required ihkosctl native command/error/resource-restoring lifecycle scenario inventory has matching passing admitted results and restored ownership.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F08-installed-service": {
+      "remaining_range": [
+        25,
+        50
+      ],
+      "confidence": "low",
+      "rationale": "Changed monitor emission, passive behavior and private stage are qualified. Real installed-service events/kmsg/hung-up and stop/error/restoration remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
+        "docs/verification/m15-f08-changed-monitor-build-20261114/QUALIFIED-INCREMENT.json"
+      ],
+      "completed": "Changed monitor built; passive checks/private stage qualified.",
+      "next": "Derive required daemon/service/udev and real IHK event/kmsg/hung-up behavior obligations from the selected supervisor and its actual contracts, bind the installed artifacts/providers and admitted operations, and demonstrate matching behavior/cleanup evidence for every required scenario.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00",
+      "increments": [
+        {
+          "description": "Build the changed monitor and qualify passive/private-stage behavior.",
+          "done": true,
+          "evidence": [
+            "docs/verification/m15-f08-changed-monitor-build-20261114/QUALIFIED-INCREMENT.json"
+          ]
+        },
+        {
+          "description": "Bind the genuine installed service and IHK event/kmsg/hung-up providers.",
+          "done": false,
+          "evidence": []
+        },
+        {
+          "description": "Run required active/error/stop behavior and prove cleanup/restoration.",
+          "done": false,
+          "evidence": []
+        }
+      ]
+    },
+    "M15-F08-native": {
+      "remaining_range": [
+        30,
+        55
+      ],
+      "confidence": "low",
+      "rationale": "Changed monitor emission, passive behavior and private stage are qualified. Real installed-service events/kmsg/hung-up and stop/error/restoration remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
+        "docs/verification/m15-f08-changed-monitor-build-20261114/QUALIFIED-INCREMENT.json"
+      ],
+      "completed": "Changed monitor built; passive checks/private stage qualified.",
+      "next": "Original matching active-monitor startup/stop/error/native lifecycle inventory is satisfied with actual admitted devices/providers and measured resource restoration.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-I04-native-admission": {
+      "remaining_range": [
+        35,
+        65
+      ],
+      "confidence": "low",
+      "rationale": "Matched artifacts, source/dependency ownership and useful consumer source exist. Actual native admission, complete applications/module-MM behavior, restoration and final integration remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Matched artifacts and project ownership/dependency prerequisites qualified.",
+      "next": "Original native authority supplies actual reviewed one-shot operation/current-free/source-custody bindings and reconciles the original owner without retiring UNKNOWN charges by assumption.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-I04-cohort": {
+      "remaining_range": [
+        20,
+        45
+      ],
+      "confidence": "low",
+      "rationale": "Matched artifacts, source/dependency ownership and useful consumer source exist. Actual native admission, complete applications/module-MM behavior, restoration and final integration remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Matched artifacts and project ownership/dependency prerequisites qualified.",
+      "next": "Exact admitted compute image, three modules, executor, library and installed tool identities are recorded as one coherent supported cohort.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-I04-applications": {
+      "remaining_range": [
+        40,
+        70
+      ],
+      "confidence": "low",
+      "rationale": "Matched artifacts, source/dependency ownership and useful consumer source exist. Actual native admission, complete applications/module-MM behavior, restoration and final integration remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Matched artifacts and project ownership/dependency prerequisites qualified.",
+      "next": "Derive the original useful-application scenarios and required observations from existing supported system contracts, then satisfy each with matching admitted cohort results; no new application quota is invented.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-I04-module-MM": {
+      "remaining_range": [
+        30,
+        60
+      ],
+      "confidence": "low",
+      "rationale": "Matched artifacts, source/dependency ownership and useful consumer source exist. Actual native admission, complete applications/module-MM behavior, restoration and final integration remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Matched artifacts and project ownership/dependency prerequisites qualified.",
+      "next": "Derive required load/unload and MM lifecycle obligations from actual supported module/consumer contracts, then satisfy every required behavior and ordering observation on the matching admitted cohort.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-I04-restoration": {
+      "remaining_range": [
+        40,
+        70
+      ],
+      "confidence": "low",
+      "rationale": "Matched artifacts, source/dependency ownership and useful consumer source exist. Actual native admission, complete applications/module-MM behavior, restoration and final integration remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Matched artifacts and project ownership/dependency prerequisites qualified.",
+      "next": "Derive required shutdown/error/restoring-lifecycle obligations from the actual supported sources and contracts, then demonstrate native before/after ownership restoration with all owned operations/waits reconciled.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-I04-acceptance": {
+      "remaining_range": [
+        40,
+        70
+      ],
+      "confidence": "low",
+      "rationale": "Matched artifacts, source/dependency ownership and useful consumer source exist. Actual native admission, complete applications/module-MM behavior, restoration and final integration remain unproved.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Matched artifacts and project ownership/dependency prerequisites qualified.",
+      "next": "M14 is genuinely accepted first, original M15 F/I obligations have required closure evidence, and saved Root records original M15 integration acceptance.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-F03-ACCEPT": {
+      "remaining_range": [
+        35,
+        65
+      ],
+      "confidence": "low",
+      "rationale": "Default generic source/link work exists. Coupled XPMEM lock/lifetime/termination wiring is incomplete or unselected; generic functional and cleanup behavior still needs matching runtime evidence. This estimate includes the unresolved prerequisite work needed for acceptance; it is not just time to record the decision.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Default generic source/link and focused supported slices passed; image built.",
+      "next": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-F06-ACCEPT": {
+      "remaining_range": [
+        30,
+        60
+      ],
+      "confidence": "low",
+      "rationale": "Architecture Rust providers and matched image exist. Signal/context, ptrace, time and cross-process target/callback lifetimes still need supported runtime results and any resulting repairs. This estimate includes the unresolved prerequisite work needed for acceptance; it is not just time to record the decision.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Architecture source/default slices and matched image built; own-child Rust consumer source prepared.",
+      "next": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M14-I03-ACCEPT": {
+      "remaining_range": [
+        40,
+        70
+      ],
+      "confidence": "low",
+      "rationale": "The image/modules and four account-consumer integration tests pass. Native launch still stops on account-snapshot mismatch; first native boot, applications and full restoration remain unproved. This estimate includes the unresolved prerequisite work needed for acceptance; it is not just time to record the decision.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
+        "docs/verification/m14-i03-final-account-consumer-20261116/RESULT.json"
+      ],
+      "completed": "Matched image/modules built; Python3.8 account-consumer fix passes all four focused integration methods.",
+      "next": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F02-ACCEPT": {
+      "remaining_range": [
+        25,
+        55
+      ],
+      "confidence": "low",
+      "rationale": "Executor source, deployed artifacts and the 78-word ABI have passing scope. The successful real GET_CREDV loader path, application/offload behavior and native cleanup remain unproved. This estimate includes the unresolved prerequisite work needed for acceptance; it is not just time to record the decision.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Selected/deployed executor and 78-word ABI qualified; existing non-ELF loader proof preserved.",
+      "next": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F03-ACCEPT": {
+      "remaining_range": [
+        15,
+        35
+      ],
+      "confidence": "low",
+      "rationale": "mcinspect source, link, ABI and focused/default behavior are qualified. Matching installed runtime-consumer behavior and final acceptance remain. This estimate includes the unresolved prerequisite work needed for acceptance; it is not just time to record the decision.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "mcinspect source, host link, ABI and focused/default behavior passed.",
+      "next": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F04-ACCEPT": {
+      "remaining_range": [
+        15,
+        35
+      ],
+      "confidence": "low",
+      "rationale": "eclair source, link, ABI and focused/default behavior are qualified. Matching installed runtime-consumer behavior and final acceptance remain. This estimate includes the unresolved prerequisite work needed for acceptance; it is not just time to record the decision.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "eclair source, host link, ABI and focused/default behavior passed.",
+      "next": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F05-ACCEPT": {
+      "remaining_range": [
+        25,
+        55
+      ],
+      "confidence": "low",
+      "rationale": "Changed archive/DSO and public providers pass, including the implemented divisor fixes. Real balanced-success, zero-node/compensation, backend, installed ABI and restoration still need results. This estimate includes the unresolved prerequisite work needed for acceptance; it is not just time to record the decision.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Changed IHK archive/DSO built; public providers and focused behavior qualified.",
+      "next": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F06-ACCEPT": {
+      "remaining_range": [
+        20,
+        45
+      ],
+      "confidence": "low",
+      "rationale": "ihkconfig source, installed artifact and focused behavior exist. Complete original real-device command/error behavior and restoring lifecycle remain unproved. This estimate includes the unresolved prerequisite work needed for acceptance; it is not just time to record the decision.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "ihkconfig source, installed artifact and focused behavior qualified.",
+      "next": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F07-ACCEPT": {
+      "remaining_range": [
+        20,
+        45
+      ],
+      "confidence": "low",
+      "rationale": "ihkosctl source, changed/installed artifact and focused behavior exist. Complete original real-device command/error behavior and restoring lifecycle remain unproved. This estimate includes the unresolved prerequisite work needed for acceptance; it is not just time to record the decision.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "ihkosctl changed/installed artifact and focused behavior qualified.",
+      "next": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-F08-ACCEPT": {
+      "remaining_range": [
+        25,
+        50
+      ],
+      "confidence": "low",
+      "rationale": "Changed monitor emission, passive behavior and private stage are qualified. Real installed-service events/kmsg/hung-up and stop/error/restoration remain unproved. This estimate includes the unresolved prerequisite work needed for acceptance; it is not just time to record the decision.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json",
+        "docs/verification/m15-f08-changed-monitor-build-20261114/QUALIFIED-INCREMENT.json"
+      ],
+      "completed": "Changed monitor built; passive checks/private stage qualified.",
+      "next": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    },
+    "M15-I04-ACCEPT": {
+      "remaining_range": [
+        40,
+        70
+      ],
+      "confidence": "low",
+      "rationale": "Matched artifacts, source/dependency ownership and useful consumer source exist. Actual native admission, complete applications/module-MM behavior, restoration and final integration remain unproved. This estimate includes the unresolved prerequisite work needed for acceptance; it is not just time to record the decision.",
+      "evidence": [
+        "docs/verification/m14-m15-closure-progress.json",
+        "docs/verification/m14-m15-build-reuse-20261115/ARTIFACTS.json"
+      ],
+      "completed": "Matched artifacts and project ownership/dependency prerequisites qualified.",
+      "next": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+      "updated_at": "2026-11-16T04:42:13.538030+00:00"
+    }
+  }
+}

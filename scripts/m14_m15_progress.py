@@ -14,7 +14,9 @@ from urllib.parse import quote
 
 TRACKER = Path("docs/verification/m14-m15-closure-progress.json")
 MARKDOWN = Path("docs/verification/M14-M15-OPEN-DELIVERABLES.md")
+ENGINEERING_MARKDOWN = Path("docs/verification/M14-M15-ENGINEERING-PROGRESS.md")
 ENGINEERING = Path("docs/verification/m14-m15-engineering-progress.json")
+ESTIMATES = Path("docs/verification/m14-m15-work-remaining-estimates.json")
 ORIGINAL_COUNT = 156
 
 
@@ -198,6 +200,33 @@ def parse_engineering(document, task_ids):
     return result
 
 
+def parse_remaining(document, identifiers):
+    """Read explicit engineering judgments; never derive effort from acceptance."""
+    _require(isinstance(document, dict) and document.get("schema") ==
+             "mckernel-engineering-work-remaining-v1", "Invalid work-remaining estimates")
+    entries = document.get("estimates", {})
+    _require(isinstance(entries, dict) and set(entries) <= set(identifiers),
+             "Work estimates must name an original check, parent or milestone")
+    for ident, entry in entries.items():
+        _require(isinstance(entry, dict), "Invalid estimate: " + ident)
+        bounds = entry.get("remaining_range")
+        _require(isinstance(bounds, list) and len(bounds) == 2
+                 and all(_number(value) for value in bounds)
+                 and 0 <= bounds[0] <= bounds[1] <= 100,
+                 "Invalid remaining-work range: " + ident)
+        _require(entry.get("confidence") in {"low", "medium", "high"}
+                 and isinstance(entry.get("rationale"), str) and entry["rationale"].strip()
+                 and _evidence(entry.get("evidence", [])),
+                 "Remaining-work estimates need confidence, rationale and evidence: " + ident)
+        for step in entry.get("increments", []):
+            _require(isinstance(step, dict) and isinstance(step.get("description"), str)
+                     and type(step.get("done")) is bool,
+                     "Engineering increments need a description and done flag")
+            refs = _evidence(step.get("evidence", []))
+            _require(not step["done"] or refs, "Completed increment needs evidence")
+    return entries
+
+
 def load_progress(repo, *, engineering_path=None):
     """Return derived machine counts/open rows; never read runtime/account state."""
     repo = Path(repo)
@@ -211,6 +240,17 @@ def load_progress(repo, *, engineering_path=None):
             warning = "Engineering metadata unavailable; estimates are unknown: " + str(error)
     result["engineering_warning"] = warning
     result["engineering"] = engineering
+    result["remaining"] = {}
+    result["estimate_updated_at"] = "unknown"
+    estimates = repo / ESTIMATES
+    if estimates.exists():
+        try:
+            document = _read_json(estimates)
+            result["remaining"] = parse_remaining(document,
+                set(result["tasks"]) | set(result["requirements"]) | set(result["milestones"]))
+            result["estimate_updated_at"] = document.get("updated_at", "unknown")
+        except (OSError, ValueError, TypeError) as error:
+            result["engineering_warning"] = "Remaining-work estimates unavailable: " + str(error)
     result["open_rows"] = [dict(row, parent_checklist_percent=result["parent_percent"][row["parent"]],
                                 engineering=engineering.get(ident, {}))
                            for ident, row in sorted(result["tasks"].items())
@@ -269,21 +309,16 @@ def _next_missing(row, progress):
     return _cell(row["engineering"].get("next_increment") or row["done_when"], 240)
 
 
-def _engineering_text(entry):
-    parts = []
-    if entry.get("checkpoint_percent") is not None:
-        if entry["checkpoint_percent"] == 100:
-            parts.append("all {}/{} checkpoints done; original acceptance pending".format(
-                entry["done_steps"], entry["total_steps"]))
-        else:
-            parts.append("{:g}% checkpoints ({}/{})".format(
-                entry["checkpoint_percent"], entry["done_steps"], entry["total_steps"]))
-    if entry.get("estimate_range") is not None:
-        low, high = entry["estimate_range"]
-        parts.append(("{:g}–<100% estimate".format(low) if low < 100 else
-                      "estimate awaits original acceptance") if high == 100 else
-                     "{:g}–{:g}% estimate".format(low, high))
-    return "; ".join(parts) or "unknown"
+def _remaining_text(progress, ident, *, accepted=False):
+    if accepted:
+        return "0% — accepted"
+    entry = progress.get("remaining", {}).get(ident, {})
+    bounds = entry.get("remaining_range")
+    if bounds is None:
+        return "unknown"
+    low, high = bounds
+    value = "{:g}%".format(low) if low == high else "{:g}–{:g}%".format(low, high)
+    return value + " remaining (" + entry["confidence"] + " confidence)"
 
 
 def _runtime(repo, campaign_state=None, runtime_state=None):
@@ -354,51 +389,88 @@ def _markdown(progress, campaign_state, runtime_updated_at="unknown", active_wor
              "[Original criteria, statuses and full evidence](m14-m15-closure-progress.json) remain the source of truth.", "",
              "Runtime state update: `" + _cell(runtime_updated_at) + "`. Only explicit original-ID assignments "
              "can label a row working; unrelated agent activity cannot.", "",
-             "| Milestone | Accepted checks | Open checks | Original weighted checklist | Explicit milestone acceptance |",
+             "**Every percentage below estimates engineering work remaining. Lower is better.** "
+             "Ranges are judgments about implementation, integration, functional tests and cleanup still needed. "
+             "They are not acceptance percentages or a countdown to a completion date. "
+             "Unknown stays unknown; new failures can increase an estimate.", "",
+             "Estimates assessed: `" + _cell(progress.get("estimate_updated_at", "unknown")) + "`. "
+             "Shared prerequisites are considered once when assessing a milestone; parent ranges are not "
+             "an arithmetic average of check counts. See [estimate evidence and reasoning](m14-m15-work-remaining-estimates.json).", "",
+             "| Milestone | Engineering estimate — work remaining | Accepted checks | Open checks | Acceptance |",
              "| --- | ---: | ---: | ---: | --- |"]
     for name, summary in progress["milestones"].items():
-        lines.append("| {} | {}/{} | {} | {:.2f}% | {} |".format(
-            name, summary["accepted"], summary["total"], summary["open"],
-            summary["checklist_percent"], "100% — accepted" if summary["accepted_milestone"] else "0% — open"))
-    lines += ["", "Original check acceptance is binary: 0% or 100%. Parent checklist percentages use the declared "
-              "immediate children; milestones give equal weight to their original file/integration gates. "
-              "These are verified checklist metrics, not effort or engineering estimates.", "",
-              "Engineering checkpoint percentages below count only explicitly defined, evidenced steps in the "
-              "[optional sidecar](m14-m15-engineering-progress.json). They measure that small declared checklist, "
-              "not the whole original condition, time spent, or acceptance. Estimates require evidence and a rationale; "
-              "otherwise engineering progress is **unknown**. Agent activity, reviews and inventories earn no credit."]
+        lines.append("| {} | {} | {}/{} | {} | {} |".format(
+            name, _remaining_text(progress, name, accepted=summary["accepted_milestone"]),
+            summary["accepted"], summary["total"], summary["open"],
+            "accepted" if summary["accepted_milestone"] else "open"))
+    lines += ["", "Verified acceptance remains a separate accepted/open decision and exact count. "
+              "Original criteria, weights and the 156-check denominator remain in the source JSON. "
+              "The [earlier fixed snapshot](M14-M15-BASELINE-20261116T034323Z.md) used verified checklist "
+              "percentages; compare these new estimates with the [engineering baseline](M14-M15-ENGINEERING-BASELINE.md), "
+              "not by subtracting one metric from the other.", "",
+              "Source, test and runtime increments below show progress between acceptances. "
+              "A completed increment can be useful even while the engineering range remains unchanged. "
+              "Update estimates when the assessed work changes; keep the latest result and next operation current."]
     if progress["engineering_warning"]:
         lines += ["", _cell(progress["engineering_warning"])]
     for milestone in ("M14", "M15"):
         lines += ["", "## " + milestone + " — " + str(progress["milestones"][milestone]["open"]) + " open checks", "",
+                  "### Every original parent subgoal", "",
+                  "| Subgoal / scope | Engineering estimate — work remaining | Acceptance | Open checks | Last completed increment / next operation |",
+                  "| --- | --- | --- | ---: | --- |"]
+
+        def descendants(ident):
+            requirement = progress["requirements"][ident]
+            return requirement.get("task_ids", []) + [task
+                for child in requirement.get("child_requirements", []) for task in descendants(child)]
+
+        for ident, requirement in progress["requirements"].items():
+            if not ident.startswith(milestone + "-") or requirement.get("parent") is not None:
+                continue
+            entry = progress.get("remaining", {}).get(ident, {})
+            accepted = requirement["accepted"]
+            completed = entry.get("completed") or ("Original scope accepted." if accepted else "See recorded original evidence.")
+            next_step = "Preserve passing scope." if accepted else entry.get("next", "Obtain the remaining original functional proof.")
+            opened = sum(progress["tasks"][task]["percent_complete"] == 0 for task in descendants(ident))
+            lines.append("| {} — {} | {} | {} | {} | {} **Next:** {} |".format(
+                ident, _cell(requirement.get("title", ident), 90),
+                _remaining_text(progress, ident, accepted=accepted),
+                "accepted" if accepted else "open", opened, _cell(completed, 190), _cell(next_step, 200)))
+        lines += ["", "### Every open original check", "",
                   "Owner means the tracker-recorded responsible role, not a currently running worker. "
                   "Passing prerequisite/partial evidence does not satisfy the open row.", "",
-                  "| Original ID / short name | State / recorded row update | Parent verified checklist | Own acceptance | Engineering only | Recorded owner | Latest recorded passing scope / next missing original proof |",
-                  "| --- | --- | ---: | ---: | --- | --- | --- |"]
+                  "| Original ID / short name | Recorded state / update | Parent | Engineering estimate — work remaining | Recorded owner | Last completed increment / next missing proof |",
+                  "| --- | --- | --- | --- | --- | --- |"]
         for row in progress["open_rows"]:
             if not row["id"].startswith(milestone + "-"):
                 continue
-            title = row["title"].removeprefix("Qualify ").removesuffix(" on the matching admissible coherent image")
+            title = row["title"]
+            if title.startswith("Qualify "):
+                title = title[len("Qualify "):]
+            suffix = " on the matching admissible coherent image"
+            if title.endswith(suffix):
+                title = title[:-len(suffix)]
             work = active_work.get(row["id"], {})
             updated = work.get("updated_at") or row["engineering"].get("updated_at") or "unknown"
             cells = ["`" + row["id"] + "` — " + _cell(title, 95),
                      _row_state(row, campaign_state, work) + " / `" + _cell(updated) + "`",
-                     "`" + row["parent"] + "` " + "{:g}%".format(row["parent_checklist_percent"]),
-                     "0% — open", _engineering_text(row["engineering"]),
+                     "`" + row["parent"] + "`", _remaining_text(progress, row["id"]),
                      _cell(work.get("owner") or row["engineering"].get("owner") or row.get("owner", "unknown"), 105),
                      _passing(row, progress) + ". **Next:** " +
                      (_cell(work["next_action"], 240) if work.get("next_action") else _next_missing(row, progress))]
             lines.append("| " + " | ".join(cells) + " |")
-    entries = [(row["id"], row["engineering"]) for row in progress["open_rows"] if row["engineering"]]
+    entries = [(row["id"], progress.get("remaining", {}).get(row["id"], {}).get("increments")
+                or row["engineering"].get("engineering_steps", [])) for row in progress["open_rows"]]
+    entries = [(ident, steps) for ident, steps in entries if steps]
     if entries:
-        lines += ["", "## Defined engineering checkpoints (separate from acceptance)"]
-        for ident, entry in entries:
-            lines += ["", "**`" + ident + "`: " + _engineering_text(entry) + ".**"]
-            if entry.get("rationale"):
-                lines += ["", _cell(entry["rationale"])]
-            for step in entry.get("engineering_steps", []):
+        lines += ["", "## Smaller engineering increments", "",
+                  "Checked boxes show the stated increment only. They are not equally weighted effort units "
+                  "and do not change original acceptance. Pending boxes name the concrete work still needed."]
+        for ident, steps in entries:
+            lines += ["", "**`" + ident + "`: " + _remaining_text(progress, ident) + ".**"]
+            for step in steps:
                 evidence = "; ".join(_link(ref) for ref in step.get("evidence", []))
-                lines += ["", "- [" + ("x" if step["done"] else " ") + "] `" + _cell(step["id"]) + "` "
+                lines += ["", "- [" + ("x" if step["done"] else " ") + "] "
                           + _cell(step["description"]) + ((" — " + evidence) if evidence else "")]
     lines += ["", "## Stop and resume", "", "```sh", "python3 -B scripts/m14_m15.py stop", "```", "",
               "This stops new campaign/child dispatch and requests active work to stop through the existing "
@@ -447,6 +519,9 @@ def render_progress(repo, *, campaign_state=None, engineering_path=None, runtime
     state, updated, work = _runtime(repo, campaign_state, runtime_state)
     text = _markdown(load_progress(repo, engineering_path=engineering_path), state, updated, work)
     _write_changed(repo / MARKDOWN, text)
+    # Existing long-lived controllers may still write the old acceptance view.
+    # Give the requested engineering view its own stable destination as well.
+    _write_changed(repo / ENGINEERING_MARKDOWN, text)
     return text
 
 
